@@ -85,7 +85,7 @@ ipcMain.on('api/status', async (event, args) => {
 
 ipcMain.on('api/idle', async (event, args) => {
     const { spawn } = require('child_process');
-    const child = spawn(path.join(process.cwd(), 'steam', 'steam-idle.exe'), [args.appId]);
+    const child = spawn(path.join(process.cwd(), 'steam', 'steam-idle.exe'), [args.appId], { detached: true });
     child.on('error', (err) => {
         console.error('Error spawning child process:', err);
     });
