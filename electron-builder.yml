@@ -1,0 +1,12 @@
+appId: com.steam-game-idler.nextron
+productName: Steam Game Idler
+copyright: Copyright © 2024 ProbablyRaging
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+publish: null
