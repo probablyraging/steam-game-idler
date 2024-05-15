@@ -30,3 +30,5 @@ try {
 } catch (error) {
     console.error('Error copying directory:', error);
 }
+
+// git add ./dist/win-unpacked/steam-game-idler-1.0.0.zip -f
