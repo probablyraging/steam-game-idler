@@ -5,24 +5,22 @@
  <p align="center">Built with NextJS + Tauri.</p>
 </p>
   <p align="center">
-    <a href="https://github.com/anuraghazra/github-readme-stats/graphs/contributors">
-      <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/probablyraging/steeeam" />
+    <a href="https://github.com/probablyraging/steam-game-idler/graphs/contributors">
+      <img alt="GitHub Contributors" src="https://img.shields.io/github/contributors/probablyraging/steam-game-idler" />
     </a>
-    <a href="https://github.com/anuraghazra/github-readme-stats/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues/probablyraging/steeeam?color=0088ff" />
+    <a href="https://github.com/probablyraging/steam-game-idler/issues">
+      <img alt="Issues" src="https://img.shields.io/github/issues/probablyraging/steam-game-idler?color=0088ff" />
     </a>
-    <a href="https://github.com/anuraghazra/github-readme-stats/pulls">
-      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/probablyraging/steeeam?color=0088ff" />
+    <a href="https://github.com/probablyraging/steam-game-idler/pulls">
+      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/probablyraging/steam-game-idler?color=0088ff" />
     </a>
   </p>
 
-# Executable NSIS
-Download the latest `.zip` release from [Releases](https://github.com/ProbablyRaging/steam-game-idler/releases)
+# Portable[¹](https://github.com/ProbablyRaging/steam-game-idler#notes)
+Download the latest `portable` release from [Releases](https://github.com/ProbablyRaging/steam-game-idler/releases)
 
-*[WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download-section) required. On Windows 10 (Version 1803 and later with all updates applied) and Windows 11, the WebView2 runtime is distributed as part of the operating system. **Use the MSI Installer if you're unsure, as it comes bundled with all dependencies.***
-
-# MSI Installer (recommended)
-Download the latest `.msi` release from [Releases](https://github.com/ProbablyRaging/steam-game-idler/releases)
+# Installer
+Download the latest `installer` release from [Releases](https://github.com/ProbablyRaging/steam-game-idler/releases)
 
 # Build It Yourself
 1. Clone the repoistory
@@ -37,10 +35,13 @@ npm install
 ```
 npm run tauri build
 ```
-4. Check the console output for build directory *(usually `/src-tauri/target/release/bundle`)*
+4. Check the console output for build directory *(usually `/src-tauri/target/release/bundle`)* 
 
 # Usage
 1. Enter your Steam username or [SteamID64](https://steamid.io/)
 2. Make sure Steam is running
 3. Click one or more games that you want to idle
 4. That's it, it's that simple
+
+## Notes
+¹ *[WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download-section) required. On Windows 10 (Version 1803 and later with all updates applied) and Windows 11, the WebView2 runtime is distributed as part of the operating system. Use the MSI Installer if you're unsure, as it comes bundled with all dependencies.*
