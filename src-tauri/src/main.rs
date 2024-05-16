@@ -22,10 +22,16 @@ fn get_file_path() -> Result<PathBuf, String> {
     }
 }
 
+use std::os::windows::process::CommandExt;
+use std::process::Stdio;
+
 #[tauri::command]
 fn check_status() -> bool {
     let output = std::process::Command::new("tasklist")
         .args(&["/FI", "IMAGENAME eq steam.exe"])
+        .stdout(Stdio::piped())
+        .stderr(Stdio::null())
+        .creation_flags(0x08000000)
         .output()
         .expect("Failed to execute tasklist command");
 

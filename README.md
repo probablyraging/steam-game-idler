@@ -16,12 +16,12 @@
     </a>
   </p>
 
-# Portable Executable
+# Executable NSIS
 Download the latest `.zip` release from [Releases](https://github.com/ProbablyRaging/steam-game-idler/releases)
 
 *[WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download-section) required. On Windows 10 (Version 1803 and later with all updates applied) and Windows 11, the WebView2 runtime is distributed as part of the operating system. **Use the MSI Installer if you're unsure, as it comes bundled with all dependencies.***
 
-# MSI Installer
+# MSI Installer (recommended)
 Download the latest `.msi` release from [Releases](https://github.com/ProbablyRaging/steam-game-idler/releases)
 
 # Build It Yourself
