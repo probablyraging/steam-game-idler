@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.light {
+    --sb-thumb: #aeaeae;
+    --sb-track: #efefef;
+    --a: #666;
+    --a-hover: #000;
+}
+
+.dark {
+    --sb-thumb: #141416;
+    --sb-track: #0b0b0c;
+    --a: #888;
+    --a-hover: #fff;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--sb-track);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--sb-thumb);
+    border-radius: 999px;
+}

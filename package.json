@@ -1,38 +1,31 @@
 {
-    "private": true,
     "name": "steam-game-idler",
-    "description": "Steam game idler",
-    "version": "1.0.0",
-    "author": "ProbablyRaging",
-    "main": "app/background.js",
+    "version": "0.1.0",
+    "private": true,
     "scripts": {
-        "dev": "nextron --renderer-port 3000",
-        "build": "nextron build && node postbuild.config.js",
-        "postinstall": "electron-builder install-app-deps"
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint",
+        "tauri": "tauri"
     },
     "dependencies": {
-        "@nextui-org/react": "^2.3.1",
+        "@nextui-org/react": "^2.3.6",
+        "@tauri-apps/api": "^1.5.6",
         "axios": "^1.6.8",
-        "electron-serve": "^1.3.0",
-        "electron-store": "^8.2.0",
-        "framer-motion": "^11.1.3",
+        "framer-motion": "^11.1.7",
         "geist": "^1.3.0",
         "moment": "^2.30.1",
+        "next": "14.2.3",
         "next-themes": "^0.3.0",
+        "react": "^18",
+        "react-dom": "^18",
         "react-icons": "^5.1.0",
-        "react-toastify": "^10.0.5",
-        "steamapi": "^3.0.8"
+        "react-toastify": "^10.0.5"
     },
     "devDependencies": {
-        "autoprefixer": "^10.4.19",
-        "electron": "^29.3.0",
-        "electron-builder": "^24.13.3",
-        "globals": "^15.0.0",
-        "next": "^13.5.6",
-        "nextron": "^8.15.0",
-        "postcss": "^8.4.38",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "tailwindcss": "^3.4.3"
+        "@tauri-apps/cli": "^1.5.14",
+        "postcss": "^8",
+        "tailwindcss": "^3.4.1"
     }
 }
