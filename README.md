@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./resources/example.png" width='400' alt='Click for larger image'/>
+<img src="./public/example.png" width='400' alt='Click for larger image'/>
  <h1 align="center">Steam Game Idler</h1>
  <p align="center">Idle any game in your Steam library. All you need is your Steam username or ID64. No password, token, or any other login information needed.</p>
  <p align="center">Built with NextJS + Tauri.</p>
