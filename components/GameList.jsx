@@ -56,7 +56,7 @@ export default function GameList({ steamId }) {
         const status = await invoke('check_status');
         if (status) {
             const path = await invoke('get_file_path');
-            const fullPath = path.replace('steam-game-idler.exe', 'lib\\steam-idle.exe');
+            const fullPath = path.replace('Steam Game Idler.exe', 'lib\\steam-idle.exe');
             await invoke('idle_game', { filePath: fullPath, argument: appId.toString() });
         } else {
             toast.error('Steam is not running');

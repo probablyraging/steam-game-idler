@@ -7,7 +7,7 @@
         "distDir": "../out"
     },
     "package": {
-        "productName": "steam-game-idler",
+        "productName": "Steam Game Idler",
         "version": "1.1.0"
     },
     "tauri": {
