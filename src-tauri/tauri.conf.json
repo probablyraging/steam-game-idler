@@ -35,7 +35,7 @@
             ],
             "identifier": "com.probablyraging.steam-game-idler",
             "longDescription": "Idle any game in your Steam library. All you need is your Steam username or ID64. No password, token, or any other login information needed.",
-            "shortDescription": "Idle any game in your Steam library.",
+            "shortDescription": "Steam Game Idler",
             "macOS": {
                 "entitlements": null,
                 "exceptionDomain": "",
