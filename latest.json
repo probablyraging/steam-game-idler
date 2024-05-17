@@ -3,7 +3,7 @@
     "notes": "Reimagined UI + automatic updates",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMHFvZS8rYkhXbG1HanZsblNkdkFzZ1hVV09OSEZjWU1vb3NnS0FNbk5oek9OcXBPZ1lHeHQxS0RFbzZ3dlRReWtmdnZCYUJVczJSRFUxWXcvcC9SZ1FBPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE1OTU4MzE3CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuMl94NjRfZW4tVVMubXNpLnppcApKQVBYTXhFOTlxOXZHaklJRXUrdzl5RmxJNUZwckVzbEorU0pyRWMvQVB2Yk5GUzhjZ1hyKyt2MDJOUlBlTGZ6RUtvejB0blVDMU5zUFNzZ2hacUhDUT09Cg==",
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGdMaDVNeFkrNUczOUJxdm9HTDVGLzhSTFdVQXMyUGNhZTg2Y1JoMHFKSy9yVHh0UVJ3VlJqc20zc05abm5mSUFJYnVpVFVDbk9tWm5RNmM5UGVtbmdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE1OTU5NjE3CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuMl94NjRfZW4tVVMubXNpLnppcAp1VE52eWtmVk9MYTNMTDk1OHNkcnVGUWVWWmIwaUpMQ0k0SFYzRVMwQU02bzVpZFdVNThBZWdwZ3NoMTlNUVhrQzk1QXF4Sk0wWUFzdXdscEhRcmxEUT09Cg==",
             "url": "https://github.com/ProbablyRaging/steam-game-idler-test/releases/download/1.1.2/Steam.Game.Idler_1.1.2_x64_en-US.msi.zip"
         }
     }
