@@ -8,15 +8,29 @@
     },
     "package": {
         "productName": "Steam Game Idler",
-        "version": "1.1.0"
+        "version": "1.1.2"
     },
     "tauri": {
         "allowlist": {
-            "all": true,
+            "all": false,
+            "window": {
+                "all": false,
+                "close": true,
+                "hide": true,
+                "show": true,
+                "maximize": true,
+                "minimize": true,
+                "unmaximize": true,
+                "unminimize": true,
+                "startDragging": true
+            },
             "fs": {
                 "scope": [
                     "$RESOURCE/*"
                 ]
+            },
+            "dialog": {
+                "ask": true
             }
         },
         "bundle": {
@@ -34,7 +48,7 @@
                 "icons/icon.ico"
             ],
             "identifier": "com.probablyraging.steam-game-idler",
-            "longDescription": "Idle any game in your Steam library. All you need is your Steam username or ID64. No password, token, or any other login information needed.",
+            "longDescription": "Idle any game in your Steam library",
             "shortDescription": "Steam Game Idler",
             "macOS": {
                 "entitlements": null,
@@ -57,15 +71,28 @@
             "csp": null
         },
         "updater": {
-            "active": false
+            "active": true,
+            "endpoints": [
+                "https://raw.githubusercontent.com/ProbablyRaging/steam-game-idler-test/main/latest.json"
+            ],
+            "dialog": true,
+            "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQyMTE5REMyMUFGRUYyQzcKUldUSDh2NGF3cDBSMGh6UVk2a1NKNFV0d1BBcnZsRnFFdDkvTTR0KzJQN0hjOTJzSWFpMFhGaysK",
+            "windows": {
+                "installMode": "passive"
+            }
         },
         "windows": [
             {
                 "fullscreen": false,
-                "width": 1120,
+                "width": 1268,
                 "height": 600,
-                "resizable": false,
-                "title": "Steam Game Idler"
+                "minWidth": 1268,
+                "minHeight": 600,
+                "resizable": true,
+                "title": "Steam Game Idler",
+                "decorations": false,
+                "transparent": true,
+                "focus": true
             }
         ]
     }

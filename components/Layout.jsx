@@ -9,7 +9,7 @@ export default function Layout({ children }) {
                 <title>Steam Game Idler</title>
             </Head>
 
-            <main className={`${GeistSans.className} h-full min-h-screen`}>
+            <main className={`${GeistSans.className} h-full min-h-screen bg-base rounded-tr-lg rounded-tl-lg`}>
                 {children}
             </main>
         </React.Fragment>

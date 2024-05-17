@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 .light {
-    --sb-thumb: #aeaeae;
+    --sb-thumb: #c8c8c8;
     --sb-track: #efefef;
     --a: #666;
     --a-hover: #000;
 }
 
 .dark {
-    --sb-thumb: #141416;
-    --sb-track: #0b0b0c;
+    --sb-thumb: #303030;
+    --sb-track: #1c1c1c;
     --a: #888;
     --a-hover: #fff;
 }
@@ -27,4 +27,12 @@
 ::-webkit-scrollbar-thumb {
     background: var(--sb-thumb);
     border-radius: 999px;
+}
+
+html {
+    background-color: transparent !important;
+}
+
+body {
+    overflow: hidden;
 }
