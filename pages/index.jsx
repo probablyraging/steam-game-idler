@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { GeistSans } from 'geist/font/sans';
 import { invoke } from '@tauri-apps/api/tauri';
-import ThemeSwitch from '@/components/theme/ThemeSwitch';
 import { Button, Divider, Input } from '@nextui-org/react';
 import { BiSolidLeaf } from "react-icons/bi";
 import { HiMiniMinus } from "react-icons/hi2";
@@ -98,12 +97,7 @@ export default function index() {
                                     />
                                 </div>
 
-                                <div className='flex items-center gap-2 h-full'>
-                                    <ThemeSwitch />
-                                </div>
-
                                 <Divider className='w-[1px] h-full bg-titleborder mx-2' />
-
 
                                 <div className='flex justify-center items-center h-full'>
                                     <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowMinimize}>
