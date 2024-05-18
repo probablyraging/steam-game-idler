@@ -41,7 +41,7 @@ export default function GridView({ gameList, favorites, setFavorites }) {
                 {gameList && gameList.map((item, index) => {
                     return (
                         <div
-                            className='relative flex flex-col w-full max-w-[220px] bg-container border border-border hover:bg-containerhover hover:border-borderhove rounded cursor-pointer group'
+                            className='relative flex flex-col w-full max-w-[220px] bg-container border border-border hover:bg-containerhover hover:border-borderhover rounded cursor-pointer group'
                             onClick={() => launchIdler(item.game.id)}
                             key={item.game.id}
                         >

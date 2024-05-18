@@ -6,15 +6,6 @@ import GridView from './GridView';
 import Private from './Private';
 import Loader from './Loader';
 
-export const sortOptions = [
-    { label: 'Name A to Z', value: 'a-z' },
-    { label: 'Name Z to A', value: 'z-a' },
-    { label: 'Playtime High to Low', value: '1-0' },
-    { label: 'Playtime Low to High', value: '0-1' },
-    { label: 'Favorited Games', value: 'fav' },
-    { label: 'Recently Played', value: 'recent' },
-];
-
 export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
     let [isLoading, setIsLoading] = useState(false);
     let [gameList, setGameList] = useState(null);

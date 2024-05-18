@@ -1,10 +1,10 @@
 {
-    "version": "1.1.2",
-    "notes": "Reimagined UI + automatic updates",
+    "version": "1.1.3",
+    "notes": "Removed unused modules, imports, and tailwind utils. Optimized assets.",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGdMaDVNeFkrNUczOUJxdm9HTDVGLzhSTFdVQXMyUGNhZTg2Y1JoMHFKSy9yVHh0UVJ3VlJqc20zc05abm5mSUFJYnVpVFVDbk9tWm5RNmM5UGVtbmdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE1OTU5NjE3CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuMl94NjRfZW4tVVMubXNpLnppcAp1VE52eWtmVk9MYTNMTDk1OHNkcnVGUWVWWmIwaUpMQ0k0SFYzRVMwQU02bzVpZFdVNThBZWdwZ3NoMTlNUVhrQzk1QXF4Sk0wWUFzdXdscEhRcmxEUT09Cg==",
-            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.1.2/Steam.Game.Idler_1.1.2_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMG1vUVNxSUNDQ3BCS0lBRFVUM0dNOThwVnY3NEhWZ1Ntd2pGdmoyNFdjQmxoc2lSWEx0TlhxeEwrVFQxQ3lIQW9YRlZjK3NNT25KOUtZZzlyZU5sV1E0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE2MDI2NjM3CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuM194NjRfZW4tVVMubXNpLnppcApTZ0dtR0RkWWZ3dkhwcWJnY2txd1l1blc2Rmw0TzV4K2wwTE1JSE9VcHlTdHh3WFZpdk4vOEhXVDF3dVdodFNUTllXK3BWdmx1S0NxaVNNS3k4UGVCZz09Cg==",
+            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.1.3/Steam.Game.Idler_1.1.3_x64_en-US.msi.zip"
         }
     }
 }

@@ -92,7 +92,7 @@ export default function SideBar({ setUserSummary, sortStyle, setSortStyle }) {
                         <MdAvTimer className='text-white' fontSize={24} />
                     </div>
                     <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi cursor-pointer' onClick={() => setSortStyle('fav')}>
-                        {sortStyle === 'fev' && (
+                        {sortStyle === 'fav' && (
                             <motion.div
                                 className='absolute w-full border-r-4 border-white'
                                 initial={{ height: 0 }}

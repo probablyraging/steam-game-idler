@@ -2,6 +2,8 @@
 
 use std::env;
 use std::path::PathBuf;
+use std::os::windows::process::CommandExt;
+use std::process::Stdio;
 
 fn main() {
     tauri::Builder::default()
@@ -21,9 +23,6 @@ fn get_file_path() -> Result<PathBuf, String> {
         Err(error) => return Err(format!("{error}")),
     }
 }
-
-use std::os::windows::process::CommandExt;
-use std::process::Stdio;
 
 #[tauri::command]
 fn check_status() -> bool {

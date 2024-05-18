@@ -19,7 +19,6 @@ module.exports = {
                 'calc': 'calc(100vh - 62px)',
             },
             boxShadow: {
-                'soft-sm': '4px 4px 20px 0px #00000010;',
                 'soft-lg': '0 30px 60px 0 #00000020',
             },
         }

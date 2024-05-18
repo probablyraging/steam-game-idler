@@ -42,7 +42,7 @@ export default function TitleBar() {
                             <ThemeSwitch />
                         </div>
 
-                        <div className='flex justify-center items-center h-full'>
+                        <div className='flex justify-center items-center h-full ml-2'>
                             <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowMinimize}>
                                 <HiMiniMinus />
                             </div>

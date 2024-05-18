@@ -4,13 +4,10 @@ import Dashboard from './Dashboard';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        setIsLoading(true);
         const userSummaryData = localStorage.getItem('userSummary');
         setUserSummary(JSON.parse(userSummaryData));
-        setIsLoading(false);
     }, []);
 
     if (!userSummary) return <Setup setUserSummary={setUserSummary} />

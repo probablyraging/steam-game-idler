@@ -1,5 +1,5 @@
 <p align="center">
-<img src="./public/logo.png" width='80' alt='Click for larger image'/>
+<img src="./assets/logo.png" width='80' alt='Click for larger image'/>
  <h1 align="center">Steam Game Idler</h1>
  <p align="center">Idle any game in your Steam library. All you need is your Steam username or ID64. No password, token, or any other login information needed.</p>
  <p align="center">Built with NextJS + Tauri.</p>
@@ -17,7 +17,7 @@
   </p>
 
 <div align="center">
-  <img src="./public/example.png" width='700' alt='Click for larger image'/>
+  <img src="./assets/example.png" width='700' alt='Click for larger image'/>
 </div>
 
 # Portable[¹](https://github.com/ProbablyRaging/steam-game-idler#notes)

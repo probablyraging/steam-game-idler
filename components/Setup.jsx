@@ -65,7 +65,7 @@ export default function Setup({ setUserSummary }) {
                     }}
                 >
                     <div className='flex items-center flex-col gap-2 p-6'>
-                        <Image src={'/logo.png'} width={32} height={32} alt='logo' />
+                        <Image src={'/logo.webp'} width={32} height={32} alt='logo' />
                         <p className='text-4xl'>
                             Welcome
                         </p>
