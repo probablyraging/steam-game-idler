@@ -7,7 +7,7 @@
         "distDir": "../out"
     },
     "package": {
-        "productName": "Steam Game Idler",
+        "productName": "Steam Game Idler Lite",
         "version": "1.1.2"
     },
     "tauri": {
@@ -47,9 +47,9 @@
                 "icons/128x128@2x.png",
                 "icons/icon.ico"
             ],
-            "identifier": "com.probablyraging.steam-game-idler",
+            "identifier": "com.probablyraging.steam-game-idler-lite",
             "longDescription": "Idle any game in your Steam library",
-            "shortDescription": "Steam Game Idler",
+            "shortDescription": "Steam Game Idler Lite",
             "macOS": {
                 "entitlements": null,
                 "exceptionDomain": "",
@@ -73,7 +73,7 @@
         "updater": {
             "active": true,
             "endpoints": [
-                "https://raw.githubusercontent.com/ProbablyRaging/steam-game-idler/main/latest.json"
+                "https://raw.githubusercontent.com/ProbablyRaging/steam-game-idler/lite/latest.json"
             ],
             "dialog": true,
             "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEQyMTE5REMyMUFGRUYyQzcKUldUSDh2NGF3cDBSMGh6UVk2a1NKNFV0d1BBcnZsRnFFdDkvTTR0KzJQN0hjOTJzSWFpMFhGaysK",
@@ -84,12 +84,10 @@
         "windows": [
             {
                 "fullscreen": false,
-                "width": 1268,
-                "height": 600,
-                "minWidth": 1268,
-                "minHeight": 600,
-                "resizable": true,
-                "title": "Steam Game Idler",
+                "width": 750,
+                "height": 100,
+                "resizable": false,
+                "title": "Steam Game Idler Lite",
                 "decorations": false,
                 "transparent": true,
                 "focus": true
