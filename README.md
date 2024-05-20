@@ -20,20 +20,35 @@ SGI comes bundled as both a portable `.exe`[¹](https://github.com/ProbablyRagin
 
 SGI also comes in a `lite` version which doesn't require entering a Steam username or ID64 and relies soley on entering a game ID to work.
 
+> [!Note]
+> **PORTABLE VERSION** *[WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download-section) required. On Windows 10 (Version 1803 and later with all updates applied) and Windows 11, the WebView2 runtime is distributed as part of the operating system. Use the MSI installer if you're unsure, as it comes bundled with all dependencies.*
+
 # Build It Yourself
 1. Clone the repoistory
 ```
 git clone https://github.com/ProbablyRaging/steam-game-idler.git
 ```
+
 2. Install dependencies
 ```
+cd ./steam-game-idler
 npm install
 ```
-3. Build the app
+
+3. Build the idler
+
+*This will create a `/libs` directory containing some packaged libraries in `/src-tauri`*
 ```
+cd ./idler-csharp
+msbuild ./idler.csproj
+```
+
+4. Build the app
+```
+cd ./steam-game-idler
 npm run tauri build
 ```
-4. Check the console output for build directory *(usually `/src-tauri/target/release/bundle`)* 
+5. Check the console output for build directory *(usually `/src-tauri/target/release/bundle`)* 
 
 # Usage
 1. Enter your Steam username or [SteamID64](https://steamid.io/)
@@ -43,6 +58,3 @@ npm run tauri build
 
 # License
 All versions of SGI are licensed under the **[GPL-3.0 License](./LICENSE)**
-
-#
-¹ *[WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download-section) required. On Windows 10 (Version 1803 and later with all updates applied) and Windows 11, the WebView2 runtime is distributed as part of the operating system. Use the MSI Installer if you're unsure, as it comes bundled with all dependencies.*

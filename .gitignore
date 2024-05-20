@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# Visual Studio
+.vs
+
 # dependencies
 /node_modules
 /.pnp
@@ -37,3 +40,8 @@ next-env.d.ts
 
 # tauri signing
 *.ps1
+
+# Idler
+/src-tauri/libs
+/idler-csharp/bin
+/idler-csharp/obj
