@@ -3,7 +3,7 @@
     "notes": "Updated idler window to show the game's name in the title bar",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMG1hakZXT1NmSWRZc3o0bU5lbVpsZGZqUFA4b3pCWmxSVEdHbnI2ZmdXQTFDUDl4MjRnMG9tTGNWN0dYSmMxZFpGVGg4ZlMyYW9TY0NrRE0vYzdtdXdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE2MTYzNjU1CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuNF94NjRfZW4tVVMubXNpLnppcApXRXFkMUZibWJCNUdMVUExLzkxV0lHVURRSmlRZXBRZWVCR1ZGM1JvRE44ZEg1cW5GSndNd0lKZGROUzVmbVkvVmhnSkpjQ0kvdVVCVEp3a0svMTZDUT09Cg==",
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGdrczNvVkhUNU50Z0ZaSnBOS083OURvVUYvS0tkS3hvT1lsUWhWQ20vSW4xK05zWURJYVhxcHlUMkZtSjlGWjJIQWtDM1Y5UFpSQjgwZW9uQ2ZUaVEwPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE2MTkwNTk0CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuNF94NjRfZW4tVVMubXNpLnppcApVYTVHZ0RCcUE1UFJad1pyZGxLN1lvMW1TYTd4T294Y0NXMGJPTWQrd3E4Tk5obWkyOWN5bEd0VzJRZ3IxU3pMUWlDQ2RyMS9xNFQ5dWNZMHZzbEFDQT09Cg==",
             "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.1.4/Steam.Game.Idler_1.1.4_x64_en-US.msi.zip"
         }
     }
