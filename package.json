@@ -1,0 +1,16 @@
+{
+    "name": "idler-linux",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "chalk": "^5.3.0",
+        "dotenv": "^16.4.5",
+        "inquirer": "^9.2.22",
+        "steam-user": "^5.0.9"
+    }
+}
