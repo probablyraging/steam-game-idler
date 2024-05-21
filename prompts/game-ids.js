@@ -1,5 +1,6 @@
 import inquirer from "inquirer";
 import chalk from "chalk";
+import promptUserToStopOrContinue from './stop-or-continue.js'
 
 // Prompt user for a list of game IDs to idle
 export default function promptUserForGameIds(client) {
