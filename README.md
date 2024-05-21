@@ -11,7 +11,8 @@
 </div>
 
 # Prerequisite
-- [Node.js](https://nodejs.org/en) v18.0.0+
+- Node.js v18.0.0+
+- npm 10.5.1+
 - Should run on most versions of linux and windows
 
 # Build It Yourself
