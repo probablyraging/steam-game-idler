@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { TiHeartFullOutline } from 'react-icons/ti';
 import SelectedGames from './SelectedGames';
-import { BiSolidLeaf } from "react-icons/bi";
-import { FaStop } from "react-icons/fa";
 import IdlingState from './IdlingState';
 
 export default function GridView({ gameList, favorites, setFavorites }) {
@@ -46,10 +44,11 @@ export default function GridView({ gameList, favorites, setFavorites }) {
         } else {
             setSelectedGames([...selectedGames, gameId]);
         }
-        if (selectedGamesNames.includes(name)) {
-            setSelectedGamesNames(selectedGamesNames.filter(item => item !== name));
+        const existingGame = selectedGamesNames.find(item => item.gameId === gameId);
+        if (existingGame) {
+            setSelectedGamesNames(selectedGamesNames.filter(item => item.gameId !== gameId));
         } else {
-            setSelectedGamesNames([...selectedGamesNames, name]);
+            setSelectedGamesNames([...selectedGamesNames, { name, gameId }]);
         }
     };
 
@@ -81,44 +80,46 @@ export default function GridView({ gameList, favorites, setFavorites }) {
             <div className='flex flex-wrap gap-4'>
                 {gameList && gameList.map((item, index) => {
                     return (
-                        <div
-                            className={`relative flex flex-col w-full max-w-[245px] border bg-container border-border hover:bg-containerhover hover:border-borderhover rounded cursor-pointer group`}
-                            onClick={() => handleClick(item.game.id, item.game.name)}
-                            key={item.game.id}
-                        >
-                            <div className='flex w-fit min-h-[100px] overflow-hidden'>
-                                <Image
-                                    className='rounded-tl rounded-tr object-cover group-hover:scale-105 duration-200'
-                                    src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.game.id}/header.jpg`}
-                                    width={245}
-                                    height={100}
-                                    alt={`${item.game.name} image`}
-                                />
-                            </div>
-                            <div className='flex justify-center items-center flex-col p-2'>
-                                <div className='max-w-[170px]'>
-                                    <p className='font-bold truncate'>
-                                        {item.game.name}
-                                    </p>
+                        <React.Fragment>
+                            <div
+                                className={`relative flex flex-col w-full max-w-[245px] border ${selectedGames.includes(item.game.id) ? 'bg-containerselected' : 'bg-container hover:bg-containerhover hover:border-borderhover'} border-border rounded cursor-pointer group`}
+                                onClick={() => handleClick(item.game.id, item.game.name)}
+                                key={item.game.id}
+                            >
+                                <div className='flex w-fit min-h-[100px] overflow-hidden'>
+                                    <Image
+                                        className='rounded-tl rounded-tr object-cover group-hover:scale-105 duration-200'
+                                        src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.game.id}/header.jpg`}
+                                        width={245}
+                                        height={100}
+                                        alt={`${item.game.name} image`}
+                                    />
+                                </div>
+                                <div className='flex justify-center items-center flex-col p-2'>
+                                    <div className='max-w-[170px]'>
+                                        <p className='font-bold truncate'>
+                                            {item.game.name}
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className='absolute top-0 right-0 p-1'>
+                                    {favorites.some(arr => arr.game.id === item.game.id) ? (
+                                        <div className='text-white bg-neutral-800 hover:bg-neutral-700 bg-opacity-60 rounded p-1' onClick={(e) => removeFromFavorites(e, item)}>
+                                            <TiHeartFullOutline className='text-favoriteicon' fontSize={16} />
+                                        </div>
+                                    ) : (
+                                        <div className='text-white bg-neutral-800 hover:bg-neutral-700 bg-opacity-60 rounded p-1' onClick={(e) => addToFavorites(e, item)}>
+                                            <TiHeartFullOutline fontSize={16} />
+                                        </div>
+                                    )}
                                 </div>
                             </div>
-                            <div className='absolute top-0 right-0 p-1'>
-                                {favorites.some(arr => arr.game.id === item.game.id) ? (
-                                    <div className='text-white bg-neutral-800 hover:bg-neutral-700 bg-opacity-60 rounded p-1' onClick={(e) => removeFromFavorites(e, item)}>
-                                        <TiHeartFullOutline className='text-favoriteicon' fontSize={16} />
-                                    </div>
-                                ) : (
-                                    <div className='text-white bg-neutral-800 hover:bg-neutral-700 bg-opacity-60 rounded p-1' onClick={(e) => addToFavorites(e, item)}>
-                                        <TiHeartFullOutline fontSize={16} />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        </React.Fragment>
                     )
                 })}
 
                 {selectedGamesNames.length > 0 && (
-                    <SelectedGames selectedGamesNames={selectedGamesNames} clearSelected={clearSelected} startIdler={startIdler} />
+                    <SelectedGames selectedGamesNames={selectedGamesNames} clearSelected={clearSelected} startIdler={startIdler} handleClick={handleClick} />
                 )}
                 {idlingState && (
                     <IdlingState stopIdler={stopIdler} />

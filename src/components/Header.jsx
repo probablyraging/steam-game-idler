@@ -20,9 +20,9 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
 
     return (
         <React.Fragment>
-            <div className='relative w-full h-[62px] bg-titlebar rounded-tr-lg rounded-tl-lg select-none'>
+            <div className='relative w-full h-[62px] bg-titlebar select-none'>
                 <div className='flex justify-between items-center h-full text-titletext'>
-                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px] rounded-tl-lg'>
+                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px]'>
                         <BiSolidLeaf className='text-white' fontSize={40} />
                     </div>
 

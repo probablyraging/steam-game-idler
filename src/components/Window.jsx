@@ -13,7 +13,7 @@ export default function Window() {
     if (!userSummary) return <Setup setUserSummary={setUserSummary} />
 
     return (
-        <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-lg rounded-tl-lg'>
+        <div className='bg-base min-h-screen max-h-[calc(100vh-62px)]'>
             <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} />
         </div>
     )

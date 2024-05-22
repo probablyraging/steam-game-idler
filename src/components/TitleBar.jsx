@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import ThemeSwitch from './theme/ThemeSwitch';
 import { BiSolidLeaf } from "react-icons/bi";
-import { HiMiniMinus } from "react-icons/hi2";
-import { BiWindows } from "react-icons/bi";
-import { IoClose } from "react-icons/io5";
 
 export default function TitleBar() {
     const windowMinimize = () => {
@@ -20,9 +17,9 @@ export default function TitleBar() {
 
     return (
         <React.Fragment>
-            <div className='h-[62px] bg-titlebar border-b border-titleborder rounded-tr-lg rounded-tl-lg select-none'>
+            <div className='h-[62px] bg-titlebar border-b border-titleborder select-none'>
                 <div className='flex justify-between items-center h-full text-titletext' data-tauri-drag-region>
-                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px] rounded-tl-lg'>
+                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px]'>
                         <BiSolidLeaf className='text-white' fontSize={40} />
                     </div>
 

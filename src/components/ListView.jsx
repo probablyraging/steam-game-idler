@@ -5,8 +5,6 @@ import { MdAvTimer } from 'react-icons/md';
 import { IoLogoGameControllerB } from "react-icons/io";
 import { TiHeartFullOutline } from 'react-icons/ti';
 import SelectedGames from './SelectedGames';
-import { BiSolidLeaf } from 'react-icons/bi';
-import { FaStop } from 'react-icons/fa';
 import IdlingState from './IdlingState';
 
 function minutesToHoursCompact(number) {
@@ -54,10 +52,11 @@ export default function ListView({ gameList, favorites, setFavorites }) {
         } else {
             setSelectedGames([...selectedGames, gameId]);
         }
-        if (selectedGamesNames.includes(name)) {
-            setSelectedGamesNames(selectedGamesNames.filter(item => item !== name));
+        const existingGame = selectedGamesNames.find(item => item.gameId === gameId);
+        if (existingGame) {
+            setSelectedGamesNames(selectedGamesNames.filter(item => item.gameId !== gameId));
         } else {
-            setSelectedGamesNames([...selectedGamesNames, name]);
+            setSelectedGamesNames([...selectedGamesNames, { name, gameId }]);
         }
     };
 
@@ -90,7 +89,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
                 {gameList && gameList.map((item, index) => {
                     return (
                         <div
-                            className='relative flex w-full h-[80px] bg-container gap-4 border border-border hover:bg-containerhover hover:border-borderhover rounded cursor-pointer group'
+                            className={`relative flex w-full h-[80px] bg-container gap-4 border border-border ${selectedGames.includes(item.game.id) ? 'bg-containerselected' : 'bg-container hover:bg-containerhover hover:border-borderhover'} rounded cursor-pointer group`}
                             onClick={() => handleClick(item.game.id, item.game.name)}
                             key={item.game.id}
                         >
@@ -159,7 +158,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
                 })}
 
                 {selectedGamesNames.length > 0 && (
-                    <SelectedGames selectedGamesNames={selectedGamesNames} clearSelected={clearSelected} startIdler={startIdler} />
+                    <SelectedGames selectedGamesNames={selectedGamesNames} clearSelected={clearSelected} startIdler={startIdler} handleClick={handleClick} />
                 )}
                 {idlingState && (
                     <IdlingState stopIdler={stopIdler} />
