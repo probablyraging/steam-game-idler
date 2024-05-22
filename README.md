@@ -14,12 +14,14 @@
 </div>
 
 # Download
-All the latest versions of SGI can be downloaded from the [releases page](https://github.com/ProbablyRaging/steam-game-idler/releases)
+All the latest versions of SGI can be downloaded from the [releases page](https://github.com/ProbablyRaging/steam-game-idler/releases)<br/>
+Looking for a linux supported version? Take a look at the [CLI + WebUI](https://github.com/ProbablyRaging/steam-game-idler/tree/cli-webui) branch
 
 ### Options
 * **Portable**: `.exe` file, works on most Win10/Win11 systems *(check the note below)*
 * **Installer**: `.msi` file, includes all dependencies and automatic updates, **recommended** for all Windows versions
 * **Lite**: simplified version with minimal GUI, only requires a game ID, no Steam username or ID64 needed
+* **CLI + Web UI**: nodejs cross-platform version with the option of a command-line interface or web interface
 
 > [!Note]
 > ***PORTABLE** requires the [WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/?form=MA13LH#download-section) runtime which is distributed as part of the OS on Win10 (version 1803 and later with all updates applied) and Win11. Use the MSI installer if you're unsure, as it comes bundled with all dependencies.*
@@ -30,7 +32,7 @@ All the latest versions of SGI can be downloaded from the [releases page](https:
 3. **Build idler**: `msbuild ./idler-csharp/idler.csproj`
 	* Creates `/libs` dir with packaged libraries in `/src-tauri`
 4. **Build app**: `npm run tauri build`
-5. **Check console output** for build dir (usually `/src-tauri/target/release/bundle`)
+5. **Check console output** for build dir *(usually `/src-tauri/target/release/bundle`)*
 
 # Usage
 *The Steam desktop app needs to be running*
