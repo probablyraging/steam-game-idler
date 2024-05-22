@@ -5,6 +5,7 @@ export default async function createEmptyConfig() {
         username: null,
         password: null,
         onlineState: null,
+        gameIds: "",
         runAs: null,
         port: null,
         hasBuiltWS: null,

@@ -8,7 +8,7 @@ import promptUserForPort from "./webui-config.js";
 async function timeoutPrompt(defaultAnswer, timeMs, config) {
     return await new Promise(async (resolve) => {
         console.log('\x1Bc');
-        console.log(chalk.bold(`Starting SGI in ${chalk.blue(config.runAs)} mode. To change this, type ${chalk.red('edit')} or press ${chalk.red('enter')} to continue (10s)`));
+        console.log(chalk.bold(`Starting SGI in ${chalk.blue(config.runAs)} mode. To change this, type ${chalk.red('edit')} or press ${chalk.red('enter')} to continue ${chalk.gray('(10s)')}`));
         let options = {
             type: 'input',
             name: 'edit',
@@ -22,9 +22,9 @@ async function timeoutPrompt(defaultAnswer, timeMs, config) {
     });
 }
 
+// Give the user 10 seconds to change which mode SGi start in
 export default async function preRunCheck(config) {
     let a = await timeoutPrompt('null', 10000, config);
-    console.log(a.edit);
     if (a.edit) {
         // Set runAs to null
         const configFile = process.cwd() + '/config.json';
