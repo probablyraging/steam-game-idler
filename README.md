@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="./assets/logo.png" width='80' alt='Click for larger image' />
   <h1 align="center">Steam Game Idler - CLI + WebUI</h1>
   <p align="center">Idle any game in your Steam library.</p>
 <p align="center">
