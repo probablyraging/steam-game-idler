@@ -19,7 +19,11 @@
 2. **Install deps for CLI**: `cd ./steam-game-idler && npm install`
 3. **Install deps for web server**: `cd ./steam-game-idler/src && npm install`
 4. **Run the CLI**: `node ./index.js`
-5. Follow the steps in the terminal to choose between either running the CLI or Web UI
+5. Follow the steps in the terminal to choose between either running the CLI or web UI
+
+# Updates
+When pulling updates from this repo you will usually need to rebuild the web UI with the `--rebuild` flag at runtime
+- **Rebuild**: `node ./index.js --rebuild`
 
 # License
 All versions of SGI are licensed under the **[GPL-3.0 License](./LICENSE)**

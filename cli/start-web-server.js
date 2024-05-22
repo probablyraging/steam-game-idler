@@ -13,7 +13,12 @@ export default async function startWebServer(port) {
         webServer = exec(`npm run build -- --port=${port}`, {
             cwd: './src',
         });
-        printCentered(chalk.bold(`--> ${chalk.yellow(`Starting web server..`)} \n\nThis is the first time launching the web server, this will take a minute or two \nFuture launches will be instant`));
+        printCentered(chalk.bold(`--> ${chalk.yellow(`Building web server..`)} \n\nThis is the first time launching the web server, this will take a minute or two \nFuture launches will be instant`));
+    } else if (process.argv.includes('--rebuild')) {
+        webServer = exec(`npm run build -- --port=${port}`, {
+            cwd: './src',
+        });
+        printCentered(chalk.bold(`--> ${chalk.yellow(`Rebuilding web server..`)} \n\nProcess ran with the ${chalk.gray('--rebuild')} flag, this will take a minute or two`));
     } else {
         webServer = exec(`npm run start -- --port=${port}`, {
             cwd: './src',
