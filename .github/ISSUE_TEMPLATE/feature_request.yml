@@ -12,6 +12,17 @@ body:
       placeholder: Include as much information as possible, how could it be implemented, what will it do, how would it benefit you and other users, etc
     validations:
       required: true
+  - type: dropdown
+    id: sgi-branch
+    attributes:
+      label: Which branch of SGI?
+      options:
+        - "Base"
+        - "Lite"
+        - "CLI + WebUI"
+        - "Other"
+    validations:
+      required: true
   - type: input
     id: issue
     attributes:
