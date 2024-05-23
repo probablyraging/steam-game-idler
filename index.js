@@ -1,19 +1,26 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import fs from 'fs';
-import createEmptyConfig from './cli/create-empty-config.js';
-import startUp from './prompts/startup.js';
+import path from 'path';
+import createConfig from './cli/create-config.js';
+import firstStartPrompt from './cli/prompts/first-start.js';
+import preStartCheck from './cli/prompts/pre-start-check.js';
+import checkForUpdates from './cli/checkForUpdated.js';
 
-// Check if a config file exists, create one if not
-const configFile = process.cwd() + '/config.json';
-
+const configPath = path.join(process.cwd(), '/config.json');
 let config;
 
-if (fs.existsSync(configFile)) {
-    config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+await checkForUpdates(configPath);
+
+if (fs.existsSync(configPath)) {
+    config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 } else {
-    await createEmptyConfig();
-    config = JSON.parse(fs.readFileSync(configFile, 'utf8'));
+    await createConfig(configPath);
+    config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 }
 
-startUp(config);
+if (config.firstStart) {
+    firstStartPrompt(configPath);
+} else {
+    preStartCheck(configPath);
+}

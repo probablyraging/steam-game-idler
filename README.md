@@ -22,7 +22,11 @@
 5. Follow the steps in the terminal to choose between either running the CLI or web UI
 
 # Updates
-When pulling updates from this repo you will usually need to rebuild the web UI with the `--rebuild` flag at runtime
+### Automatic OTA Updates
+SGI will check for updates everytime you run it, if an update is available you can accept or decline it. If accepted, SGI with handle the rest.
+
+### Manual Updates
+When pulling updates from this repo, make sure to delete your old `config.json` and rebuild the web UI with the `--rebuild` flag at runtime
 - **Rebuild**: `node ./index.js --rebuild`
 
 # License

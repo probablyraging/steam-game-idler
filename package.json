@@ -1,6 +1,6 @@
 {
-    "name": "idler-linux",
-    "version": "1.0.0",
+    "name": "sgi-li-webui",
+    "version": "1.0.2",
     "main": "index.js",
     "type": "module",
     "keywords": [],
@@ -8,9 +8,11 @@
     "license": "ISC",
     "description": "",
     "dependencies": {
+        "axios": "^1.7.2",
         "chalk": "^5.3.0",
         "dotenv": "^16.4.5",
         "inquirer": "^9.2.22",
+        "moment": "^2.30.1",
         "steam-user": "^5.0.9"
     }
 }

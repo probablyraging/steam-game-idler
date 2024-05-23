@@ -1,5 +1,6 @@
 import SteamUser from "steam-user";
 import chalk from "chalk";
+import logGameNameOrId from "../cli/log-name-or-id.js";
 
 const client = new SteamUser();
 client.setOptions({ autoRelogin: true });
@@ -11,16 +12,15 @@ async function wsLogin(username, password,) {
     });
 
     client.on('loggedOn', () => {
-        console.log(chalk.bold.green(`Logged in to Steam account ${chalk.blue(username)}(${chalk.gray(client.steamID)}) appearing as ${chalk.blue('Offline')}`));
         client.setPersona(SteamUser.EPersonaState.Online);
     });
 
-    client.on('appLaunched', (appid) => {
-        console.log(chalk.bold.green(`Game with ID ${chalk.blue(appid)} is being idled`));
+    client.on('appLaunched', async (appid) => {
+        await logGameNameOrId(client, appid, 'appLaunched');
     });
 
-    client.on('appQuit', (appid) => {
-        console.log(chalk.bold.hex('#f79748')(`Game with ID ${chalk.blue(appid)} is no longer being idled`));
+    client.on('appQuit', async (appid) => {
+        await logGameNameOrId(client, appid, 'appQuit');
     });
 
     client.on('disconnected', (msg) => {

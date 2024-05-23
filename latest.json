@@ -1,0 +1,7 @@
+{
+    "version": "1.0.2",
+    "notes": [
+        "Rework CLI prompt flow",
+        "Added OTA updated"
+    ]
+}
