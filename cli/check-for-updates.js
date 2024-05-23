@@ -11,6 +11,7 @@ export default async function checkForUpdates(configPath) {
     const packageJsonPath = path.join(process.cwd(), '/package.json');
     const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     const currentVersion = packageJson.version;
+    const platform = process.platform;
 
     try {
         const res = await axios.get('https://raw.githubusercontent.com/ProbablyRaging/steam-game-idler/cli-webui/latest.json');
@@ -44,15 +45,19 @@ export default async function checkForUpdates(configPath) {
 
                     return new Promise(async (resolve, reject) => {
                         try {
-                            execSync(`git pull`, { cwd: './', stdio: 'ignore' });
-                            execSync(`npm install`, { cwd: './', stdio: 'ignore' });
-                            console.log(chalk.green(`\nUpdated successfully\n`));
+                            if (platform === 'win32') {
+                                execSync(`git pull && npm install`, { cwd: './', stdio: 'ignore' });
+                            } else if (platform === 'linux') {
+                                execSync(`pkexec git pull && npm install`, { cwd: './', stdio: 'ignore' });
+                            } else if (platform === 'darwin') {
+                                execSync(`sudo git pull && npm install`, { cwd: './', stdio: 'ignore' });
+                            }
+                            console.log(chalk.green(`\nUpdated successfully!\n`));
                             await sleep(3000);
                             resolve();
                         } catch (e) {
-                            console.log(chalk.red('\nUnable to update. Make sure you have `git` installed and check your connection\n'));
-                            await sleep(5000);
-                            resolve();
+                            console.log(chalk.red(`\nUnable to update. Make sure you have 'git' installed, or try updating manually with ${chalk.gray('git pull && npm install')}\n`));
+                            process.exit();
                         }
                     });
                 }
