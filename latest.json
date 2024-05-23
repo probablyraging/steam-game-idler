@@ -1,7 +1,7 @@
 {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "notes": [
-        "Rework CLI prompt flow",
-        "Added OTA updated"
+        "Fixed incorrect file name",
+        "Automatically update npm modules after update"
     ]
 }

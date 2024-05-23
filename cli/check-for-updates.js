@@ -45,6 +45,7 @@ export default async function checkForUpdates(configPath) {
                     return new Promise(async (resolve, reject) => {
                         try {
                             execSync(`git pull`, { cwd: './', stdio: 'ignore' });
+                            execSync(`npm install`, { cwd: './', stdio: 'ignore' });
                             console.log(chalk.green(`\nUpdated successfully\n`));
                             await sleep(3000);
                             resolve();
