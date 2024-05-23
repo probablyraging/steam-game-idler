@@ -12,7 +12,7 @@
 # Prerequisite
 - Node.js v18.0.0+
 - npm 10.5.1+
-- Should run on most versions of linux and windows
+- Should run on most versions of linux, macos and windows
 
 # Build It Yourself
 1. **Clone**: `git clone -b cli-webui https://github.com/ProbablyRaging/steam-game-idler.git`
@@ -22,12 +22,10 @@
 5. Follow the steps in the terminal to choose between either running the CLI or web UI
 
 # Updates
-### Automatic OTA Updates
-SGI will check for updates everytime you run it, if an update is available you can accept or decline it. If accepted you may need to enter your admin password as SGI will try to run updated in an elevated shell, after that SGI with handle the rest.
-
-### Manual Updates
-When pulling updates from this repo, make sure to delete your old `config.json` and rebuild the web UI with the `--rebuild` flag at runtime
-- **Rebuild**: `node ./index.js --rebuild`
+SGI will check for updates at runtime, if one is available you will be notified
+**When an update is available**: `git pull && npm install`
+**Delete outdated config**: `rm -r ./config.json`
+**Rebuild web server**: `node ./index.js --rebuild`
 
 # License
 All versions of SGI are licensed under the **[GPL-3.0 License](./LICENSE)**

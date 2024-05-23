@@ -2,6 +2,6 @@
     "version": "1.0.3",
     "notes": [
         "Fixed incorrect file name",
-        "Automatically update npm modules after update"
+        "Check for updates on launch"
     ]
 }

@@ -107,15 +107,3 @@ export const stopOrExitQ = [{
         return true;
     }
 }]
-
-export const updateQ = [{
-    type: 'confirm',
-    name: 'updateAccepted',
-    message: 'Would you like to update now?',
-}]
-
-export const updateConfirmQ = [{
-    type: 'confirm',
-    name: 'updateConfirm',
-    message: chalk.yellow('Your current config settings will be deleted. Are you sure?'),
-}]

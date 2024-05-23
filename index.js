@@ -10,7 +10,7 @@ import checkForUpdates from './cli/check-for-updates.js'
 const configPath = path.join(process.cwd(), '/config.json');
 let config;
 
-await checkForUpdates(configPath);
+await checkForUpdates();
 
 if (fs.existsSync(configPath)) {
     config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
