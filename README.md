@@ -10,8 +10,8 @@
 </p>
 </div>
 <div align="center" style="margin-top: 10px;">
-  <img src="./assets/example1.png" width='300' alt='Click for larger image' />
-  <img src="./assets/example2.png" width='300' alt='Click for larger image' />
+  <img src="./assets/example1.png" width='500' alt='Click for larger image' />
+  <img src="./assets/example2.png" width='500' alt='Click for larger image' />
 </div>
 
 # Prerequisite
