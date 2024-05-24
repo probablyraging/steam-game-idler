@@ -30,7 +30,7 @@ export default async function startWebServer(configPath) {
             }
             console.log('\x1Bc');
             console.log(chalk.cyan(splash));
-            console.log(`\nWeb server: ${chalk.hex('#f79748')(`http://localhost:${port}/`)} ${getRunningMessage()}`);
+            console.log(`\n\nWeb server: ${chalk.hex('#f79748')(`http://localhost:${port}/`)} ${getRunningMessage()}`);
         }
 
         if (stdout.includes('serverMessage')) {

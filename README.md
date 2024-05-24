@@ -14,7 +14,7 @@
   <img src="./assets/example2.png" width='400' alt='Click for larger image' />
 </div>
 
-# Prerequisite
+# Prerequisites
 - Node.js v18.0.0+
 - npm 10.5.1+
 - Should run on most versions of linux, macos and windows
@@ -27,10 +27,10 @@
 5. Follow the steps in the terminal to choose between either running the CLI or web UI
 
 # Updates
-SGI will check for updates at runtime, if one is available you will be notified
-**When an update is available**: `git pull && npm install`
-**Delete outdated config**: `rm -r ./config.json`
-**Rebuild web server**: `node ./index.js --rebuild`
+SGI will check for updates at runtime, if one is available you will be notified. When an update is available
+1. **Pull updates and install deps**: `git pull` & `npm install`
+2. **Delete outdated config**: `rm -r ./config.json`
+3. **Rebuild web server**: `node ./index.js --rebuild`
 
 # License
 All versions of SGI are licensed under the **[GPL-3.0 License](./LICENSE)**

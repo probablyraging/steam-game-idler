@@ -29,8 +29,9 @@ export default async function checkForUpdates() {
                 }
             }
 
-            console.log(`When ready, you can update with ${chalk.cyan('git pull && npm install')}. Make sure you delete your config.json after updating\n`);
-            console.log(chalk.gray('Press enter to continue..'));
+            console.log(`When ready, you can update with ${chalk.cyan('git pull && npm install')}. Make sure you delete your config.json after updating`);
+            console.log(`Need help updating? Follow these steps ${chalk.gray('https://github.com/probablyraging/steam-game-idler/tree/cli-webui?tab=readme-ov-file#updates')}\n`);
+            console.log(chalk.gray('Press enter to continue to Steam Game Idler..'));
 
             process.stdin.setEncoding('utf8');
             return new Promise((resolve, reject) => {
