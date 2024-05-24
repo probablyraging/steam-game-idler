@@ -28,7 +28,7 @@ Looking for a linux/macos supported version? Take a look at the [CLI + Web UI](h
 
 # Build It Yourself
 1. **Clone**: `git clone https://github.com/probablyraging/steam-game-idler.git`
-2. **Install deps**: `cd ./steam-game-idler && npm install`
+2. **Install deps**: `cd ./steam-game-idler` & `npm install`
 3. **Build idler**: `msbuild ./idler-csharp/idler.csproj`
 	* Creates `/libs` dir with packaged libraries in `/src-tauri`
 4. **Build app**: `npm run tauri build`
