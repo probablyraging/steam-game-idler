@@ -8,7 +8,13 @@
         "build": "next build && next start"
     },
     "dependencies": {
-        "@nextui-org/react": "^2.3.6",
+        "@nextui-org/button": "^2.0.31",
+        "@nextui-org/divider": "^2.0.27",
+        "@nextui-org/input": "^2.1.21",
+        "@nextui-org/spinner": "^2.0.28",
+        "@nextui-org/system": "^2.1.2",
+        "@nextui-org/theme": "^2.2.3",
+        "@nextui-org/tooltip": "^2.0.33",
         "framer-motion": "^11.2.2",
         "geist": "^1.3.0",
         "moment": "^2.30.1",

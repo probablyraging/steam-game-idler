@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button } from '@nextui-org/button';
 import { IoListSharp, IoGridOutline } from "react-icons/io5";
 import ListView from './ListView';
 import GridView from './GridView';

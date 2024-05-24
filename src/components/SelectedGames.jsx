@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, Divider } from '@nextui-org/react';
+import { Button } from '@nextui-org/button';
+import { Divider } from '@nextui-org/divider';
 import { BsFillTrash3Fill } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 

@@ -1,5 +1,5 @@
 import { ThemeProvider } from '@/components/theme/theme-provider';
-import { NextUIProvider } from '@nextui-org/react';
+import { NextUIProvider } from '@nextui-org/system';
 import '../styles/globals.css';
 
 export default function MyApp({ Component, pageProps }) {

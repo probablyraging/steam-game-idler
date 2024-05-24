@@ -21,8 +21,8 @@
 
 # Build It Yourself
 1. **Clone**: `git clone -b cli-webui https://github.com/ProbablyRaging/steam-game-idler.git`
-2. **Install deps for CLI**: `cd ./steam-game-idler && npm install`
-3. **Install deps for web server**: `cd ./steam-game-idler/src && npm install`
+2. **Install deps for CLI**: `cd ./steam-game-idler` & `npm install`
+3. **Install deps for web server**: `cd ./steam-game-idler/src` & `npm install`
 4. **Run the CLI**: `node ./index.js`
 5. Follow the steps in the terminal to choose between either running the CLI or web UI
 

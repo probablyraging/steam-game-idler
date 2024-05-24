@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import ThemeSwitch from './theme/ThemeSwitch';
-import { Input } from '@nextui-org/react';
+import { Input } from '@nextui-org/input';
 import { BiSolidLeaf } from "react-icons/bi";
 import { RiSearchLine } from "react-icons/ri";
 

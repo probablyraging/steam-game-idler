@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Button, Input, Tooltip } from '@nextui-org/react';
+import { Button } from '@nextui-org/button';
+import { Input } from '@nextui-org/input';
+import { Tooltip } from '@nextui-org/tooltip';
 import TitleBar from './TitleBar';
 
 export default function Setup({ setUserSummary }) {

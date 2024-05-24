@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Button } from '@nextui-org/react';
+import { Button } from '@nextui-org/button';
 
 export default function Private({ steamId }) {
     return (
