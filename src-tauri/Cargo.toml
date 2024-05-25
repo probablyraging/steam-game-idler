@@ -18,7 +18,6 @@ tauri-build = { version = "1.5.2", features = [] }
 serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.6.5", features = [ "dialog-ask", "updater", "window-start-dragging", "window-show", "window-maximize", "window-hide", "window-close", "window-unminimize", "window-unmaximize", "window-minimize"] }
-window-shadows = "0.2.2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

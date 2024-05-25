@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button } from '@nextui-org/react';
+import { Button, Tooltip } from '@nextui-org/react';
 import { IoListSharp, IoGridOutline } from "react-icons/io5";
 import ListView from './ListView';
 import GridView from './GridView';
@@ -77,18 +77,18 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
                     <div className='flex justify-end items-center w-full gap-2 pb-4'>
                         <Button
                             isIconOnly
-                            startContent={<IoListSharp fontSize={18} />}
-                            size='sm'
-                            className={`${viewStyle === 'list' && 'text-sgi'} bg-container border border-border`}
-                            onClick={() => handleViewStyle('list')}
-                        />
-
-                        <Button
-                            isIconOnly
                             startContent={<IoGridOutline fontSize={14} />}
                             size='sm'
                             className={`${viewStyle === 'grid' && 'text-sgi'} bg-container border border-border`}
                             onClick={() => handleViewStyle('grid')}
+                        />
+
+                        <Button
+                            isIconOnly
+                            startContent={<IoListSharp fontSize={18} />}
+                            size='sm'
+                            className={`${viewStyle === 'list' && 'text-sgi'} bg-container border border-border`}
+                            onClick={() => handleViewStyle('list')}
                         />
                     </div>
 
