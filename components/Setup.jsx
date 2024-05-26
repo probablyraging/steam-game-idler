@@ -24,7 +24,7 @@ export default function Setup({ setUserSummary }) {
                 setUserSummary(userSummary);
                 setIsLoading(false);
             } else {
-                setError(<p className='text-red-400'>Incorrect Steam username or ID64</p>);
+                setError(<p className='text-red-400'>Incorrect Steam profile name or ID64</p>);
                 setIsLoading(false);
                 setTimeout(() => {
                     setError(null);
@@ -73,7 +73,7 @@ export default function Setup({ setUserSummary }) {
 
                     <div className='flex justify-center items-center flex-col gap-5 pb-6'>
                         <Input
-                            placeholder='Steam username or ID64'
+                            placeholder='Steam profile name or ID64'
                             startContent={<FiHash />}
                             value={inputValue}
                             onChange={handleChange}
@@ -95,7 +95,7 @@ export default function Setup({ setUserSummary }) {
                     </div>
 
                     <div className='flex justify-center items-center p-6 w-full bg-[#f6f6f6] dark:bg-[#181818] border-t border-border rounded-br-lg rounded-bl-lg'>
-                        <Tooltip closeDelay={0} className='text-xs' content='Your username or SteamID64 is needed in order to pull your games list from the Steam API'>
+                        <Tooltip closeDelay={0} className='text-xs' content='Your profile name or SteamID64 is needed in order to pull your games list from the Steam API'>
                             <p className='text-xs text-link hover:text-linkhover cursor-pointer'>
                                 Why do you need this?
                             </p>
