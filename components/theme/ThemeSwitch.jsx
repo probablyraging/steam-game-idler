@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useTheme } from "next-themes";
-import { LuMoonStar } from "react-icons/lu";
-import { LuSun } from "react-icons/lu";
-import { HiMiniComputerDesktop } from "react-icons/hi2";
+import { useTheme } from 'next-themes';
+import { LuMoonStar } from 'react-icons/lu';
+import { LuSun } from 'react-icons/lu';
+import { HiMiniComputerDesktop } from 'react-icons/hi2';
 import { Divider } from '@nextui-org/react';
 
 export default function ThemeSwitch() {
@@ -41,5 +41,5 @@ export default function ThemeSwitch() {
 
             <Divider className='w-[1px] h-full bg-titleborder' />
         </React.Fragment>
-    )
+    );
 }

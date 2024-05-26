@@ -38,7 +38,7 @@ export default function GridView({ gameList, favorites, setFavorites }) {
     return (
         <React.Fragment>
             <div className='flex flex-wrap gap-4'>
-                {gameList && gameList.map((item, index) => {
+                {gameList && gameList.map((item) => {
                     return (
                         <div
                             className='relative flex flex-col w-full max-w-[220px] bg-container border border-border hover:bg-containerhover hover:border-borderhover rounded cursor-pointer group'
@@ -73,10 +73,10 @@ export default function GridView({ gameList, favorites, setFavorites }) {
                                 )}
                             </div>
                         </div>
-                    )
+                    );
                 })}
                 <ToastContainer position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={3000} />
             </div>
         </React.Fragment>
-    )
+    );
 }

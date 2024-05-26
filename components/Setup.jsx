@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Button, Input, Tooltip } from '@nextui-org/react';
-import { FiHash } from "react-icons/fi";
+import { FiHash } from 'react-icons/fi';
 import TitleBar from './TitleBar';
 
 export default function Setup({ setUserSummary }) {
@@ -13,13 +13,13 @@ export default function Setup({ setUserSummary }) {
     const verify = (uid) => {
         setIsLoading(true);
 
-        fetch(`https://steeeam.vercel.app/api/ext-user-summary`, {
+        fetch('https://steeeam.vercel.app/api/ext-user-summary', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { uid: uid } }),
         }).then(async res => {
             if (res.status !== 500) {
-                const userSummary = await res.json()
+                const userSummary = await res.json();
                 localStorage.setItem('userSummary', JSON.stringify(userSummary));
                 setUserSummary(userSummary);
                 setIsLoading(false);
@@ -33,7 +33,7 @@ export default function Setup({ setUserSummary }) {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async () => {
         if (inputValue.length > 0) {
             verify(inputValue);
         }
@@ -104,5 +104,5 @@ export default function Setup({ setUserSummary }) {
                 </motion.div>
             </div>
         </React.Fragment >
-    )
+    );
 }

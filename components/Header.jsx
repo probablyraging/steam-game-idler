@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ThemeSwitch from './theme/ThemeSwitch';
 import { Divider, Input } from '@nextui-org/react';
-import { BiSolidLeaf } from "react-icons/bi";
-import { HiMiniMinus } from "react-icons/hi2";
-import { BiWindows } from "react-icons/bi";
-import { IoClose } from "react-icons/io5";
-import { RiSearchLine } from "react-icons/ri";
+import { BiSolidLeaf } from 'react-icons/bi';
+import { HiMiniMinus } from 'react-icons/hi2';
+import { BiWindows } from 'react-icons/bi';
+import { IoClose } from 'react-icons/io5';
+import { RiSearchLine } from 'react-icons/ri';
 
 export default function Header({ userSummary, inputValue, setInputValue, setIsQuery }) {
     const [appWindow, setAppWindow] = useState();
@@ -40,7 +40,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
         setInputValue(e.target.value);
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = () => {
         handleQuery('query');
     };
 
@@ -97,5 +97,5 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

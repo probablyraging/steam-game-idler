@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ThemeSwitch from './theme/ThemeSwitch';
-import { BiSolidLeaf } from "react-icons/bi";
-import { HiMiniMinus } from "react-icons/hi2";
-import { BiWindows } from "react-icons/bi";
-import { IoClose } from "react-icons/io5";
+import { BiSolidLeaf } from 'react-icons/bi';
+import { HiMiniMinus } from 'react-icons/hi2';
+import { BiWindows } from 'react-icons/bi';
+import { IoClose } from 'react-icons/io5';
 
 export default function TitleBar() {
     const [appWindow, setAppWindow] = useState();
@@ -57,5 +57,5 @@ export default function TitleBar() {
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

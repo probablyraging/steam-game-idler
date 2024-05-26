@@ -3,7 +3,7 @@ import Image from 'next/image';
 import moment from 'moment';
 import { invoke } from '@tauri-apps/api/tauri';
 import { MdAvTimer } from 'react-icons/md';
-import { IoLogoGameControllerB } from "react-icons/io";
+import { IoLogoGameControllerB } from 'react-icons/io';
 import minutesToHoursCompact from '@/utils/utils';
 import { TiHeartFullOutline } from 'react-icons/ti';
 import { Slide, ToastContainer, toast } from 'react-toastify';
@@ -42,7 +42,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
     return (
         <React.Fragment>
             <div className='grid grid-cols-2 gap-6'>
-                {gameList && gameList.map((item, index) => {
+                {gameList && gameList.map((item) => {
                     return (
                         <div
                             className='relative flex w-full h-[80px] bg-container gap-4 border border-border hover:bg-containerhover hover:border-borderhover rounded cursor-pointer group'
@@ -88,7 +88,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
                                             <IoLogoGameControllerB className='text-blue-400' fontSize={16} />
                                             <div>
                                                 {item.lastPlayedTimestamp > 0 ? (
-                                                    <p>{moment.unix(item.lastPlayedTimestamp).format("MMM D, YYYY")}</p>
+                                                    <p>{moment.unix(item.lastPlayedTimestamp).format('MMM D, YYYY')}</p>
                                                 ) : (
                                                     <p>-</p>
                                                 )}
@@ -110,10 +110,10 @@ export default function ListView({ gameList, favorites, setFavorites }) {
                                 </div>
                             </div>
                         </div>
-                    )
+                    );
                 })}
                 <ToastContainer position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={3000} />
             </div>
         </React.Fragment>
-    )
+    );
 }

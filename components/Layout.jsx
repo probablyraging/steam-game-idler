@@ -13,5 +13,5 @@ export default function Layout({ children }) {
                 {children}
             </main>
         </React.Fragment>
-    )
+    );
 }
