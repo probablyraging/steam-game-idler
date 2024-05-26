@@ -2,8 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import ThemeSwitch from './theme/ThemeSwitch';
 import { Input } from '@nextui-org/input';
-import { BiSolidLeaf } from "react-icons/bi";
-import { RiSearchLine } from "react-icons/ri";
+import { BiSolidLeaf } from 'react-icons/bi';
+import { RiSearchLine } from 'react-icons/ri';
 
 export default function Header({ userSummary, inputValue, setInputValue, setIsQuery }) {
     const handleQuery = () => {
@@ -14,7 +14,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
         setInputValue(e.target.value);
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = () => {
         handleQuery('query');
     };
 
@@ -57,5 +57,5 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

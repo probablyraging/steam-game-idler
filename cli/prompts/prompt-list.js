@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk from 'chalk';
 
 export const firstStartQ = [{
     type: 'list',
@@ -12,17 +12,17 @@ export const firstStartQ = [{
     type: 'confirm',
     name: 'defaultMode',
     message: 'Would you like this to be the default mode when starting SGI?',
-}]
+}];
 
 export const steamLoginQ = [{
     type: 'input',
     name: 'username',
-    message: `Steam Username:`,
+    message: 'Steam Username:',
     validate(a) { if (a.length === 0) return 'Username required'; return true; }
 }, {
     type: 'password',
     name: 'password',
-    message: `Steam Password:`,
+    message: 'Steam Password:',
     validate(a) { if (a.length === 0) return 'Password required'; return true; }
 }, {
     type: 'confirm',
@@ -44,23 +44,23 @@ export const steamLoginQ = [{
         { name: 'App IDs', value: 'appIds' },
         { name: 'Game Names', value: 'gameNames' },
     ]
-}]
+}];
 
 export const steamLoginMinQ = [{
     type: 'input',
     name: 'username',
-    message: `Steam Username:`,
+    message: 'Steam Username:',
     validate(a) { if (a.length === 0) return 'Username required'; return true; }
 }, {
     type: 'password',
     name: 'password',
-    message: `Steam Password:`,
+    message: 'Steam Password:',
     validate(a) { if (a.length === 0) return 'Password required'; return true; }
 }, {
     type: 'confirm',
     name: 'rememberLoginDetails',
     message: 'Would you like SGI to remember your Steam password?',
-}]
+}];
 
 export const webUIQ = [{
     type: 'input',
@@ -70,18 +70,18 @@ export const webUIQ = [{
         if (isNaN(a) || a.length === 0) return 'Port must be a number';
         return true;
     }
-}]
+}];
 
 export const gameIdsQ = [{
     type: 'input',
     name: 'gameIds',
-    message: `Game ID(s):`,
+    message: 'Game ID(s):',
     validate(a) {
         if (a.length === 0) {
-            return `No valid Game ID(s) provided`;
+            return 'No valid Game ID(s) provided';
         }
 
-        const gameIds = a.split(",").map(id => Number(id.trim()));
+        const gameIds = a.split(',').map(id => Number(id.trim()));
 
         if (gameIds.length > 32) {
             return `You can only idle a max of ${chalk.cyan('32')} games at once. You provided ${chalk.cyan(gameIds.length)}`;
@@ -89,13 +89,13 @@ export const gameIdsQ = [{
 
         if (gameIds.includes(NaN)) {
             const invalidIndex = gameIds.findIndex(id => isNaN(id));
-            const invalidId = a.split(",")[invalidIndex];
+            const invalidId = a.split(',')[invalidIndex];
             return `Invalid Game ID(s) provided. Game IDs must be numbers only -> ${chalk.red(invalidId)}`;
         }
 
         return true;
     }
-}]
+}];
 
 export const stopOrExitQ = [{
     type: 'input',
@@ -106,4 +106,4 @@ export const stopOrExitQ = [{
         if (a !== 'stop' && a !== 'exit') return `Command not recognized -> ${chalk.red(a)}`;
         return true;
     }
-}]
+}];

@@ -14,5 +14,10 @@
         "inquirer": "^9.2.22",
         "moment": "^2.30.1",
         "steam-user": "^5.0.9"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.3.0",
+        "eslint": "^9.3.0",
+        "globals": "^15.3.0"
     }
 }

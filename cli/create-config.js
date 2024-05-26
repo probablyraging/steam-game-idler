@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 
 export default async function createConfig(configPath) {
     const config = {
@@ -6,7 +6,7 @@ export default async function createConfig(configPath) {
         username: null,
         password: null,
         onlineState: null,
-        gameIds: "",
+        gameIds: '',
         defaultMode: null,
         port: null,
         hasBuiltWS: false,
@@ -14,5 +14,5 @@ export default async function createConfig(configPath) {
         showGamesAs: null
     };
 
-    fs.writeFileSync(configPath, JSON.stringify(config, null, 4));
+    await fs.writeFile(configPath, JSON.stringify(config, null, 4));
 }

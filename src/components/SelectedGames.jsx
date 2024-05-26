@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button } from '@nextui-org/button';
 import { Divider } from '@nextui-org/divider';
-import { BsFillTrash3Fill } from "react-icons/bs";
-import { IoMdClose } from "react-icons/io";
+import { BsFillTrash3Fill } from 'react-icons/bs';
+import { IoMdClose } from 'react-icons/io';
 
 export default function SelectedGames({ selectedGamesNames, clearSelected, startIdler, handleClick }) {
     return (
@@ -15,16 +15,19 @@ export default function SelectedGames({ selectedGamesNames, clearSelected, start
                     <div className='bg-scrolldiv border border-border max-h-[100px] max-w-[400px] overflow-y-auto rounded-md p-1'>
                         {selectedGamesNames.map((item, index) => {
                             return (
-                                <React.Fragment>
-                                    <div className='flex justify-between items-center gap-1 p-1 cursor-pointer rounded-md hover:bg-containerhover select-none group' onClick={() => handleClick(item.gameId, item.name)}>
+                                <div key={item.gameId}>
+                                    <div
+                                        className='flex justify-between items-center gap-1 p-1 cursor-pointer rounded-md hover:bg-containerhover select-none group'
+                                        onClick={() => handleClick(item.gameId, item.name)}
+                                    >
                                         <p className='truncate'>{item.name}</p>
                                         <div className='group-hover:bg-red-400 group-hover:text-white rounded-md p-1'>
                                             <IoMdClose />
                                         </div>
                                     </div>
                                     {index !== selectedGamesNames.length - 1 && <Divider />}
-                                </React.Fragment>
-                            )
+                                </div>
+                            );
                         })}
                     </div>
                     <div className='flex gap-2 w-full mt-2'>
@@ -48,5 +51,5 @@ export default function SelectedGames({ selectedGamesNames, clearSelected, start
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

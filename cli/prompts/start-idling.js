@@ -1,13 +1,13 @@
-import inquirer from "inquirer";
-import chalk from "chalk";
-import fs from 'fs';
+import inquirer from 'inquirer';
+import chalk from 'chalk';
+import fs from 'fs/promises';
 import path from 'path';
-import { stopOrExitQ } from "./prompt-list.js";
-import gameIdsPrompt from "./game-ids.js";
-import { sleep } from "../utils.js";
+import { stopOrExitQ } from './prompt-list.js';
+import gameIdsPrompt from './game-ids.js';
+import { sleep } from '../utils.js';
 
 export default async function startIdlingGames(client, configPath, config, gameIds, fromConfig) {
-    const splash = fs.readFileSync(path.join(process.cwd(), '/splash.txt'), 'utf8');
+    const splash = await fs.readFile(path.join(process.cwd(), '/splash.txt'), 'utf8');
     const accountName = client?._loginSession?._accountName || null;
     const onlineState = config.onlineState.charAt(0).toUpperCase() + config.onlineState.slice(1);
 
@@ -32,7 +32,7 @@ export default async function startIdlingGames(client, configPath, config, gameI
 
     if (stopOrExitA.stopOrExit === 'stop') {
         if (process.env.dev) {
-            console.log(`Stopped idling`);
+            console.log('Stopped idling');
             return;
         }
 
@@ -48,7 +48,7 @@ export default async function startIdlingGames(client, configPath, config, gameI
 
     if (stopOrExitA.stopOrExit === 'exit') {
         if (process.env.dev) {
-            console.log(`Stopped idling.. Exiting..`);
+            console.log('Stopped idling.. Exiting..');
             return;
         }
 
@@ -58,7 +58,7 @@ export default async function startIdlingGames(client, configPath, config, gameI
         await sleep(3000);
 
         client.logOff();
-        console.log(chalk.yellow(`Exiting..`));
+        console.log(chalk.yellow('Exiting..'));
         process.exit();
     }
 }

@@ -1,25 +1,25 @@
 import inquirer from 'inquirer';
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
-import chalk from "chalk";
+import chalk from 'chalk';
 import loginToSteam from '../login-to-steam.js';
 import { sleep, updateConfig } from '../utils.js';
 import { firstStartQ, webUIQ } from './prompt-list.js';
 import startWebServer from '../../web_server/start-web-server.js';
 
 export default async function preStartCheck(configPath) {
-    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
     const defaultMode = config.defaultMode;
-    const splash = fs.readFileSync(path.join(process.cwd(), '/splash.txt'), 'utf8');
+    const splash = await fs.readFile(path.join(process.cwd(), '/splash.txt'), 'utf8');
 
     console.log('\x1Bc');
     console.log(chalk.cyan(splash));
 
     if (defaultMode) {
-        console.log(`\n\nWelcome to Steam Game Idler (SGI) CLI + Web UI`);
+        console.log('\n\nWelcome to Steam Game Idler (SGI) CLI + Web UI');
         console.log(`Starting in ${chalk.cyan(defaultMode.toUpperCase())} mode - you can change this in the config\n\n`);
     } else {
-        console.log(`\n\nWelcome to Steam Game Idler (SGI) CLI + Web UI\n\n`);
+        console.log('\n\nWelcome to Steam Game Idler (SGI) CLI + Web UI\n\n');
     }
 
     await sleep(3000);

@@ -1,12 +1,12 @@
-import inquirer from "inquirer";
-import SteamUser from "steam-user";
-import chalk from "chalk";
-import fs from 'fs';
+import inquirer from 'inquirer';
+import SteamUser from 'steam-user';
+import chalk from 'chalk';
+import fs from 'fs/promises';
 import path from 'path';
-import { steamLoginMinQ, steamLoginQ } from "./prompts/prompt-list.js";
-import { sleep, updateConfig } from "./utils.js";
-import gameIdsPrompt from "./prompts/game-ids.js";
-import logGameNameOrId from "./log-name-or-id.js";
+import { steamLoginMinQ, steamLoginQ } from './prompts/prompt-list.js';
+import { sleep, updateConfig } from './utils.js';
+import gameIdsPrompt from './prompts/game-ids.js';
+import logGameNameOrId from './log-name-or-id.js';
 
 const OnlineState = {
     Online: 'online',
@@ -15,8 +15,8 @@ const OnlineState = {
 };
 
 export default async function loginToSteam(configPath) {
-    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-    const splash = fs.readFileSync(path.join(process.cwd(), '/splash.txt'), 'utf8');
+    const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
+    const splash = await fs.readFile(path.join(process.cwd(), '/splash.txt'), 'utf8');
 
     let username = config.username;
     let password = config.password;
@@ -33,7 +33,7 @@ export default async function loginToSteam(configPath) {
 
             username = steamLoginA.username;
             password = steamLoginA.password;
-            onlineState = steamLoginA.onlineState
+            onlineState = steamLoginA.onlineState;
 
             if (steamLoginA.rememberLoginDetails) {
                 await updateConfig(steamLoginA);
@@ -79,7 +79,7 @@ export default async function loginToSteam(configPath) {
         password: password,
     });
 
-    client.on("loggedOn", async (e) => {
+    client.on('loggedOn', async () => {
         const personaState = getPersonaState(onlineState);
         client.setPersona(personaState);
 
@@ -95,12 +95,12 @@ export default async function loginToSteam(configPath) {
     });
 
     client.on('disconnected', (msg) => {
-        console.log(chalk.red(`Unexpectedly disconnected from Steam's server:`), msg);
-        console.log(`Attempting to log back in..`);
+        console.log(chalk.red('Unexpectedly disconnected from Steam\'s server:'), msg);
+        console.log('Attempting to log back in..');
     });
 
-    client.on("error", (err) => {
-        console.error(chalk.red(`Error logging in to Steam:`), err.message);
+    client.on('error', (err) => {
+        console.error(chalk.red('Error logging in to Steam:'), err.message);
     });
 }
 

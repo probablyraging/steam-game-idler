@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/button';
-import { IoListSharp, IoGridOutline } from "react-icons/io5";
+import { IoListSharp, IoGridOutline } from 'react-icons/io5';
 import ListView from './ListView';
 import GridView from './GridView';
 import Private from './Private';
@@ -14,7 +14,7 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
 
     useEffect(() => {
         setIsLoading(true);
-        fetch(`https://steeeam.vercel.app/api/ext-user-game-list`, {
+        fetch('https://steeeam.vercel.app/api/ext-user-game-list', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { steamId: steamId } }),
@@ -25,7 +25,7 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
             }
             setIsLoading(false);
         });
-    }, []);
+    }, [steamId]);
 
     useEffect(() => {
         const favorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
@@ -37,23 +37,23 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
     };
 
     if (sortStyle === 'a-z') {
-        gameList && gameList.sort((gameA, gameB) => {
+        gameList = gameList?.sort((gameA, gameB) => {
             const nameA = gameA.game.name.toLowerCase();
             const nameB = gameB.game.name.toLowerCase();
             return nameA.localeCompare(nameB);
         });
     } else if (sortStyle === 'z-a') {
-        gameList && gameList.sort((gameA, gameB) => {
+        gameList = gameList?.sort((gameA, gameB) => {
             const nameA = gameA.game.name.toLowerCase();
             const nameB = gameB.game.name.toLowerCase();
             return nameB.localeCompare(nameA);
         });
     } else if (sortStyle === '1-0') {
-        gameList && gameList.sort((a, b) => b.minutes - a.minutes);
+        gameList = gameList?.sort((a, b) => b.minutes - a.minutes);
     } else if (sortStyle === '0-1') {
-        gameList && gameList.sort((a, b) => a.minutes - b.minutes);
+        gameList = gameList?.sort((a, b) => a.minutes - b.minutes);
     } else if (sortStyle === 'recent') {
-        gameList && gameList.sort((a, b) => b.lastPlayedTimestamp - a.lastPlayedTimestamp);
+        gameList = gameList?.sort((a, b) => b.lastPlayedTimestamp - a.lastPlayedTimestamp);
     } else if (sortStyle === 'fav') {
         const favorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
         gameList = favorites.map(JSON.parse);
@@ -66,9 +66,9 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
         gameList = filteredGames;
     };
 
-    if (isLoading) return <Loader />
+    if (isLoading) return <Loader />;
 
-    if (!gameList) return <Private steamId={steamId} />
+    if (!gameList) return <Private steamId={steamId} />;
 
     return (
         <React.Fragment>
@@ -97,5 +97,5 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

@@ -8,5 +8,5 @@ export default function Loader() {
                 <Spinner color='secondary' size='lg' />
             </div>
         </React.Fragment>
-    )
+    );
 }

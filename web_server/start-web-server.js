@@ -1,13 +1,13 @@
 import { exec } from 'child_process';
-import chalk from "chalk";
-import fs from 'fs';
+import chalk from 'chalk';
+import fs from 'fs/promises';
 import path from 'path';
-import { updateConfig } from "../cli/utils.js";
+import { updateConfig } from '../cli/utils.js';
 import { wsStartIdling, wsStopIdling } from './handle-idling.js';
 
 export default async function startWebServer(configPath) {
-    const splash = fs.readFileSync(path.join(process.cwd(), '/splash.txt'), 'utf8');
-    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    const splash = await fs.readFile(path.join(process.cwd(), '/splash.txt'), 'utf8');
+    const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
     const port = config.port || 3000;
 
     let webServer;
@@ -20,7 +20,7 @@ export default async function startWebServer(configPath) {
         webServer = exec(`npm run start -- --port=${port}`, { cwd: './src' });
         console.log('\x1Bc');
         console.log(chalk.cyan(splash));
-        console.log(`\n\n--> Starting web server..`);
+        console.log('\n\n--> Starting web server..');
     }
 
     webServer.stdout.on('data', (stdout) => {
@@ -48,7 +48,7 @@ export default async function startWebServer(configPath) {
         console.error(`error: ${error.message}`);
     });
 
-    webServer.on('exit', (code, signal) => {
+    webServer.on('exit', () => {
         console.log('Web server exited');
     });
 
@@ -66,11 +66,11 @@ export default async function startWebServer(configPath) {
 function getBuildMessage(hasBuiltWS) {
     return hasBuiltWS ?
         `\nSteam Game Idler ran with the ${chalk.gray('--rebuild')} flag, this will take a minute or two` :
-        `\nThis is the first time launching the web server, this will take a minute or two. Future launches will be instant`;
+        '\nThis is the first time launching the web server, this will take a minute or two. Future launches will be instant';
 }
 
 function getRunningMessage() {
-    return `\n\n${chalk.yellow(`Leave this window open!\n`)}`;
+    return `\n\n${chalk.yellow('Leave this window open!\n')}`;
 }
 
 function handleServerMessage(serverMessage, steamAuth, gameIds) {

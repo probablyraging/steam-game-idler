@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios from 'axios';
 import path from 'path';
-import fs from 'fs';
-import chalk from "chalk";
+import fs from 'fs/promises';
+import chalk from 'chalk';
 
 export default async function checkForUpdates() {
     const packageJsonPath = path.join(process.cwd(), '/package.json');
-    const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    const packageJson = JSON.parse(await fs.readFile(packageJsonPath, 'utf8'));
     const currentVersion = packageJson.version;
 
     try {
@@ -13,13 +13,13 @@ export default async function checkForUpdates() {
         const { version, notes } = res.data;
 
         if (version > currentVersion) {
-            const splash = fs.readFileSync(path.join(process.cwd(), '/splash.txt'), 'utf8');
+            const splash = await fs.readFile(path.join(process.cwd(), '/splash.txt'), 'utf8');
 
             console.log('\x1Bc');
             console.log(chalk.cyan(splash));
-            console.log(`\n\nThere is an update available for Steam Game Idler`);
+            console.log('\n\nThere is an update available for Steam Game Idler');
             console.log(`\nCurrent ${chalk.hex('#f79748')(currentVersion)}   >   Latest ${chalk.green(version)}`);
-            console.log(chalk.bold(`\nChangelog`));
+            console.log(chalk.bold('\nChangelog'));
 
             for (const [index, note] of notes.entries()) {
                 if (index === notes.length - 1) {
@@ -34,7 +34,7 @@ export default async function checkForUpdates() {
             console.log(chalk.gray('Press enter to continue to Steam Game Idler..'));
 
             process.stdin.setEncoding('utf8');
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve) => {
                 process.stdin.on('data', () => {
                     process.stdin.pause();
                     resolve();
@@ -42,6 +42,6 @@ export default async function checkForUpdates() {
             });
         }
     } catch (e) {
-        return;
+        return e;
     }
 }

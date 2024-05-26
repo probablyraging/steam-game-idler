@@ -12,11 +12,11 @@ export default function Setup({ setUserSummary }) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async () => {
         if (usernameValue.length > 0 && passwordValue.length > 0) {
             setIsLoading(true);
 
-            fetch(`api/login`, {
+            fetch('api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ data: { username: usernameValue, password: passwordValue } }),
@@ -26,13 +26,13 @@ export default function Setup({ setUserSummary }) {
 
                     localStorage.setItem('steamAuth', JSON.stringify({ username: usernameValue, password: passwordValue }));
 
-                    fetch(`https://steeeam.vercel.app/api/ext-user-summary`, {
+                    fetch('https://steeeam.vercel.app/api/ext-user-summary', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ data: { uid: data.steamId } }),
                     }).then(async res => {
                         if (res.status !== 500) {
-                            const userSummary = await res.json()
+                            const userSummary = await res.json();
                             localStorage.setItem('userSummary', JSON.stringify(userSummary));
                             setUserSummary(userSummary);
                             setIsLoading(false);
@@ -129,5 +129,5 @@ export default function Setup({ setUserSummary }) {
                 </motion.div>
             </div>
         </React.Fragment >
-    )
+    );
 }

@@ -17,5 +17,5 @@ export default function Dashboard({ userSummary, setUserSummary }) {
                 <GamesList steamId={userSummary.steamId} sortStyle={sortStyle} inputValue={inputValue} isQuery={isQuery} />
             </div>
         </React.Fragment>
-    )
+    );
 }

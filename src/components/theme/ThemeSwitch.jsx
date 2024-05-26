@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useTheme } from "next-themes";
-import { LuMoonStar } from "react-icons/lu";
-import { LuSun } from "react-icons/lu";
-import { HiMiniComputerDesktop } from "react-icons/hi2";
+import { useTheme } from 'next-themes';
+import { LuMoonStar } from 'react-icons/lu';
+import { LuSun } from 'react-icons/lu';
+import { HiMiniComputerDesktop } from 'react-icons/hi2';
 
 export default function ThemeSwitch() {
     const { theme, setTheme } = useTheme();
@@ -38,5 +38,5 @@ export default function ThemeSwitch() {
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

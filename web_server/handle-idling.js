@@ -1,6 +1,6 @@
-import SteamUser from "steam-user";
-import chalk from "chalk";
-import logGameNameOrId from "../cli/log-name-or-id.js";
+import SteamUser from 'steam-user';
+import chalk from 'chalk';
+import logGameNameOrId from '../cli/log-name-or-id.js';
 
 const client = new SteamUser();
 client.setOptions({ autoRelogin: true });
@@ -25,7 +25,7 @@ async function wsLogin(username, password,) {
 
     client.on('disconnected', (msg) => {
         console.log(chalk.bold.yellow(`Unexpectedly disconnected from Steam's server: ${msg}`));
-        console.log(chalk.bold.yellow(`Attempting to log back in..`));
+        console.log(chalk.bold.yellow('Attempting to log back in..'));
     });
 }
 

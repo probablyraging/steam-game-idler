@@ -1,12 +1,12 @@
-import inquirer from "inquirer";
-import chalk from "chalk";
-import fs from 'fs';
+import inquirer from 'inquirer';
+import chalk from 'chalk';
+import fs from 'fs/promises';
 import path from 'path';
-import { gameIdsQ } from "./prompt-list.js";
-import startIdlingGames from "./start-idling.js";
+import { gameIdsQ } from './prompt-list.js';
+import startIdlingGames from './start-idling.js';
 
 export default async function gameIdsPrompt(client, manualStop, configPath) {
-    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    const config = JSON.parse(await fs.readFile(configPath, 'utf8'));
     const gameIdsConf = config.gameIds;
 
     if (!manualStop && config.gameIds?.length > 0) {
@@ -17,8 +17,8 @@ export default async function gameIdsPrompt(client, manualStop, configPath) {
 }
 
 async function useConfigFileGameIds(client, configPath, config, gameIdsConf) {
-    const splash = fs.readFileSync(path.join(process.cwd(), '/splash.txt'), 'utf8');
-    const gameIds = gameIdsConf.split(",").map(id => Number(id.trim()));
+    const splash = await fs.readFile(path.join(process.cwd(), '/splash.txt'), 'utf8');
+    const gameIds = gameIdsConf.split(',').map(id => Number(id.trim()));
 
     console.log('\x1Bc');
     console.log(chalk.cyan(splash));
@@ -29,7 +29,7 @@ async function useConfigFileGameIds(client, configPath, config, gameIdsConf) {
 
     if (gameIds.includes(NaN)) {
         const invalidIndex = gameIds.findIndex(id => isNaN(id));
-        const invalidId = a.split(",")[invalidIndex];
+        const invalidId = gameIds.split(',')[invalidIndex];
         return `\n\nInvalid Game ID(s) provided. Game IDs must be numbers only -> ${chalk.red(invalidId)}`;
     }
 
@@ -37,7 +37,7 @@ async function useConfigFileGameIds(client, configPath, config, gameIdsConf) {
 }
 
 async function promptUserForInput(client, configPath, config) {
-    const splash = fs.readFileSync(path.join(process.cwd(), '/splash.txt'), 'utf8');
+    const splash = await fs.readFile(path.join(process.cwd(), '/splash.txt'), 'utf8');
     const accountName = client?._loginSession?._accountName || null;
     const onlineState = config.onlineState.charAt(0).toUpperCase() + config.onlineState.slice(1);
 
@@ -48,7 +48,7 @@ async function promptUserForInput(client, configPath, config) {
     console.log(`You can skip this step by adding a list of game IDs to the config.json - ${chalk.gray('"gameIds": "460, 22100, 4766"')}`);
 
     const gameIdsA = await inquirer.prompt(gameIdsQ);
-    const gameIds = gameIdsA.gameIds.split(",").map(id => Number(id.trim()));
+    const gameIds = gameIdsA.gameIds.split(',').map(id => Number(id.trim()));
 
     startIdlingGames(client, configPath, config, gameIds, false);
 }

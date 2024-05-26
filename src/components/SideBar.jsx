@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { TbSortAZ, TbSortZA } from "react-icons/tb";
-import { MdOutlineTimer10Select, MdOutlineTimer3Select } from "react-icons/md";
-import { MdAvTimer } from "react-icons/md";
+import { TbSortAZ, TbSortZA } from 'react-icons/tb';
+import { MdOutlineTimer10Select, MdOutlineTimer3Select } from 'react-icons/md';
+import { MdAvTimer } from 'react-icons/md';
 import { TiHeartFullOutline } from 'react-icons/ti';
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt } from 'react-icons/fa';
 
 export default function SideBar({ setUserSummary, sortStyle, setSortStyle }) {
     const handleLogout = () => {
@@ -116,5 +116,5 @@ export default function SideBar({ setUserSummary, sortStyle, setSortStyle }) {
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

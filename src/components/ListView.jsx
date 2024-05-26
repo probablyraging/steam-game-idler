@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import moment from 'moment';
 import { MdAvTimer } from 'react-icons/md';
-import { IoLogoGameControllerB } from "react-icons/io";
+import { IoLogoGameControllerB } from 'react-icons/io';
 import { TiHeartFullOutline } from 'react-icons/ti';
 import SelectedGames from './SelectedGames';
 import IdlingState from './IdlingState';
@@ -20,7 +20,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
     const [idlingState, setIdlingState] = useState(false);
 
     const startIdler = async () => {
-        fetch(`api/start-idle`, {
+        fetch('api/start-idle', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { gameIds: selectedGames } }),
@@ -35,7 +35,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
     const stopIdler = async () => {
         const steamAuth = localStorage.getItem('steamAuth');
 
-        fetch(`api/stop-idle`, {
+        fetch('api/stop-idle', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ data: { steamAuth: JSON.parse(steamAuth) } }),
@@ -86,7 +86,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
     return (
         <React.Fragment>
             <div className='grid grid-cols-2 gap-6'>
-                {gameList && gameList.map((item, index) => {
+                {gameList && gameList.map((item) => {
                     return (
                         <div
                             className={`relative flex w-full h-[80px] bg-container gap-4 border border-border ${selectedGames.includes(item.game.id) ? 'bg-containerselected' : 'bg-container hover:bg-containerhover hover:border-borderhover'} rounded cursor-pointer group`}
@@ -132,7 +132,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
                                             <IoLogoGameControllerB className='text-blue-400' fontSize={16} />
                                             <div>
                                                 {item.lastPlayedTimestamp > 0 ? (
-                                                    <p>{moment.unix(item.lastPlayedTimestamp).format("MMM D, YYYY")}</p>
+                                                    <p>{moment.unix(item.lastPlayedTimestamp).format('MMM D, YYYY')}</p>
                                                 ) : (
                                                     <p>-</p>
                                                 )}
@@ -154,7 +154,7 @@ export default function ListView({ gameList, favorites, setFavorites }) {
                                 </div>
                             </div>
                         </div>
-                    )
+                    );
                 })}
 
                 {selectedGamesNames.length > 0 && (
@@ -165,5 +165,5 @@ export default function ListView({ gameList, favorites, setFavorites }) {
                 )}
             </div>
         </React.Fragment>
-    )
+    );
 }

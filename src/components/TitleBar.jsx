@@ -1,20 +1,8 @@
 import React from 'react';
 import ThemeSwitch from './theme/ThemeSwitch';
-import { BiSolidLeaf } from "react-icons/bi";
+import { BiSolidLeaf } from 'react-icons/bi';
 
 export default function TitleBar() {
-    const windowMinimize = () => {
-        appWindow?.minimize();
-    };
-
-    const windowToggleMaximize = () => {
-        appWindow?.toggleMaximize();
-    };
-
-    const windowClose = () => {
-        appWindow?.close();
-    };
-
     return (
         <React.Fragment>
             <div className='h-[62px] bg-titlebar border-b border-titleborder select-none'>
@@ -31,5 +19,5 @@ export default function TitleBar() {
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

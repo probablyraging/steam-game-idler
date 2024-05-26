@@ -19,5 +19,5 @@ export default function IdlingState({ stopIdler }) {
                 </div>
             </div>
         </React.Fragment>
-    )
+    );
 }

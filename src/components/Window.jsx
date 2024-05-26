@@ -10,11 +10,11 @@ export default function Window() {
         setUserSummary(JSON.parse(userSummaryData));
     }, []);
 
-    if (!userSummary) return <Setup setUserSummary={setUserSummary} />
+    if (!userSummary) return <Setup setUserSummary={setUserSummary} />;
 
     return (
         <div className='bg-base min-h-screen max-h-[calc(100vh-62px)]'>
             <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} />
         </div>
-    )
+    );
 }
