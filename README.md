@@ -27,10 +27,10 @@
 5. Follow the steps in the terminal to choose between either running the CLI or web UI
 
 # Using Steam Guard
-If your account is protected by Steam Guard, a 5-digit Steam Guard code will be required;
+If your account is protected by Steam Guard, a 5-digit Steam Guard code will be required
 ### Web UI
 - On the login page of the Web UI when logging in
-- In the command/terminal window when attempting to idle games *(if you don't see the "started idling [game name]" message after entering your code you will need to stop and start idling your game(s) again)*
+- In the command/terminal window when attempting to idle games *(if you don't see the `started idling [game name]` message after entering your code you will need to stop and start idling your game(s) again)*
 ### SLI
 - In the command/terminal window when logging in
 
