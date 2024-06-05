@@ -36,7 +36,6 @@ export default async function checkForUpdates() {
             process.stdin.setEncoding('utf8');
             return new Promise((resolve) => {
                 process.stdin.on('data', () => {
-                    process.stdin.pause();
                     resolve();
                 });
             });
