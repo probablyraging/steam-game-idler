@@ -11,6 +11,12 @@ export default async function handler(req, res) {
             client.logOn({
                 accountName: username,
                 password: password,
+                twoFactorCode: req.body.data.authCode || ''
+            });
+
+            client.on('steamGuard', () => {
+                res.status(200).json({ requires2FA: true });
+                resolve();
             });
 
             client.on('loggedOn', (e) => {

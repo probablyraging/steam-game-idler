@@ -9,6 +9,8 @@ import TitleBar from './TitleBar';
 export default function Setup({ setUserSummary }) {
     const [usernameValue, setUsernameValue] = useState('');
     const [passwordValue, setPasswordValue] = useState('');
+    const [twoFactorValue, setTwoFactorValue] = useState('');
+    const [requires2FA, setRequires2FA] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -19,10 +21,16 @@ export default function Setup({ setUserSummary }) {
             fetch('api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { username: usernameValue, password: passwordValue } }),
+                body: JSON.stringify({ data: { username: usernameValue, password: passwordValue, authCode: twoFactorValue } }),
             }).then(async res => {
                 if (res.status !== 500) {
                     const data = await res.json();
+
+                    if (data.requires2FA) {
+                        setRequires2FA(true);
+                        setIsLoading(false);
+                        return;
+                    }
 
                     localStorage.setItem('steamAuth', JSON.stringify({ username: usernameValue, password: passwordValue }));
 
@@ -57,6 +65,10 @@ export default function Setup({ setUserSummary }) {
         setPasswordValue(e.target.value);
     };
 
+    const handleTwoFactorChange = (e) => {
+        setTwoFactorValue(e.target.value);
+    };
+
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             handleSubmit(e);
@@ -86,28 +98,47 @@ export default function Setup({ setUserSummary }) {
                     </div>
 
                     <div className='flex justify-center items-center flex-col gap-5 pb-6'>
-                        <Input
-                            placeholder='Steam Username'
-                            isRequired
-                            value={usernameValue}
-                            onChange={handleUsernameChange}
-                            description={error}
-                            classNames={{
-                                inputWrapper: ['bg-base border border-inputborder hover:!bg-titlebar']
-                            }}
-                        />
-                        <Input
-                            placeholder='Steam Password'
-                            isRequired
-                            type='password'
-                            value={passwordValue}
-                            onChange={handlePasswordChange}
-                            onKeyDown={handleKeyDown}
-                            description={error}
-                            classNames={{
-                                inputWrapper: ['bg-base border border-inputborder hover:!bg-titlebar']
-                            }}
-                        />
+                        {!requires2FA && (
+                            <React.Fragment>
+                                <Input
+                                    placeholder='Steam Username'
+                                    isRequired
+                                    value={usernameValue}
+                                    onChange={handleUsernameChange}
+                                    onKeyDown={handleKeyDown}
+                                    description={error}
+                                    classNames={{
+                                        inputWrapper: ['bg-base border border-inputborder hover:!bg-titlebar']
+                                    }}
+                                />
+                                <Input
+                                    placeholder='Steam Password'
+                                    isRequired
+                                    type='password'
+                                    value={passwordValue}
+                                    onChange={handlePasswordChange}
+                                    onKeyDown={handleKeyDown}
+                                    description={error}
+                                    classNames={{
+                                        inputWrapper: ['bg-base border border-inputborder hover:!bg-titlebar']
+                                    }}
+                                />
+                            </React.Fragment>
+                        )}
+                        {requires2FA && (
+                            <Input
+                                placeholder='Steam Guard Code'
+                                isRequired
+                                maxLength={5}
+                                value={twoFactorValue}
+                                onChange={handleTwoFactorChange}
+                                onKeyDown={handleKeyDown}
+                                description={error}
+                                classNames={{
+                                    inputWrapper: ['bg-base border border-inputborder hover:!bg-titlebar']
+                                }}
+                            />
+                        )}
                         <Button
                             size='sm'
                             color='primary'

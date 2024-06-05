@@ -1,7 +1,6 @@
 {
-    "version": "1.0.3",
+    "version": "1.0.4",
     "notes": [
-        "Fixed incorrect file name",
-        "Check for updates on launch"
+        "Added support for logging in to and idling games on Steam Guard protected accounts via the Web UI"
     ]
 }
