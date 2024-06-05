@@ -1,6 +1,6 @@
 {
     "name": "sgi-li-webui",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "main": "index.js",
     "type": "module",
     "keywords": [],

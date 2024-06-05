@@ -1,6 +1,6 @@
 {
-    "version": "1.0.4",
+    "version": "1.0.5",
     "notes": [
-        "Added support for logging in to and idling games on Steam Guard protected accounts via the Web UI"
+        "Added tooltips to the sidebar (sort bar) to indicate what each button does"
     ]
 }
