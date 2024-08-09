@@ -1,10 +1,10 @@
 {
-    "version": "1.1.5",
-    "notes": "Added tooltips to the sidebar (sort bar) to indicate what each button does",
+    "version": "1.1.6",
+    "notes": "Removed 'list view' and 'grid view' buttons. Added 'game information' button.",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGxLZHdvcXIrZ0JkaGs0dzNKeHUxN0xYejd1b2NLVnllZTRzVWhlc2c3OUJoMFg5THJaS0VLa2dBdlJ0NnFxZHAxcHMxNlQ4alBmQ1ZkVlFwMHI1THdZPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzE2NjA4MDU2CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuNV94NjRfZW4tVVMubXNpLnppcAovM2tJanh4d05lM3VhV3A5bXB1Y1NNS05wVGhFeVZTMzNlWmwwcTNhbzhLcjdKdlVsa3lRRkQ2bytPR3ZIWTgxUzRhd0Y5Zzh4UTh1NEwwOER3VG9DUT09Cg==",
-            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.1.5/Steam.Game.Idler_1.1.5_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGg4L1VVMUdiMzU3OE1vRGVORExRdXRiWnlTc252OFd4VVlGYzdYSXhQTlZBWFd3VWJ6cEJZUHB3QS9ZMUYrVjFsT3c0YTJsa3JQWjZmSjliNWpKZFE0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMTg0NTkwCWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuNl94NjRfZW4tVVMubXNpLnppcApwQ01qMEJGZ2FRNkJvN1B0dERUMVUyYnFxMHJnKzJNTlBvVE1PbnF0ZTZVTy82L2wrSlFVZ0NLcWVIclJsSlY1NXNjblFjc3E4dXI5SnNHYUQrcmJCUT09Cg==",
+            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.1.6/Steam.Game.Idler_1.1.6_x64_en-US.msi.zip"
         }
     }
 }

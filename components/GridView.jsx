@@ -1,11 +1,16 @@
 import React from 'react';
 import Image from 'next/image';
+import moment from 'moment';
 import { invoke } from '@tauri-apps/api/tauri';
 import { TiHeartFullOutline } from 'react-icons/ti';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import minutesToHoursCompact from '@/utils/utils';
+import { MdAvTimer } from 'react-icons/md';
+import { IoLogoGameControllerB } from 'react-icons/io';
+import { Tooltip } from '@nextui-org/react';
 
-export default function GridView({ gameList, favorites, setFavorites }) {
+export default function GridView({ gameList, favorites, setFavorites, showStats }) {
     const launchIdler = async (appId) => {
         const status = await invoke('check_status');
         if (status) {
@@ -56,9 +61,41 @@ export default function GridView({ gameList, favorites, setFavorites }) {
                             </div>
                             <div className='flex justify-center items-center flex-col p-2'>
                                 <div className='max-w-[170px]'>
-                                    <p className='font-bold truncate'>
+                                    <p className='font-bold text-center truncate'>
                                         {item.game.name}
                                     </p>
+
+                                    {showStats && (
+                                        <div className='flex items-center flex-col gap-2 mt-2'>
+                                            <Tooltip closeDelay={0} placement='right' className='text-xs' content='Total playtime'>
+                                                <div className='flex items-center gap-1 text-xs'>
+                                                    <MdAvTimer className='text-yellow-400' fontSize={16} />
+                                                    <div>
+                                                        {minutesToHoursCompact(item.minutes) > 1 ? (
+                                                            <p>{minutesToHoursCompact(item.minutes).toLocaleString()} hours</p>
+                                                        ) : minutesToHoursCompact(item.minutes) === 0 ? (
+                                                            <p>0 hours</p>
+                                                        ) : (
+                                                            <p>{minutesToHoursCompact(item.minutes).toLocaleString()} hour</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </Tooltip>
+
+                                            <Tooltip closeDelay={0} placement='right' className='text-xs' content='Last played'>
+                                                <div className='flex items-center gap-1 text-xs'>
+                                                    <IoLogoGameControllerB className='text-blue-400' fontSize={16} />
+                                                    <div>
+                                                        {item.lastPlayedTimestamp > 0 ? (
+                                                            <p>{moment.unix(item.lastPlayedTimestamp).format('MMM D, YYYY')}</p>
+                                                        ) : (
+                                                            <p>Never played</p>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            </Tooltip>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div className='absolute top-0 right-0 p-1'>

@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@nextui-org/react';
-import { IoListSharp, IoGridOutline } from 'react-icons/io5';
-import ListView from './ListView';
+import { IoIosStats } from 'react-icons/io';
 import GridView from './GridView';
 import Private from './Private';
 import Loader from './Loader';
+import { Tooltip } from '@nextui-org/react';
 
 export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
     let [isLoading, setIsLoading] = useState(false);
     let [gameList, setGameList] = useState(null);
-    const [viewStyle, setViewStyle] = useState('grid');
     const [favorites, setFavorites] = useState(null);
+    const [showStats, setShowStats] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -32,8 +32,8 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
         setFavorites(favorites.map(JSON.parse));
     }, []);
 
-    const handleViewStyle = (value) => {
-        setViewStyle(value);
+    const handleShowStats = () => {
+        setShowStats(!showStats);
     };
 
     if (sortStyle === 'a-z') {
@@ -75,25 +75,18 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto'>
                 <div className='p-4'>
                     <div className='flex justify-end items-center w-full gap-2 pb-4'>
-                        <Button
-                            isIconOnly
-                            startContent={<IoGridOutline fontSize={14} />}
-                            size='sm'
-                            className={`${viewStyle === 'grid' && 'text-sgi'} bg-container border border-border`}
-                            onClick={() => handleViewStyle('grid')}
-                        />
-
-                        <Button
-                            isIconOnly
-                            startContent={<IoListSharp fontSize={18} />}
-                            size='sm'
-                            className={`${viewStyle === 'list' && 'text-sgi'} bg-container border border-border`}
-                            onClick={() => handleViewStyle('list')}
-                        />
+                        <Tooltip closeDelay={0} placement='left' className='text-xs' content='Show game information'>
+                            <Button
+                                isIconOnly
+                                startContent={<IoIosStats fontSize={18} />}
+                                size='sm'
+                                className={`${showStats && 'text-sgi'} bg-container border border-border`}
+                                onClick={() => handleShowStats()}
+                            />
+                        </Tooltip>
                     </div>
 
-                    {viewStyle === 'list' && (<ListView gameList={gameList} favorites={favorites} setFavorites={setFavorites} />)}
-                    {viewStyle === 'grid' && (<GridView gameList={gameList} favorites={favorites} setFavorites={setFavorites} />)}
+                    <GridView gameList={gameList} favorites={favorites} setFavorites={setFavorites} showStats={showStats} />
                 </div>
             </div>
         </React.Fragment>
