@@ -10,7 +10,8 @@ fn main() {
         .invoke_handler(tauri::generate_handler![
             get_file_path,
             check_status,
-            idle_game
+            idle_game,
+            unlock_achievement
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -45,5 +46,14 @@ fn idle_game(file_path: String, argument: String) -> Result<(), String> {
         .arg(argument)
         .spawn()
         .expect("failed to launch");
+    Ok(())
+}
+
+#[tauri::command]
+fn unlock_achievement(file_path: String, app_id: String, achievement_id: String) -> Result<(), String> {
+    std::process::Command::new(file_path)
+        .args(&[app_id, achievement_id])
+        .output()
+        .expect("failed to execute unlocker");
     Ok(())
 }

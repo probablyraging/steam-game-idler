@@ -7,6 +7,7 @@
     --sb-track: #efefef;
     --a: #666;
     --a-hover: #000;
+    --percent: #e3e3e3;
 }
 
 .dark {
@@ -14,6 +15,7 @@
     --sb-track: #1c1c1c;
     --a: #888;
     --a-hover: #fff;
+    --percent: #1c1c1c;
 }
 
 ::-webkit-scrollbar {

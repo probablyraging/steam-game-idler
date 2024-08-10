@@ -7,10 +7,10 @@ import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import minutesToHoursCompact from '@/utils/utils';
 import { MdAvTimer } from 'react-icons/md';
-import { IoLogoGameControllerB } from 'react-icons/io';
+import { IoLogoGameControllerB, IoMdTrophy } from 'react-icons/io';
 import { Tooltip } from '@nextui-org/react';
 
-export default function GridView({ gameList, favorites, setFavorites, showStats }) {
+export default function GridView({ gameList, favorites, setFavorites, showStats, showAchievements, setShowAchievements, setAppId }) {
     const launchIdler = async (appId) => {
         const status = await invoke('check_status');
         if (status) {
@@ -38,6 +38,12 @@ export default function GridView({ gameList, favorites, setFavorites, showStats 
         localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
         const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
         setFavorites(newFavorites.map(JSON.parse));
+    };
+
+    const viewAchievments = (e, item) => {
+        e.stopPropagation();
+        setAppId(item.game.id);
+        setShowAchievements(!showAchievements);
     };
 
     return (
@@ -108,6 +114,12 @@ export default function GridView({ gameList, favorites, setFavorites, showStats 
                                         <TiHeartFullOutline fontSize={16} />
                                     </div>
                                 )}
+                            </div>
+
+                            <div className='absolute top-0 right-7 p-1'>
+                                <div className='text-white bg-neutral-800 hover:bg-neutral-700 bg-opacity-60 rounded p-1' onClick={(e) => viewAchievments(e, item)}>
+                                    <IoMdTrophy fontSize={16} />
+                                </div>
                             </div>
                         </div>
                     );

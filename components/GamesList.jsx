@@ -5,12 +5,15 @@ import GridView from './GridView';
 import Private from './Private';
 import Loader from './Loader';
 import { Tooltip } from '@nextui-org/react';
+import Achievements from './Achievements';
 
 export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
     let [isLoading, setIsLoading] = useState(false);
     let [gameList, setGameList] = useState(null);
     const [favorites, setFavorites] = useState(null);
     const [showStats, setShowStats] = useState(false);
+    const [showAchievements, setShowAchievements] = useState(false);
+    const [appId, setAppId] = useState(null);
 
     useEffect(() => {
         setIsLoading(true);
@@ -74,19 +77,33 @@ export default function GamesList({ steamId, sortStyle, inputValue, isQuery }) {
         <React.Fragment>
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto'>
                 <div className='p-4'>
-                    <div className='flex justify-end items-center w-full gap-2 pb-4'>
-                        <Tooltip closeDelay={0} placement='left' className='text-xs' content='Show game information'>
-                            <Button
-                                isIconOnly
-                                startContent={<IoIosStats fontSize={18} />}
-                                size='sm'
-                                className={`${showStats && 'text-sgi'} bg-container border border-border`}
-                                onClick={() => handleShowStats()}
-                            />
-                        </Tooltip>
-                    </div>
+                    {showAchievements === true ? (
+                        <Achievements steamId={steamId} appId={appId} setShowAchievements={setShowAchievements} />
+                    ) : (
+                        <React.Fragment>
+                            <div className='flex justify-end items-center w-full gap-2 pb-4'>
+                                <Tooltip closeDelay={0} placement='left' className='text-xs' content='Show game information'>
+                                    <Button
+                                        isIconOnly
+                                        startContent={<IoIosStats fontSize={18} />}
+                                        size='sm'
+                                        className={`${showStats && 'text-sgi'} bg-container border border-border`}
+                                        onClick={() => handleShowStats()}
+                                    />
+                                </Tooltip>
+                            </div>
 
-                    <GridView gameList={gameList} favorites={favorites} setFavorites={setFavorites} showStats={showStats} />
+                            <GridView
+                                gameList={gameList}
+                                favorites={favorites}
+                                setFavorites={setFavorites}
+                                showStats={showStats}
+                                showAchievements={showAchievements}
+                                setShowAchievements={setShowAchievements}
+                                setAppId={setAppId}
+                            />
+                        </React.Fragment>
+                    )}
                 </div>
             </div>
         </React.Fragment>

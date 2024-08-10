@@ -56,6 +56,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                     <div className='flex justify-center items-center flex-grow h-full border-b border-titleborder'>
                         <div className='flex flex-grow p-4' data-tauri-drag-region>
                             <Input
+                                isClearable
                                 placeholder='Search for a game'
                                 startContent={<RiSearchLine />}
                                 className='max-w-[400px]'
@@ -63,6 +64,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                                 value={inputValue}
                                 onChange={handleChange}
                                 onKeyDown={handleKeyDown}
+                                onClear={() => { setInputValue(''); }}
                             />
                         </div>
 

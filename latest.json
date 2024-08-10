@@ -1,10 +1,10 @@
 {
-    "version": "1.1.6",
-    "notes": "Removed 'list view' and 'grid view' buttons. Added 'game information' button.",
+    "version": "1.2.0",
+    "notes": "Added achievement unlocker functionality (click the trophy button on game cards).",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGg4L1VVMUdiMzU3OE1vRGVORExRdXRiWnlTc252OFd4VVlGYzdYSXhQTlZBWFd3VWJ6cEJZUHB3QS9ZMUYrVjFsT3c0YTJsa3JQWjZmSjliNWpKZFE0PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMTg0NTkwCWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjEuNl94NjRfZW4tVVMubXNpLnppcApwQ01qMEJGZ2FRNkJvN1B0dERUMVUyYnFxMHJnKzJNTlBvVE1PbnF0ZTZVTy82L2wrSlFVZ0NLcWVIclJsSlY1NXNjblFjc3E4dXI5SnNHYUQrcmJCUT09Cg==",
-            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.1.6/Steam.Game.Idler_1.1.6_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMHZzSVZGM2VIQnI1Nm9kd2VDMVYzNStCTmo2ai9kZVcrK3N3ZkE3THc3M3E3YjBTVVorbDNGQU1hMmlrWHdLYUNTeDAwTkJNc0VBSDFKZTV1WDAyeHdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMzE1MTQzCWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjIuMF94NjRfZW4tVVMubXNpLnppcApSOWxzYXk5OG5IVDNmOGljMm5nTnFObmRCSXRpbWEycndwNFpqc21zaThxUngxNTNkWkkzVnJrV0hsbDdFV2ZqWU8rbkJzZGVUb3NiVnoyN25mcFFEdz09Cg==",
+            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.2.0/Steam.Game.Idler_1.2.0_x64_en-US.msi.zip"
         }
     }
 }
