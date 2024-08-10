@@ -3,7 +3,7 @@
     "notes": "Added achievement unlocker functionality (click the trophy button on game cards).",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMHZzSVZGM2VIQnI1Nm9kd2VDMVYzNStCTmo2ai9kZVcrK3N3ZkE3THc3M3E3YjBTVVorbDNGQU1hMmlrWHdLYUNTeDAwTkJNc0VBSDFKZTV1WDAyeHdzPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMzE1MTQzCWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjIuMF94NjRfZW4tVVMubXNpLnppcApSOWxzYXk5OG5IVDNmOGljMm5nTnFObmRCSXRpbWEycndwNFpqc21zaThxUngxNTNkWkkzVnJrV0hsbDdFV2ZqWU8rbkJzZGVUb3NiVnoyN25mcFFEdz09Cg==",
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGlubnBVWWVBSlpTbCsrYXJ3Sy9qaURkKysxU2kvUkRkZGhoZEdxeUNNUEZMb1NPQ0Z3b0oxcWVRd2QxdFluT0k2M1RHdlBoSjFCRTJ2aDRWeEJRN3dvPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMzE2Nzg4CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjIuMF94NjRfZW4tVVMubXNpLnppcApJZ2NObktaaFhXWDRXaWw5ano2SWlnVGpwYVBxazl1NUhYOTRxcUIvUlFHZE9vNHlGS0tkaURSbTBMZ2xTV2I2SXFaQlBSRUsyRnhHMmJJRkFQK0tBdz09Cg==",
             "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.2.0/Steam.Game.Idler_1.2.0_x64_en-US.msi.zip"
         }
     }
