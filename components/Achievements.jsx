@@ -5,9 +5,11 @@ import Image from 'next/image';
 import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { FaUnlockAlt, FaLock } from 'react-icons/fa';
+import { FaUnlockAlt, FaLock, FaInfoCircle } from 'react-icons/fa';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 import { RiSearchLine } from 'react-icons/ri';
+import Link from 'next/link';
+import { TiWarning } from 'react-icons/ti';
 
 export default function Achievements({ steamId, appId, setShowAchievements }) {
     let [isLoading, setIsLoading] = useState(false);
@@ -16,6 +18,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
     let [gameAchievementsPercentages, setGameAchievementsPercentages] = useState([]);
     const [isSorted, setIsSorted] = useState(false);
     const [inputValue, setInputValue] = useState('');
+    const [achievementsUnavailable, setAchievementsUnavailable] = useState(false);
 
     useEffect(() => {
         setIsLoading(true);
@@ -27,9 +30,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
             }).then(async res => {
                 if (res.status !== 500) {
                     const data = await res.json();
-                    console.log(data);
-
-                    setAchievementList(data.availableGameStats.achievements);
+                    setAchievementList(data.availableGameStats?.achievements);
                 }
             }),
             fetch('https://steeeam.vercel.app/api/ext-user-achievements', {
@@ -40,6 +41,8 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                 if (res.status !== 500) {
                     const data = await res.json();
                     setUserAchievements(data.achievements);
+                } else {
+                    setAchievementsUnavailable(true);
                 }
             }),
             fetch('https://steeeam.vercel.app/api/ext-game-achievement-percentage', {
@@ -61,7 +64,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
     const percentageMap = new Map();
     gameAchievementsPercentages.forEach(item => percentageMap.set(item.name, item.percent));
 
-    if (!isSorted) {
+    if (!isSorted && achievementList && achievementList.length > 0) {
         achievementList = [...achievementList].sort((a, b) => {
             const percentA = percentageMap.get(a.name) || 0;
             const percentB = percentageMap.get(b.name) || 0;
@@ -132,6 +135,22 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
 
     if (isLoading) return <Loader />;
 
+    if (!achievementList || (achievementList && achievementList.length < 1)) {
+        return (
+            <React.Fragment>
+                <div className='flex justify-between items-center'>
+                    <Button className='w-fit bg-[#F4F4F5] dark:bg-[#27272A] border border-border hover:border-borderhover rounded' radius='none' startContent={<IoMdArrowRoundBack fontSize={18} />} onClick={handleClick}>
+                        Back to games list
+                    </Button>
+                </div>
+
+                <div className='flex justify-center items-center w-full mt-2'>
+                    <p>This game has no available achievements.</p>
+                </div>
+            </React.Fragment>
+        );
+    }
+
     return (
         <React.Fragment>
             <div className='flex justify-between items-center'>
@@ -168,9 +187,29 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
             </div>
 
             <div className='flex flex-wrap gap-4 mt-2'>
-                <div>
+                <div className='flex flex-col gap-2 mt-2 w-full'>
+                    {achievementsUnavailable && (
+                        <div className='flex justify-between items-center w-full p-2 bg-red-100 border border-red-300 rounded'>
+                            <div className='flex items-center gap-2 text-xs font-semibold text-red-400'>
+                                <TiWarning fontSize={18} />
+                                <p>Your &quot;Game details&quot; setting might be set to private in your privacy settings. You can still unlock achievements but the changes won&apos;t be reflected here.</p>
+                            </div>
+                            <Link href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`} target='_blank'>
+                                <Button color='primary' size='sm' className='text-white dark:text-black font-medium rounded-sm'>
+                                    Change Account Privacy
+                                </Button>
+                            </Link>
+                        </div>
+                    )}
+
+                    <div className='flex justify-between items-center w-full p-2 bg-blue-100 border border-blue-300 rounded'>
+                        <div className='flex items-center gap-2 text-xs font-semibold text-blue-400'>
+                            <FaInfoCircle fontSize={18} />
+                            <p>Please note that unlocking/locking achievements is instant but may take up to 5 minutes to be reflected on this page. Check your Steam game achievements for real-time changes.</p>
+                        </div>
+                    </div>
+
                     <p className='text-xs italic'>
-                        Please note that unlocking/locking achievements is instant but may take up to 5 minutes to be reflected on this page. Check your Steam game achievements for real-time changes.
                     </p>
                 </div>
 
