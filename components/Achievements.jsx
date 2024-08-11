@@ -6,7 +6,7 @@ import { Button, Input, Select, SelectItem } from '@nextui-org/react';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaUnlockAlt, FaLock, FaInfoCircle } from 'react-icons/fa';
-import { IoMdArrowRoundBack } from 'react-icons/io';
+import { IoIosClose, IoMdArrowRoundBack } from 'react-icons/io';
 import { RiSearchLine } from 'react-icons/ri';
 import Link from 'next/link';
 import { TiWarning } from 'react-icons/ti';
@@ -19,6 +19,10 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
     const [isSorted, setIsSorted] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [achievementsUnavailable, setAchievementsUnavailable] = useState(false);
+    const [needConfirmation, setNeedConfirmation] = useState(false);
+    const [btnLoading, setBtnLoading] = useState(false);
+    const [showAlertOne, setShowAlertOne] = useState(true);
+    const [showAlertTwo, setShowAlertTwo] = useState(true);
 
     useEffect(() => {
         setIsLoading(true);
@@ -58,6 +62,13 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
         ]).finally(() => setIsLoading(false));
     }, [steamId, appId]);
 
+    useEffect(() => {
+        const alertOne = localStorage.getItem('alertOne');
+        if (alertOne !== null) setShowAlertOne(alertOne);
+        const alertTwo = localStorage.getItem('alertTwo');
+        if (alertTwo !== null) setShowAlertTwo(alertTwo);
+    }, []);
+
     const userAchievementsMap = new Map();
     userAchievements.forEach(item => userAchievementsMap.set(item.name, item.unlocked));
 
@@ -78,7 +89,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
         );
     };
 
-    const unlockAchievement = async (achievementId) => {
+    const unlockAchievement = async (achievementId, unlockAll) => {
         const status = await invoke('check_status');
         if (status) {
             const path = await invoke('get_file_path');
@@ -86,7 +97,8 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
             await invoke('unlock_achievement', {
                 filePath: fullPath,
                 appId: appId.toString(),
-                achievementId: achievementId
+                achievementId: achievementId,
+                unlockAll: unlockAll
             });
         } else {
             toast.error('Steam is not running');
@@ -131,6 +143,40 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
             setAchievementList(sortedList);
         }
         setIsSorted(true);
+    };
+
+    const handleUnlockAll = async (step) => {
+        if (step === 1) {
+            setNeedConfirmation(true);
+        } else if (step === 2) {
+            setBtnLoading(true);
+            let unlocked = 0;
+            const total = achievementList.length;
+            for (const ach of achievementList) {
+                try {
+                    await unlockAchievement(ach.name, true);
+                    unlocked++;
+                    toast.info(`Unlocked ${unlocked} of ${total} achievements`, { autoClose: 1000 });
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                } catch (error) {
+                    console.error(`Failed to unlock achievement ${ach.name}:`, error);
+                }
+            }
+            setBtnLoading(false);
+            setNeedConfirmation(false);
+            toast.success(`Successfully unlocked ${unlocked} of ${total} achievements.`);
+        }
+    };
+
+    const handleAlert = (val) => {
+        if (val === 1) {
+            localStorage.setItem('alertOne', false);
+            setShowAlertOne('false');
+        }
+        if (val === 2) {
+            localStorage.setItem('alertTwo', false);
+            setShowAlertTwo('false');
+        }
     };
 
     if (isLoading) return <Loader />;
@@ -188,29 +234,58 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
 
             <div className='flex flex-wrap gap-4 mt-2'>
                 <div className='flex flex-col gap-2 mt-2 w-full'>
-                    {achievementsUnavailable && (
+                    {achievementsUnavailable && showAlertOne !== 'false' && (
                         <div className='flex justify-between items-center w-full p-2 bg-red-100 border border-red-300 rounded'>
                             <div className='flex items-center gap-2 text-xs font-semibold text-red-400'>
                                 <TiWarning fontSize={18} />
                                 <p>Your &quot;Game details&quot; setting might be set to private in your privacy settings. You can still unlock achievements but the changes won&apos;t be reflected here.</p>
                             </div>
-                            <Link href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`} target='_blank'>
-                                <Button color='primary' size='sm' className='text-white dark:text-black font-medium rounded-sm'>
-                                    Change Account Privacy
-                                </Button>
-                            </Link>
+                            <div className='flex items-center gap-2'>
+                                <Link href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`} target='_blank'>
+                                    <Button color='primary' size='sm' className='text-white dark:text-black font-medium rounded-sm'>
+                                        Change Account Privacy
+                                    </Button>
+                                </Link>
+                                <Button
+                                    isIconOnly
+                                    size='sm'
+                                    className='bg-transparent hover:text-red-400'
+                                    startContent={<IoIosClose fontSize={24} />}
+                                    onClick={() => { handleAlert(1); }}
+                                />
+                            </div>
                         </div>
                     )}
 
-                    <div className='flex justify-between items-center w-full p-2 bg-blue-100 border border-blue-300 rounded'>
-                        <div className='flex items-center gap-2 text-xs font-semibold text-blue-400'>
-                            <FaInfoCircle fontSize={18} />
-                            <p>Please note that unlocking/locking achievements is instant but may take up to 5 minutes to be reflected on this page. Check your Steam game achievements for real-time changes.</p>
+                    {showAlertTwo !== 'false' && (
+                        <div className='flex justify-between items-center w-full p-2 bg-blue-100 border border-blue-300 rounded'>
+                            <div className='flex justify-between items-center w-full gap-2 text-xs font-semibold text-blue-400'>
+                                <div className='flex items-center gap-2'>
+                                    <FaInfoCircle fontSize={18} />
+                                    <p>Please note that unlocking/locking achievements is instant but may take up to 5 minutes to be reflected on this page. Check your Steam game achievements for real-time changes.</p>
+                                </div>
+                                <Button
+                                    isIconOnly
+                                    size='sm'
+                                    className='bg-transparent hover:text-blue-400'
+                                    startContent={<IoIosClose fontSize={24} />}
+                                    onClick={() => { handleAlert(2); }}
+                                />
+                            </div>
                         </div>
-                    </div>
+                    )}
+                </div>
 
-                    <p className='text-xs italic'>
-                    </p>
+                <div className='flex w-full justify-end'>
+                    {needConfirmation ? (
+                        <Button isLoading={btnLoading} className='bg-sgi text-white' onClick={() => { handleUnlockAll(2) }}>
+                            Are you sure?
+                        </Button>
+                    ) : (
+                        <Button isLoading={btnLoading} className='bg-green-300 dark:bg-[#41b16b]' onClick={() => { handleUnlockAll(1) }}>
+                            Unlock all achievements
+                        </Button>
+                    )}
                 </div>
 
                 {achievementList && achievementList.map((item) => {
@@ -250,13 +325,13 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                                     <Button
                                         startContent={<FaUnlockAlt fontSize={18} />}
                                         className='h-full rounded-none bg-green-300 dark:bg-[#41b16b] min-w-[105px]'
-                                        onClick={() => { unlockAchievement(item.name); }}
+                                        onClick={() => { unlockAchievement(item.name, false); }}
                                     >Unlock</Button>
                                 ) : (
                                     <Button
                                         startContent={<FaLock fontSize={18} />}
                                         className='h-full rounded-none bg-red-300 dark:bg-[#bd5454] min-w-[105px]'
-                                        onClick={() => { unlockAchievement(item.name); }}
+                                        onClick={() => { unlockAchievement(item.name, false); }}
                                     >Lock</Button>
                                 )}
                             </div>

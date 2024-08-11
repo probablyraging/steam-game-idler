@@ -14,7 +14,7 @@ namespace AchievementUnlocker
         {
             if (args.Length < 2)
             {
-                MessageBox.Show("Usage: AchievementUnlocker.exe <AppID> <AchievementID>", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Usage: AchievementUnlocker.exe <AppID> <AchievementID> <bool? UnlockAll>", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -26,6 +26,7 @@ namespace AchievementUnlocker
             }
 
             string achievementId = args[1];
+            bool unlockAll = args.Length > 2 && bool.TryParse(args[2], out var result) && result;
 
             Environment.SetEnvironmentVariable("SteamAppId", appId.ToString());
 
@@ -58,34 +59,58 @@ namespace AchievementUnlocker
                 }
 
                 bool isAchieved;
-                if (SteamUserStats.GetAchievement(achievementId, out isAchieved))
+                if (unlockAll)
                 {
-                    if (isAchieved)
+                    if (SteamUserStats.GetAchievement(achievementId, out isAchieved))
                     {
-                        if (SteamUserStats.ClearAchievement(achievementId))
+                        if (!isAchieved)
                         {
-                            SteamUserStats.StoreStats();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Failed to lock achievement", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            if (SteamUserStats.SetAchievement(achievementId))
+                            {
+                                SteamUserStats.StoreStats();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to unlock achievement", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
                     }
                     else
                     {
-                        if (SteamUserStats.SetAchievement(achievementId))
-                        {
-                            SteamUserStats.StoreStats();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Failed to unlock achievement", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        MessageBox.Show("Failed to get achievement data. It might not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else
                 {
-                    MessageBox.Show("Failed to get achievement data. It might not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (SteamUserStats.GetAchievement(achievementId, out isAchieved))
+                    {
+                        if (isAchieved)
+                        {
+                            if (SteamUserStats.ClearAchievement(achievementId))
+                            {
+                                SteamUserStats.StoreStats();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to lock achievement", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                        else
+                        {
+                            if (SteamUserStats.SetAchievement(achievementId))
+                            {
+                                SteamUserStats.StoreStats();
+                            }
+                            else
+                            {
+                                MessageBox.Show("Failed to unlock achievement", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Failed to get achievement data. It might not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
             catch (Exception ex)

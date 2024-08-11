@@ -1,10 +1,10 @@
 {
-    "version": "1.2.1",
-    "notes": "Added achievement unlocker functionality (click the trophy button on game cards).",
+    "version": "1.2.2",
+    "notes": "Added an unlock all button to the achievements menu",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGtyeWZTNmhhVE1pWUFhakxSYjFtYmo5SW5ZeWY2cGxJR3dSdU1OalU0M2Erc1RxcmtXNDZGZ1BDMXBvSWhka0UxOHB4cXhFbFh3L3kwam5jZ1NFL2djPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMzMyMTkxCWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjIuMV94NjRfZW4tVVMubXNpLnppcApVT3V0VW1ISlV3cUsxQXYxY3BzOUtOUCt1a29Uc0k0QnFpM2NRU2RDQmhaUVFhTkZYaWRFQzZwTXlyY0lCb3cvVVZhc2ZPRVBpWndxYWFyQnZOYjVDUT09Cg==",
-            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.2.1/Steam.Game.Idler_1.2.1_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMHVSN3NsT1gxdVhNUmQyaUZRVnZHWUlhUkN6UUVmcGppTm82MXg4Y20yak1GK01XWjhGdU5NQ2lYZThXSWYzYldqYTNwM0EzMUl5TXBrd3ZuOUZLZ0FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMzYzODg3CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjIuMl94NjRfZW4tVVMubXNpLnppcApKNUJHYThTT21kSG4rR2h6WXI5N1JpNnVDZ1NVVk14dHhuZjd5azhFRTBaZ0tRYmgrbndoczZ2cUtrZkE3TDd2ZWU0aEFHeXlpNWFqMTN2NGxFaGNEZz09Cg==",
+            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.2.2/Steam.Game.Idler_1.2.2_x64_en-US.msi.zip"
         }
     }
 }

@@ -50,9 +50,10 @@ fn idle_game(file_path: String, argument: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-fn unlock_achievement(file_path: String, app_id: String, achievement_id: String) -> Result<(), String> {
+fn unlock_achievement(file_path: String, app_id: String, achievement_id: String, unlock_all: bool) -> Result<(), String> {
+    let unlock_all_arg = if unlock_all { "true" } else { "false" }.to_string();
     std::process::Command::new(file_path)
-        .args(&[app_id, achievement_id])
+        .args(&[app_id, achievement_id, unlock_all_arg])
         .output()
         .expect("failed to execute unlocker");
     Ok(())
