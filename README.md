@@ -20,7 +20,6 @@ Looking for a linux/macos supported version? Take a look at the [CLI + Web UI](h
 ### Options
 * **[Portable](https://github.com/probablyraging/steam-game-idler)**: `.exe` file, works on most win10/win11 systems *(check the note below)*
 * **[Installer](https://github.com/probablyraging/steam-game-idler)**: `.msi` file, includes all dependencies and automatic updates, **recommended** for all windows versions
-* **[Lite](https://github.com/probablyraging/steam-game-idler/tree/lite)**: simplified version with no achievement unlocker, minimal UI, only requires a game ID, no Steam profile name or ID64 needed
 * **[CLI + Web UI](https://github.com/probablyraging/steam-game-idler/tree/cli-webui)**: windows, linux, and macos supported version with a command-line interface and/or web interface
 
 > [!Note]
