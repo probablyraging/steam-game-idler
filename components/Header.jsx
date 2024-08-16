@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import ThemeSwitch from './theme/ThemeSwitch';
-import { Button, Divider, Input } from '@nextui-org/react';
-import { BiCoffeeTogo, BiSolidLeaf } from 'react-icons/bi';
+import { Divider, Input } from '@nextui-org/react';
+import { BiSolidLeaf } from 'react-icons/bi';
 import { HiMiniMinus } from 'react-icons/hi2';
 import { BiWindows } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 import { RiSearchLine } from 'react-icons/ri';
-import Link from 'next/link';
 
 export default function Header({ userSummary, inputValue, setInputValue, setIsQuery }) {
     const [appWindow, setAppWindow] = useState();
@@ -67,15 +66,6 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                                 onClear={() => { setInputValue(''); }}
                             />
                         </div>
-
-                        <Link href={'https://buymeacoffee.com/probablyraging'} target='_blank'>
-                            <Button size='sm' className='bg-yellow-300'>
-                                <p className='flex items-center gap-2 font-medium text-black'>
-                                    <BiCoffeeTogo fontSize={18} /> Buy Me A Coffee
-                                </p>
-                            </Button>
-                        </Link>
-
                         <Divider className='w-[1px] h-full bg-titleborder mx-2' />
 
                         <div className='flex items-center gap-2 h-full'>

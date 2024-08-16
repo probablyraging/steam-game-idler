@@ -5,16 +5,17 @@
     <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
     <!-- Project Properties -->
     <PropertyGroup>
-        <ProjectGuid>{1D89E2E1-4DB1-493B-AD89-045CEDF825E8}</ProjectGuid>
+        <ProjectGuid>{5D53F071-E827-4905-A9D9-E09E59902F32}</ProjectGuid>
         <OutputType>WinExe</OutputType>
-        <OutputPath>bin\dist\</OutputPath>
-        <RootNamespace>AchievementUnlocker</RootNamespace>
-        <AssemblyName>AchievementUnlocker</AssemblyName>
+        <OutputPath>..\..\src-tauri\libs\</OutputPath>
+        <RootNamespace>Idler</RootNamespace>
+        <AssemblyName>Idler</AssemblyName>
         <ApplicationIcon>icon.ico</ApplicationIcon>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <PlatformTarget>x86</PlatformTarget>
         <DebugSymbols>false</DebugSymbols>
+        <IntermediateOutputPath>$(OutputPath)temp\</IntermediateOutputPath>
     </PropertyGroup>
     <!-- References -->
     <ItemGroup>
@@ -39,8 +40,38 @@
     </ItemGroup>
     <!-- Compile Items -->
     <ItemGroup>
+        <Compile Include="FormIdler.cs">
+            <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="FormIdler.Designer.cs">
+            <DependentUpon>FormIdler.cs</DependentUpon>
+        </Compile>
         <Compile Include="Program.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <!-- Embedded Resources -->
+    <ItemGroup>
+        <EmbeddedResource Include="FormIdler.resx">
+            <DependentUpon>FormIdler.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Properties\Resources.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+            <SubType>Designer</SubType>
+        </EmbeddedResource>
+    </ItemGroup>
+    <!-- Designer Files -->
+    <ItemGroup>
+        <Compile Include="Properties\Resources.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Resources.resx</DependentUpon>
+            <DesignTime>True</DesignTime>
+        </Compile>
+        <Compile Include="Properties\Settings.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DependentUpon>Settings.settings</DependentUpon>
+            <DesignTimeSharedInput>True</DesignTimeSharedInput>
+        </Compile>
     </ItemGroup>
     <!-- Content Files -->
     <ItemGroup>

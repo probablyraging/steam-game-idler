@@ -32,6 +32,9 @@
         ],
         "no-sync": [
             "warn"
+        ],
+        "react-hooks/exhaustive-deps": [
+            "off"
         ]
     }
 }

@@ -12,6 +12,10 @@ module.exports = {
             width: {
                 'calc': 'calc(100vw - 62px)'
             },
+            height: {
+                'calc': 'calc(100vh - 62px)',
+                'loader': 'calc(100vh - 154px)'
+            },
             maxHeight: {
                 'calc': 'calc(100vh - 62px)',
             },

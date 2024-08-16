@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import Setup from './Setup';
 import Dashboard from './Dashboard';
+import { logEvent } from '@/utils/utils';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
 
     useEffect(() => {
+        const defaultSettings = {
+            achievementUnlocker: {
+                random: true,
+                interval: 60
+            }
+        };
+
         const userSummaryData = localStorage.getItem('userSummary');
         setUserSummary(JSON.parse(userSummaryData));
+        let currentSettings = JSON.parse(localStorage.getItem('settings'));
+        if (!currentSettings) {
+            localStorage.setItem('settings', JSON.stringify(defaultSettings));
+            currentSettings = JSON.parse(localStorage.getItem('settings'));
+        }
+        logEvent('[System] Launched Steam Game Idler');
     }, []);
 
     if (!userSummary) return <Setup setUserSummary={setUserSummary} />;

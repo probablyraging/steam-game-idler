@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import ExtLink from '../ExtLink';
 import { Button } from '@nextui-org/react';
 
 export default function Private({ steamId }) {
@@ -15,12 +15,12 @@ export default function Private({ steamId }) {
                         </p>
                     </div>
                     <div className='flex justify-center items-center flex-col gap-7 pb-6'>
-                        <p className='text-center'>This account has their games list set to private so we&apos;re unable to view their games.</p>
-                        <Link href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`} target='_blank'>
+                        <p className='text-center px-3'>This account has no games or their games list set to private so we&apos;re unable to view their games.</p>
+                        <ExtLink href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`}>
                             <Button color='primary' size='sm' className='text-white dark:text-black font-medium rounded-sm'>
                                 Change Account Privacy
                             </Button>
-                        </Link>
+                        </ExtLink>
                     </div>
                 </div>
             </div>

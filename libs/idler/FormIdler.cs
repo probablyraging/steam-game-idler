@@ -42,7 +42,7 @@ namespace Idler
                     {
                         appName = "Unknown App";
                     }
-                    this.Text = $"{appName} - Idling";
+                    this.Text = $"{appName} {appid} - Idling";
                 }
             }
             catch (Exception)

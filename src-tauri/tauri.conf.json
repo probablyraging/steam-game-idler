@@ -4,11 +4,12 @@
         "beforeBuildCommand": "npm run build",
         "beforeDevCommand": "npm run dev",
         "devPath": "http://localhost:3000",
-        "distDir": "../out"
+        "distDir": "../out",
+        "withGlobalTauri": true
     },
     "package": {
         "productName": "Steam Game Idler",
-        "version": "1.2.2"
+        "version": "1.3.0"
     },
     "tauri": {
         "allowlist": {
@@ -25,12 +26,19 @@
                 "startDragging": true
             },
             "fs": {
+                "all": true,
                 "scope": [
-                    "$RESOURCE/*"
+                    "**"
                 ]
             },
             "dialog": {
                 "ask": true
+            },
+            "shell": {
+                "open": true
+            },
+            "path": {
+                "all": true
             }
         },
         "bundle": {

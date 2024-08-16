@@ -1,10 +1,10 @@
 {
-    "version": "1.2.2",
-    "notes": "Added an unlock all button to the achievements menu",
+    "version": "1.3.0",
+    "notes": "https://github.com/probablyraging/steam-game-idler/releases",
     "platforms": {
         "windows-x86_64": {
-            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMHVSN3NsT1gxdVhNUmQyaUZRVnZHWUlhUkN6UUVmcGppTm82MXg4Y20yak1GK01XWjhGdU5NQ2lYZThXSWYzYldqYTNwM0EzMUl5TXBrd3ZuOUZLZ0FFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzMzYzODg3CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjIuMl94NjRfZW4tVVMubXNpLnppcApKNUJHYThTT21kSG4rR2h6WXI5N1JpNnVDZ1NVVk14dHhuZjd5azhFRTBaZ0tRYmgrbndoczZ2cUtrZkE3TDd2ZWU0aEFHeXlpNWFqMTN2NGxFaGNEZz09Cg==",
-            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.2.2/Steam.Game.Idler_1.2.2_x64_en-US.msi.zip"
+            "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGxjSVBEdzBCdG11eVNjVFRBY2I0MzZTMHVKeXNjUW9kS01NZmVEa1NLblhXVlNvalVZWHNUR1l2ZGpKNjJSMDYyQzAwL1VvTW5TMG1taHlCL2pZU2dFPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzIzODA3ODYyCWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjMuMF94NjRfZW4tVVMubXNpLnppcApkNUgyTWJhY0xEV3AzOE1vSk1MeUNzbWpROUptRVdBRCtycm5RYzdZUzd2YmxRSkRSZ2dGYXE2amduMXJhT0tpNTQzYkc1MWE4K0ZNRElJaEpWZnNCZz09Cg==",
+            "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.3.0/Steam.Game.Idler_1.3.0_x64_en-US.msi.zip"
         }
     }
 }

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Button, Input, Tooltip } from '@nextui-org/react';
+import { Button, Input } from '@nextui-org/react';
 import { FiHash } from 'react-icons/fi';
 import TitleBar from './TitleBar';
+import ExtLink from './ExtLink';
 
 export default function Setup({ setUserSummary }) {
     const [inputValue, setInputValue] = useState('');
@@ -84,9 +85,9 @@ export default function Setup({ setUserSummary }) {
                             }}
                         />
                         <Button
+                            isDisabled={inputValue.length < 1}
                             size='sm'
-                            color='primary'
-                            className='font-medium rounded-sm'
+                            className='bg-sgi text-white font-semibold rounded-sm'
                             isLoading={isLoading}
                             onClick={handleSubmit}
                         >
@@ -95,11 +96,11 @@ export default function Setup({ setUserSummary }) {
                     </div>
 
                     <div className='flex justify-center items-center p-6 w-full bg-[#f6f6f6] dark:bg-[#181818] border-t border-border rounded-br-lg rounded-bl-lg'>
-                        <Tooltip closeDelay={0} className='text-xs' content='Your profile name or SteamID64 is needed in order to pull your games list from the Steam API'>
+                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/User-interface#login-screen'}>
                             <p className='text-xs text-link hover:text-linkhover cursor-pointer'>
                                 Why do you need this?
                             </p>
-                        </Tooltip>
+                        </ExtLink>
                     </div>
                 </motion.div>
             </div>
