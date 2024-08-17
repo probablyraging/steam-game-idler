@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Setup from './Setup';
 import Dashboard from './Dashboard';
-import { logEvent } from '@/utils/utils';
+import { logEvent, statistics } from '@/utils/utils';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
@@ -14,6 +14,7 @@ export default function Window() {
             }
         };
 
+        statistics('launched');
         const userSummaryData = localStorage.getItem('userSummary');
         setUserSummary(JSON.parse(userSummaryData));
         let currentSettings = JSON.parse(localStorage.getItem('settings'));

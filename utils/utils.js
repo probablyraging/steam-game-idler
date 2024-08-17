@@ -15,7 +15,8 @@ export async function startIdler(appId, appName, quiet = false) {
             const path = await invoke('get_file_path');
             const fullPath = path.replace('Steam Game Idler.exe', 'libs\\Idler.exe');
             await invoke('start_idle', { filePath: fullPath, appId: appId.toString(), quiet: quiet.toString() });
-            logEvent(`Started idling ${appId}`);
+            statistics('idle');
+            logEvent(`Started idling ${appName}`);
             return true;
         } else {
             return false;
@@ -45,6 +46,7 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
             achievementId: achievementId,
             unlockAll: unlockAll
         });
+        statistics('achievement');
         logEvent(`Unlocked achievement ${achievementId} (${appId})`);
     } else {
         toast.error('Steam is not running');
@@ -80,4 +82,16 @@ export async function logEvent(message) {
 
 export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+export async function statistics(type) {
+    try {
+        fetch('https://steeeam.vercel.app/api/ext-statistics', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data: { type: type } }),
+        });
+    } catch (error) {
+        console.log('Error contacting statistics endpoint: ', error);
+    }
 }
