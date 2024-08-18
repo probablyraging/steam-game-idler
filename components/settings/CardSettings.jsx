@@ -20,10 +20,10 @@ export default function CardSettings() {
             setSidValue(cookies.sid);
             setSlsValue(cookies.sls);
 
-            fetch('https://steeeam.vercel.app/api/ext-validate-session', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { sid: cookies.sid, sls: cookies.sls } }),
+                body: JSON.stringify({ route: 'validate-session', sid: cookies.sid, sls: cookies.sls }),
             }).then(async (res) => {
                 if (res.status !== 500) {
                     const data = await res.json();
@@ -53,10 +53,10 @@ export default function CardSettings() {
         if (sidValue.length > 0 && slsValue.length > 0) {
             setIsLoading(true);
 
-            fetch('https://steeeam.vercel.app/api/ext-validate-session', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { sid: sidValue, sls: slsValue } }),
+                body: JSON.stringify({ route: 'validate-session', sid: sidValue, sls: slsValue }),
             }).then(async (res) => {
                 if (res.status !== 500) {
                     const data = await res.json();

@@ -55,10 +55,10 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
 }
 
 export async function checkDrops(steamId, appId, sid, sls) {
-    const response = await fetch('https://steeeam.vercel.app/api/ext-drops', {
+    const response = await fetch('https://apibase.vercel.app/api/route', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ data: { steamId: steamId, appId: appId, sid: sid, sls: sls } }),
+        body: JSON.stringify({ route: 'drops', steamId: steamId, appId: appId, sid: sid, sls: sls }),
     })
     if (response.status !== 500) {
         const data = await response.json();
@@ -86,10 +86,10 @@ export function delay(ms) {
 
 export async function statistics(type) {
     try {
-        fetch('https://steeeam.vercel.app/api/ext-statistics', {
+        fetch('https://apibase.vercel.app/api/route', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data: { type: type } }),
+            body: JSON.stringify({ route: 'statistics', type: type }),
         });
     } catch (error) {
         console.log('Error contacting statistics endpoint: ', error);

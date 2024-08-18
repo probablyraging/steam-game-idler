@@ -13,11 +13,10 @@ export default function Setup({ setUserSummary }) {
 
     const verify = (uid) => {
         setIsLoading(true);
-
-        fetch('https://steeeam.vercel.app/api/ext-user-summary', {
+        fetch('https://apibase.vercel.app/api/route', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ data: { uid: uid } }),
+            body: JSON.stringify({ route: 'user-summary', uid: uid }),
         }).then(async res => {
             if (res.status !== 500) {
                 const userSummary = await res.json();
@@ -66,7 +65,7 @@ export default function Setup({ setUserSummary }) {
                     }}
                 >
                     <div className='flex items-center flex-col gap-2 p-6'>
-                        <Image src={'/logo.webp'} width={32} height={32} alt='logo' />
+                        <Image src={'/logo.webp'} width={32} height={32} alt='logo' priority={false} />
                         <p className='text-4xl'>
                             Welcome
                         </p>

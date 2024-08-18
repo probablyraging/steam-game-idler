@@ -34,10 +34,10 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                 setIsLoading(false);
             }, 100);
         } else {
-            fetch('https://steeeam.vercel.app/api/ext-user-game-list', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { steamId: steamId } }),
+                body: JSON.stringify({ route: 'user-games-list', steamId: steamId }),
             }).then(async (res) => {
                 if (res.status !== 500) {
                     const gameList = await res.json();

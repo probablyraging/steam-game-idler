@@ -28,20 +28,20 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
     useEffect(() => {
         setIsLoading(true);
         Promise.all([
-            fetch('https://steeeam.vercel.app/api/ext-game-schema', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { appId: appId } }),
+                body: JSON.stringify({ route: 'game-schema', appId: appId }),
             }).then(async res => {
                 if (res.status !== 500) {
                     const data = await res.json();
                     setAchievementList(data.availableGameStats?.achievements);
                 }
             }),
-            fetch('https://steeeam.vercel.app/api/ext-user-achievements', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { steamId: steamId, appId: appId } }),
+                body: JSON.stringify({ route: 'user-achievements', steamId: steamId, appId: appId }),
             }).then(async res => {
                 if (res.status !== 500) {
                     const data = await res.json();
@@ -50,10 +50,10 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                     setAchievementsUnavailable(true);
                 }
             }),
-            fetch('https://steeeam.vercel.app/api/ext-game-achievement-percentage', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { appId: appId } }),
+                body: JSON.stringify({ route: 'game-achievement-percentage', appId: appId }),
             }).then(async res => {
                 if (res.status !== 500) {
                     const data = await res.json();

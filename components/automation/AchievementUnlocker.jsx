@@ -61,15 +61,15 @@ export default function AchievementUnlocker({ setActivePage }) {
         setCurrentGame({ appId: game.game.id, name: game.game.name });
 
         const [userAchievementsResponse, gameAchievementsResponse] = await Promise.all([
-            fetch('https://steeeam.vercel.app/api/ext-user-achievements', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { steamId: userSummary.steamId, appId: game.game.id } }),
+                body: JSON.stringify({ route: 'user-achievements', steamId: userSummary.steamId, appId: game.game.id }),
             }),
-            fetch('https://steeeam.vercel.app/api/ext-game-achievement-percentage', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ data: { appId: game.game.id } }),
+                body: JSON.stringify({ route: 'game-achievement-percentage', appId: game.game.id }),
             })
         ]);
 
