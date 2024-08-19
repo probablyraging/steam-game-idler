@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { checkDrops, logEvent, startIdler, stopIdler } from '@/utils/utils';
 import StopButton from './StopButton';
-import Image from 'next/image';
 import { Button, Skeleton, Spinner } from '@nextui-org/react';
 import { IoCheckmark } from 'react-icons/io5';
 
@@ -61,8 +60,11 @@ export default function CardFarming({ setActivePage }) {
                 const dropsRemaining = await checkDrops(userSummary.steamId, gameData.game.id, steamCookies.sid, steamCookies.sls);
                 if (dropsRemaining > 0) {
                     logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - starting`);
-                    gamesSet.add({ appId: gameData.game.id, appName: gameData.game.name, icon: gameData.game.icon });
-                    totalDrops += dropsRemaining;
+                    if (gamesSet.size < 30) {
+                        console.log(gameData);
+                        gamesSet.add({ appId: gameData.game.id, appName: gameData.game.name });
+                        totalDrops += dropsRemaining;
+                    }
                 } else {
                     logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - removed from list`);
                     removeGameFromFarmingList(gameData.game.id);
@@ -194,15 +196,6 @@ export default function CardFarming({ setActivePage }) {
                     <div className='grid grid-cols-3 gap-2 max-h-[170px] border border-border rounded p-2 overflow-y-auto'>
                         {[...Array.from(gamesWithDrops)].map((item) => (
                             <div key={item.appId} className='flex gap-1 border border-border rounded p-1'>
-                                <Image
-                                    className='rounded object-cover'
-                                    src={`https://cdn.akamai.steamstatic.com/steamcommunity/public/images/apps/${item.appId}/${item.icon}.jpg`}
-                                    width={32}
-                                    height={36}
-                                    alt={`${item.name} image`}
-                                    priority={true}
-                                />
-
                                 <div className='flex flex-col px-2'>
                                     <p className='text-sm font-semibold'>{item.appName}</p>
                                     <p className='text-xs'>{item.appId}</p>

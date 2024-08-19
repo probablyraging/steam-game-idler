@@ -160,6 +160,10 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                             setSortStyle={setSortStyle}
                             showStats={showStats}
                             handleShowStats={handleShowStats}
+                            filteredGames={filteredGames}
+                            setFilteredGames={setFilteredGames}
+                            visibleGames={visibleGames}
+                            setVisibleGames={setVisibleGames}
                         />
                     )}
 

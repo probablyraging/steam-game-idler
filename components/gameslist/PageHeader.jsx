@@ -3,8 +3,9 @@ import { Button, Select, SelectItem, Tooltip } from '@nextui-org/react';
 import { IoIosStats } from 'react-icons/io';
 import { MdSort } from 'react-icons/md';
 import Automate from './Automate';
+import GamesWithDrops from './GamesWithDrops';
 
-export default function PageHeader({ activePage, setActivePage, sortStyle, setSortStyle, showStats, handleShowStats }) {
+export default function PageHeader({ activePage, setActivePage, sortStyle, setSortStyle, showStats, handleShowStats, filteredGames, setFilteredGames, visibleGames, setVisibleGames }) {
     const sortOptions = [
         { key: 'a-z', label: 'Title Ascending' },
         { key: 'z-a', label: 'Title Descending' },
@@ -47,6 +48,10 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
                 </div>
 
                 <div className='flex justify-end items-center gap-2'>
+                    {sortStyle === 'cardFarming' && (
+                        <GamesWithDrops setFilteredGames={setFilteredGames} setVisibleGames={setVisibleGames} />
+                    )}
+
                     <div className='flex items-center gap-1'>
                         <Automate setActivePage={setActivePage} />
                     </div>
@@ -76,6 +81,12 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
                         {(item) => <SelectItem>{item.label}</SelectItem>}
                     </Select>
                 </div>
+            </div>
+
+            <div className='flex w-full'>
+                <p className='text-xs text-gray-500 mb-2'>
+                    Showing {visibleGames.length} of {filteredGames.length} games
+                </p>
             </div>
         </React.Fragment >
     );
