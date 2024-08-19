@@ -14,6 +14,16 @@ export default function GamesWithDrops({ setFilteredGames, setVisibleGames }) {
             setIsLoading(false);
             return toast.error('Missing credentials in Settings');
         }
+        const validate = await fetch('https://apibase.vercel.app/api/route', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ route: 'validate-session', sid: steamCookies?.sid, sls: steamCookies?.sls }),
+        });
+        if (validate.status === 500) {
+            localStorage.removeItem('steamCookies');
+            setIsLoading(false);
+            return toast.error('Steam credentials need to be updated');
+        }
         const response = await fetch('https://apibase.vercel.app/api/route', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
