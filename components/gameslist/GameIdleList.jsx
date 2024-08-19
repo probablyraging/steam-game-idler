@@ -53,6 +53,7 @@ export default function GameIdleList({ gameList, favorites, cardFarming, achieve
         setTimeout(() => {
             let cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
             cardFarming.push(JSON.stringify(item));
+            console.log(cardFarming.map(JSON.parse));
             localStorage.setItem('cardFarming', JSON.stringify(cardFarming));
             const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
             setCardFarming(newCardFarming.map(JSON.parse));
