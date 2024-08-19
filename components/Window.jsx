@@ -1,30 +1,29 @@
 import React, { useEffect, useState } from 'react';
+import { checkUpdate } from '@tauri-apps/api/updater';
 import Setup from './Setup';
 import Dashboard from './Dashboard';
+import UpdateScreen from './UpdateScreen';
 import { logEvent, statistics } from '@/utils/utils';
-import UpdateModal from './UpdateModal';
-import { getVersion } from '@tauri-apps/api/app';
-import semver from 'semver';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
-    const [hasMajorUpdate, setHasMajorUpdate] = useState(false);
+    const [hasUpdate, setHasUpdate] = useState(false);
 
     useEffect(() => {
-        fetch('https://apibase.vercel.app/api/route', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ route: 'check-major-update' }),
-        }).then(async (res) => {
-            if (res.status !== 500) {
-                const data = await res.json();
-                const currentVersion = await getVersion();
-                const latestVersion = data.version;
-                if (data.major && semver.lt(currentVersion, latestVersion)) {
-                    setHasMajorUpdate(true);
+        const checkForUpdates = async () => {
+            try {
+                const { shouldUpdate } = await checkUpdate();
+                if (shouldUpdate) {
+                    setHasUpdate(true);
                 }
+            } catch (error) {
+                console.error('Failed to check for updates:', error);
             }
-        });
+        };
+        checkForUpdates();
+    }, []);
+
+    useEffect(() => {
         const defaultSettings = { achievementUnlocker: { random: true, interval: 60 } };
         statistics('launched');
         const userSummaryData = localStorage.getItem('userSummary');
@@ -37,21 +36,19 @@ export default function Window() {
         logEvent('[System] Launched Steam Game Idler');
     }, []);
 
+    if (hasUpdate) return (
+        <UpdateScreen />
+    );
+
     if (!userSummary) return (
         <React.Fragment>
             <Setup setUserSummary={setUserSummary} />
-            {hasMajorUpdate && (
-                <UpdateModal />
-            )}
         </React.Fragment>
     );
 
     return (
         <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-lg rounded-tl-lg'>
             <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} />
-            {hasMajorUpdate && (
-                <UpdateModal />
-            )}
         </div>
     );
 }
