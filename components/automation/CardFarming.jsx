@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { checkDrops, logEvent, startIdler, stopIdler } from '@/utils/utils';
+import { checkDrops, getAllGamesWithDrops, logEvent, startIdler, stopIdler } from '@/utils/utils';
 import StopButton from './StopButton';
 import { Button, Skeleton, Spinner } from '@nextui-org/react';
 import { IoCheckmark } from 'react-icons/io5';
@@ -50,31 +50,44 @@ export default function CardFarming({ setActivePage }) {
         const cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
         const steamCookies = JSON.parse(localStorage.getItem('steamCookies')) || {};
         const userSummary = JSON.parse(localStorage.getItem('userSummary')) || {};
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
 
         const gameDataArr = cardFarming.map(game => JSON.parse(game));
         const gamesSet = new Set();
         let totalDrops = 0;
 
-        const dropCheckPromises = gameDataArr.map(async (gameData) => {
-            try {
-                const dropsRemaining = await checkDrops(userSummary.steamId, gameData.game.id, steamCookies.sid, steamCookies.sls);
-                if (dropsRemaining > 0) {
-                    logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - starting`);
+        try {
+            if (settings.cardFarming.allGames) {
+                const gamesWithDrops = await getAllGamesWithDrops(userSummary.steamId, steamCookies.sid, steamCookies.sls);
+                for (const gameData of gamesWithDrops) {
                     if (gamesSet.size < 30) {
-                        console.log(gameData);
                         gamesSet.add({ appId: gameData.game.id, appName: gameData.game.name });
-                        totalDrops += dropsRemaining;
+                        totalDrops += gameData.game.remaining;
+                        logEvent(`[Card Farming] ${gameData.game.remaining} drops remaining for ${gameData.game.name} - starting`);
+                    } else {
+                        break;
                     }
-                } else {
-                    logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - removed from list`);
-                    removeGameFromFarmingList(gameData.game.id);
                 }
-            } catch (error) {
-                logEvent(`[Error] [Card Farming] ${error}`);
+            } else {
+                const dropCheckPromises = gameDataArr.map(async (gameData) => {
+                    if (gamesSet.size >= 30) return Promise.resolve();
+                    const dropsRemaining = await checkDrops(userSummary.steamId, gameData.game.id, steamCookies.sid, steamCookies.sls);
+                    if (dropsRemaining > 0) {
+                        if (gamesSet.size < 30) {
+                            gamesSet.add({ appId: gameData.game.id, appName: gameData.game.name });
+                            totalDrops += dropsRemaining;
+                            logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - starting`);
+                        }
+                    } else {
+                        logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - removed from list`);
+                        removeGameFromFarmingList(gameData.game.id);
+                    }
+                });
+                await Promise.all(dropCheckPromises);
             }
-        });
-
-        await Promise.all(dropCheckPromises);
+        } catch (error) {
+            logEvent(`[Error] [Card Farming] ${error}`);
+        }
 
         return { totalDrops, gamesSet };
     };
@@ -133,13 +146,17 @@ export default function CardFarming({ setActivePage }) {
         localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
     };
 
-    const handleCancel = () => {
-        for (const game of gamesWithDrops) {
-            stopIdler(game.appId);
-        }
-        isMountedRef.current = false;
-        abortControllerRef.current.abort();
+    const handleCancel = async () => {
         setActivePage('games');
+        try {
+            const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId));
+            await Promise.all(stopPromises);
+        } catch (error) {
+            console.error('Error stopping games:', error);
+        } finally {
+            isMountedRef.current = false;
+            abortControllerRef.current.abort();
+        }
     };
 
     return (

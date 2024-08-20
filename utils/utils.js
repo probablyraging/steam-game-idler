@@ -49,7 +49,6 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
         statistics('achievement');
         logEvent(`Unlocked achievement ${achievementId} (${appId})`);
     } else {
-        toast.error('Steam is not running');
         logEvent(`[Error] Achievement failed - Steam is not running`);
     }
 }
@@ -67,6 +66,20 @@ export async function checkDrops(steamId, appId, sid, sls) {
         } else {
             return 0;
         }
+    } else {
+        return 0;
+    }
+}
+
+export async function getAllGamesWithDrops(steamId, sid, sls) {
+    const response = await fetch('https://apibase.vercel.app/api/route', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ route: 'games-with-drops', steamId: steamId, sid: sid, sls: sls }),
+    })
+    if (response.status !== 500) {
+        const data = await response.json();
+        return data.games;
     } else {
         return 0;
     }

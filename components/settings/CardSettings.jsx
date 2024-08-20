@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ExtLink from '../ExtLink';
-import { Button, Input, Skeleton } from '@nextui-org/react';
+import { Button, Checkbox, Input, Skeleton } from '@nextui-org/react';
 import { logEvent } from '@/utils/utils';
 
-export default function CardSettings() {
+export default function CardSettings({ settings, setSettings }) {
     let [isLoading, setIsLoading] = useState(false);
     const [sidValue, setSidValue] = useState('');
     const [slsValue, setSlsValue] = useState('');
@@ -11,6 +11,13 @@ export default function CardSettings() {
     const [loginState, setLoginState] = useState(false);
     const [steamUser, setSteamUser] = useState(null);
     const [validationError, setValidationError] = useState(false);
+    const [localSettings, setLocalSettings] = useState(null);
+
+    useEffect(() => {
+        if (settings) {
+            setLocalSettings(settings);
+        }
+    }, [settings]);
 
     useEffect(() => {
         setIsLoading(true);
@@ -86,20 +93,82 @@ export default function CardSettings() {
         logEvent('[Settings - Card Farming] Logged out');
     };
 
+    const handleCheckboxChange = (e) => {
+        const { name, checked } = e.target;
+        const updatedSettings = {
+            ...localSettings,
+            achievementUnlocker: {
+                ...localSettings.achievementUnlocker
+            },
+            cardFarming: {
+                ...localSettings.cardFarming,
+                [name]: checked
+            }
+        };
+        const checkboxNames = Object.keys(updatedSettings.cardFarming);
+        if (checked) {
+            const otherCheckboxName = checkboxNames.find(checkbox => checkbox !== name);
+            updatedSettings.cardFarming[otherCheckboxName] = false;
+        } else {
+            const otherCheckboxName = checkboxNames.find(checkbox => checkbox !== name);
+            if (!updatedSettings.cardFarming[otherCheckboxName]) {
+                updatedSettings.cardFarming[name] = true;
+            }
+        }
+        localStorage.setItem('settings', JSON.stringify(updatedSettings));
+        updateSettings(updatedSettings);
+        logEvent(`[Settings - Card Farming] Changed '${name}' to '${updatedSettings.cardFarming[name]}'`);
+    };
+
+    const updateSettings = (newSettings) => {
+        setLocalSettings(newSettings);
+        setSettings(newSettings);
+        try {
+            localStorage.setItem('settings', JSON.stringify(newSettings));
+        } catch (error) {
+            console.error('Failed to save settings to localStorage:', error);
+        }
+    };
+
     return (
         <React.Fragment>
             <div className='mt-4 p-4 border border-border rounded'>
-                <p className='text-sm font-semibold mb-6'>
-                    Card Farming
-                </p>
+                <div className='mb-6'>
+                    <p className='text-sm font-semibold'>
+                        Card Farming
+                    </p>
+                    <p className='text-xs mb-2'>
+                        Steam credentials are required in order to use the Card Farming feature. <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/Settings#steam-credentials'} className='text-blue-400'>Learn more</ExtLink>
+                    </p>
+                </div>
 
-                <div className='flex flex-col gap-6'>
+                <div className='flex flex-col gap-4'>
+                    <Checkbox
+                        name='listGames'
+                        isSelected={localSettings?.cardFarming?.listGames}
+                        onChange={handleCheckboxChange}
+                    >
+                        <div className='flex items-center gap-1'>
+                            <p className='text-xs'>
+                                Card farming list
+                            </p>
+                        </div>
+                    </Checkbox>
+
+                    <Checkbox
+                        name='allGames'
+                        isSelected={localSettings?.cardFarming?.allGames}
+                        onChange={handleCheckboxChange}
+                    >
+                        <div className='flex items-center gap-1'>
+                            <p className='text-xs'>
+                                All games with drops
+                            </p>
+                        </div>
+                    </Checkbox>
+
                     <div className='w-full'>
                         <div className='flex flex-col'>
-                            <p className='text-xs mb-2'>
-                                Steam credentials are required in order to use the Card Farming feature. <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/Settings#steam-credentials'} className='text-blue-400'>Learn more</ExtLink>
-                            </p>
-
                             <div className='flex gap-4'>
                                 <Input
                                     size='sm'

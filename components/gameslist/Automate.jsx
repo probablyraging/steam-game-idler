@@ -11,6 +11,7 @@ export default function Automate({ setActivePage }) {
     const startCardFarming = async () => {
         const steamRunning = await invoke('check_status');
         const steamCookies = JSON.parse(localStorage.getItem('steamCookies')) || {};
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
         if (!steamRunning) {
             return toast.error('Steam is not running');
         }
@@ -27,8 +28,8 @@ export default function Automate({ setActivePage }) {
             return toast.error('Steam credentials need to be updated');
         }
         const cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
-        if (cardFarming.length < 1) {
-            return toast.error('No games in card farming list');
+        if (!settings.cardFarming.allGames && cardFarming.length < 1) {
+            return toast.error('Enable the "All games" setting or add some games to your card farming list');
         }
         setActivePage('card-farming');
     };
@@ -89,7 +90,7 @@ export default function Automate({ setActivePage }) {
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={3000} />
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

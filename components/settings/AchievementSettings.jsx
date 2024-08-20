@@ -83,7 +83,7 @@ export default function AchievementSettings({ settings, setSettings }) {
 
                         <Slider
                             label={
-                                <div className='flex justify-between items-center gap-1 min-w-[300px]'>
+                                <div className='flex justify-between items-center gap-1 min-w-[350px]'>
                                     <p className='text-xs'>
                                         Unlock interval
                                     </p>
@@ -92,7 +92,6 @@ export default function AchievementSettings({ settings, setSettings }) {
                                     </p>
                                 </div>
                             }
-                            isDisabled={localSettings.achievementUnlocker.random}
                             size='sm'
                             step={5}
                             minValue={5}

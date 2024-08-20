@@ -55,7 +55,7 @@ fn start_idle(file_path: String, app_id: String, quiet: String) -> Result<(), St
 }
 
 #[tauri::command]
-fn stop_idle(app_id: String) -> Result<(), String> {
+async fn stop_idle(app_id: String) -> Result<(), String> {
     let wmic_output = std::process::Command::new("wmic")
         .args(&["process", "get", "processid,commandline"])
         .creation_flags(0x08000000)

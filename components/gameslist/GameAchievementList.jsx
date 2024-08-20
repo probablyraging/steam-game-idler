@@ -157,7 +157,7 @@ export default function GameAchievementList({ gameList, favorites, cardFarming, 
                         </div>
                     );
                 })}
-                <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={3000} />
+                <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
             </div>
         </React.Fragment>
     );

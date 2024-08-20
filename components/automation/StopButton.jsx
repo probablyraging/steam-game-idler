@@ -9,19 +9,20 @@ export default function StopButton({ setActivePage, isMountedRef, abortControlle
         ...Array.from({ length: 500 }, (_, i) => 6 - i * 0.01),
     ];
 
-    const handleStop = () => {
-        if (screen === 'card-farming') {
-            for (const game of gamesWithDrops) {
-                stopIdler(game.appId);
+    const handleStop = async () => {
+        setActivePage('games');
+        try {
+            if (screen === 'card-farming') {
+                const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId));
+                await Promise.all(stopPromises);
+            } else {
+                await stopIdler(currentGame.appId);
             }
+        } catch (error) {
+            console.error('Error stopping games:', error);
+        } finally {
             isMountedRef.current = false;
             abortControllerRef.current.abort();
-            setActivePage('games');
-        } else {
-            isMountedRef.current = false;
-            abortControllerRef.current.abort();
-            setActivePage('games');
-            stopIdler(currentGame.appId);
         }
     };
 
