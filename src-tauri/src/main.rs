@@ -48,6 +48,7 @@ fn check_status() -> bool {
 fn start_idle(file_path: String, app_id: String, quiet: String) -> Result<(), String> {
     std::process::Command::new(file_path)
         .args(&[&app_id, &quiet])
+        .creation_flags(0x08000000)
         .spawn()
         .map_err(|e| e.to_string())?;
     Ok(())
@@ -57,6 +58,7 @@ fn start_idle(file_path: String, app_id: String, quiet: String) -> Result<(), St
 fn stop_idle(app_id: String) -> Result<(), String> {
     let wmic_output = std::process::Command::new("wmic")
         .args(&["process", "get", "processid,commandline"])
+        .creation_flags(0x08000000)
         .output()
         .expect("failed to get process");
     let wmic_stdout = String::from_utf8_lossy(&wmic_output.stdout);
@@ -66,6 +68,7 @@ fn stop_idle(app_id: String) -> Result<(), String> {
         .ok_or_else(|| "No matching process found".to_string())?;
     std::process::Command::new("taskkill")
         .args(&["/F", "/PID", pid])
+        .creation_flags(0x08000000)
         .output()
         .expect("failed to kill process");
     Ok(())
