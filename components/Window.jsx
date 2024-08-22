@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { checkUpdate } from '@tauri-apps/api/updater';
-import Setup from './Setup';
 import Dashboard from './Dashboard';
 import UpdateScreen from './UpdateScreen';
-import { logEvent, statistics } from '@/utils/utils';
+import { logEvent, updateLaunchedStats } from '@/utils/utils';
+import { invoke } from '@tauri-apps/api/tauri';
+import Setup from './Setup';
 
 export default function Window() {
-    const [userSummary, setUserSummary] = useState(null);
     const [hasUpdate, setHasUpdate] = useState(false);
+    const [userSummary, setUserSummary] = useState(null);
 
     useEffect(() => {
         const checkForUpdates = async () => {
@@ -24,8 +25,20 @@ export default function Window() {
     }, []);
 
     useEffect(() => {
+        const checkSteamStatus = async () => {
+            const path = await invoke('get_file_path');
+            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
+            const result = await invoke('check_steam_status', { filePath: fullPath });
+            if (result === 'not_running') {
+                setUserSummary(null);
+            }
+        };
+        checkSteamStatus();
+    }, []);
+
+    useEffect(() => {
         const defaultSettings = { achievementUnlocker: { random: true, interval: 60 } };
-        statistics('launched');
+        updateLaunchedStats('launched');
         const userSummaryData = localStorage.getItem('userSummary');
         setUserSummary(JSON.parse(userSummaryData));
         let currentSettings = JSON.parse(localStorage.getItem('settings'));
@@ -41,9 +54,7 @@ export default function Window() {
     );
 
     if (!userSummary) return (
-        <React.Fragment>
-            <Setup setUserSummary={setUserSummary} />
-        </React.Fragment>
+        <Setup setUserSummary={setUserSummary} />
     );
 
     return (

@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
-namespace Idler
+namespace SteamUtility
 {
     public partial class FormIdler : Form
     {

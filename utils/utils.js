@@ -1,6 +1,9 @@
 import moment from "moment";
 import { invoke } from '@tauri-apps/api/tauri';
 
+let idleCounter = 0;
+let achievementCounter = 0;
+
 export function minutesToHoursCompact(number) {
     const durationInMinutes = number;
     const duration = moment.duration(durationInMinutes, 'minutes');
@@ -13,9 +16,10 @@ export async function startIdler(appId, appName, quiet = false) {
         const steamRunning = await invoke('check_status');
         if (steamRunning) {
             const path = await invoke('get_file_path');
-            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\Idler.exe');
+            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtil.exe');
             await invoke('start_idle', { filePath: fullPath, appId: appId.toString(), quiet: quiet.toString() });
-            statistics('idle');
+            idleCounter++;
+            updateIdleStats();
             logEvent(`Started idling ${appName}`);
             return true;
         } else {
@@ -39,14 +43,15 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
     const steamRunning = await invoke('check_status');
     if (steamRunning) {
         const path = await invoke('get_file_path');
-        const fullPath = path.replace('Steam Game Idler.exe', 'libs\\AchievementUnlocker.exe');
+        const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
         await invoke('unlock_achievement', {
             filePath: fullPath,
             appId: appId.toString(),
             achievementId: achievementId,
             unlockAll: unlockAll
         });
-        statistics('achievement');
+        achievementCounter++;
+        updateAchievementStats();
         logEvent(`Unlocked achievement ${achievementId} (${appId})`);
     } else {
         logEvent(`[Error] Achievement failed - Steam is not running`);
@@ -97,14 +102,53 @@ export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-export async function statistics(type) {
+const updateIdleStats = debounce(async () => {
+    try {
+        await fetch('https://apibase.vercel.app/api/route', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ route: 'statistics', type: 'idle', count: idleCounter }),
+        });
+        idleCounter = 0;
+    } catch (error) {
+        console.log('Error contacting statistics endpoint: ', error);
+    }
+}, 5000);
+
+const updateAchievementStats = debounce(async () => {
+    try {
+        console.log('updating db..', achievementCounter);
+        await fetch('https://apibase.vercel.app/api/route', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ route: 'statistics', type: 'achievement', count: achievementCounter }),
+        });
+        achievementCounter = 0;
+    } catch (error) {
+        console.log('Error contacting statistics endpoint: ', error);
+    }
+}, 5000);
+
+export async function updateLaunchedStats(type) {
     try {
         fetch('https://apibase.vercel.app/api/route', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ route: 'statistics', type: type }),
+            body: JSON.stringify({ route: 'statistics', type: type, count: 1 }),
         });
     } catch (error) {
         console.log('Error contacting statistics endpoint: ', error);
     }
+}
+
+function debounce(func, wait) {
+    let timeout;
+    return function executedFunction(...args) {
+        const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    };
 }

@@ -1,4 +1,4 @@
-﻿namespace Idler
+﻿namespace SteamUtility
 {
     partial class FormIdler
     {

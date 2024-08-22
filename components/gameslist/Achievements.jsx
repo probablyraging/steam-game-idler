@@ -278,7 +278,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                             )}
                         </div>
 
-                        <div className='grid grid-cols-3 gap-4 max-h-[405px] px-2 w-full overflow-y-auto'>
+                        <div className='grid grid-cols-3 gap-4 max-h-[405px] p-2 w-full border border-border rounded overflow-y-auto'>
                             {achievementList && achievementList.map((item) => {
                                 const isUnlocked = userAchievementsMap.get(item.name) || false;
                                 const percentage = percentageMap.get(item.name);
@@ -319,7 +319,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                                             <div className='w-full bg-gray-200 rounded-full h-2.5 mb-1'>
                                                 <div className='bg-sgi h-2.5 rounded-full' style={{ width: `${percentage}%` }}></div>
                                             </div>
-                                            <p className='text-xs text-right'>{percentage.toFixed(1)}% unlock percentage</p>
+                                            <p className='text-xs text-right'>{percentage.toFixed(1)}% unlock rate</p>
                                         </div>
                                     </div>
                                 );

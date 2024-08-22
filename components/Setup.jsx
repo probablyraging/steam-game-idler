@@ -1,51 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Button, Input } from '@nextui-org/react';
-import { FiHash } from 'react-icons/fi';
+import { Button } from '@nextui-org/react';
 import TitleBar from './TitleBar';
 import ExtLink from './ExtLink';
+import { invoke } from '@tauri-apps/api/tauri';
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Setup({ setUserSummary }) {
-    const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [steamId, setSteamId] = useState(null);
 
-    const verify = (uid) => {
-        setIsLoading(true);
-        fetch('https://apibase.vercel.app/api/route', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ route: 'user-summary', uid: uid }),
-        }).then(async res => {
-            if (res.status !== 500) {
-                const userSummary = await res.json();
-                localStorage.setItem('userSummary', JSON.stringify(userSummary));
-                setUserSummary(userSummary);
-                setIsLoading(false);
-            } else {
-                setError(<p className='text-red-400'>Incorrect Steam profile name or ID64</p>);
-                setIsLoading(false);
-                setTimeout(() => {
-                    setError(null);
-                }, 3000);
-            }
-        });
-    };
-
-    const handleSubmit = async () => {
-        if (inputValue.length > 0) {
-            verify(inputValue);
+    useEffect(() => {
+        if (steamId) {
+            fetch('https://apibase.vercel.app/api/route', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ route: 'user-summary', uid: steamId }),
+            }).then(async res => {
+                if (res.status !== 500) {
+                    setIsLoading(false);
+                    const userSummary = await res.json();
+                    localStorage.setItem('userSummary', JSON.stringify(userSummary));
+                    setUserSummary(userSummary);
+                }
+            });
         }
-    };
+    }, [steamId]);
 
-    const handleChange = (e) => {
-        setInputValue(e.target.value);
-    };
-
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            handleSubmit(e);
+    const handleClick = async () => {
+        setIsLoading(true);
+        const path = await invoke('get_file_path');
+        const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
+        const result = await invoke('check_steam_status', { filePath: fullPath });
+        if (result === 'not_running') {
+            setIsLoading(false);
+            return toast.error('The Steam desktop app is not running, or you are not signed in');
+        } else {
+            setSteamId(result);
         }
     };
 
@@ -72,37 +65,26 @@ export default function Setup({ setUserSummary }) {
                     </div>
 
                     <div className='flex justify-center items-center flex-col gap-5 pb-6'>
-                        <Input
-                            placeholder='Steam profile name or ID64'
-                            startContent={<FiHash />}
-                            value={inputValue}
-                            onChange={handleChange}
-                            onKeyDown={handleKeyDown}
-                            description={error}
-                            classNames={{
-                                inputWrapper: ['bg-base border border-inputborder hover:!bg-titlebar']
-                            }}
-                        />
                         <Button
-                            isDisabled={inputValue.length < 1}
+                            isLoading={isLoading}
                             size='sm'
                             className='bg-sgi text-white font-semibold rounded-sm'
-                            isLoading={isLoading}
-                            onClick={handleSubmit}
+                            onClick={handleClick}
                         >
                             Continue
                         </Button>
                     </div>
 
                     <div className='flex justify-center items-center p-6 w-full bg-[#f6f6f6] dark:bg-[#181818] border-t border-border rounded-br-lg rounded-bl-lg'>
-                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/User-interface#login-screen'}>
+                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/User-interface#welcome-screen'}>
                             <p className='text-xs text-link hover:text-linkhover cursor-pointer'>
-                                Why do you need this?
+                                Need help?
                             </p>
                         </ExtLink>
                     </div>
                 </motion.div>
             </div>
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment >
     );
 }

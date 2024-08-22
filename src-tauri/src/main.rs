@@ -17,7 +17,8 @@ fn main() {
             stop_idle,
             unlock_achievement,
             log_event,
-            get_app_log_dir
+            get_app_log_dir,
+            check_steam_status
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -45,9 +46,29 @@ fn check_status() -> bool {
 }
 
 #[tauri::command]
+fn check_steam_status(file_path: String) -> Result<String, String> {
+    let output = std::process::Command::new(file_path)
+        .arg("check_steam")
+        .creation_flags(0x08000000)
+        .output()
+        .map_err(|e| e.to_string())?;
+    let output_str = String::from_utf8_lossy(&output.stdout);
+    if output_str.contains("Steam is not running") {
+        Ok("not_running".to_string())
+    } else {
+        let steam_id = output_str
+            .split("steamId ")
+            .nth(1)
+            .ok_or("Failed to parse Steam ID")?
+            .trim();
+        Ok(steam_id.to_string())
+    }
+}
+
+#[tauri::command]
 fn start_idle(file_path: String, app_id: String, quiet: String) -> Result<(), String> {
     std::process::Command::new(file_path)
-        .args(&[&app_id, &quiet])
+        .args(&["idle", &app_id, &quiet])
         .creation_flags(0x08000000)
         .spawn()
         .map_err(|e| e.to_string())?;
@@ -78,7 +99,7 @@ async fn stop_idle(app_id: String) -> Result<(), String> {
 fn unlock_achievement(file_path: String, app_id: String, achievement_id: String, unlock_all: bool) -> Result<(), String> {
     let unlock_all_arg = if unlock_all { "true" } else { "false" }.to_string();
     std::process::Command::new(file_path)
-        .args(&[app_id, achievement_id, unlock_all_arg])
+        .args(&["unlock", &app_id, &achievement_id, &unlock_all_arg])
         .output()
         .expect("failed to execute unlocker");
     Ok(())

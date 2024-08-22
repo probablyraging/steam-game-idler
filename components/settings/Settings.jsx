@@ -5,6 +5,7 @@ import AchievementSettings from './AchievementSettings';
 import Logs from './Logs';
 import { BiCoffeeTogo, BiListUl, BiSolidBug, BiSolidHelpCircle } from 'react-icons/bi';
 import { getVersion } from '@tauri-apps/api/app';
+import { Tab, Tabs } from '@nextui-org/react';
 
 export default function Settings() {
     const [settings, setSettings] = useState(null);
@@ -84,12 +85,17 @@ export default function Settings() {
                         </div>
                     </div>
 
-                    <div className='flex flex-col gap-4'>
-                        <CardSettings settings={settings} setSettings={setSettings} />
-                        <AchievementSettings settings={settings} setSettings={setSettings} />
-                    </div>
-
-                    <Logs />
+                    <Tabs aria-label='Settings tabs' color='primary' variant='underlined' className='mt-6' classNames={{ tab: ['pl-0'] }}>
+                        <Tab key='card-farming' title='Card Farming'>
+                            <CardSettings settings={settings} setSettings={setSettings} />
+                        </Tab>
+                        <Tab key='achievement-unlocker' title='Achievement Unlocker'>
+                            <AchievementSettings settings={settings} setSettings={setSettings} />
+                        </Tab>
+                        <Tab key='logs' title='Logs'>
+                            <Logs />
+                        </Tab>
+                    </Tabs>
                 </div>
             </div>
         </React.Fragment>

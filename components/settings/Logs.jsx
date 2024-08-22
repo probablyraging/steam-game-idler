@@ -29,13 +29,16 @@ export default function Logs() {
 
     return (
         <React.Fragment>
-            <div className='mt-4'>
-                <p className='font-semibold text-sm mb-1'>
-                    Logs
-                </p>
-                <p className='text-xs mb-1'>
-                    Log file location: <span className='font-mono bg-containerhover px-1 py-0.5'>{logPath}</span>
-                </p>
+            <div className='mt-4 p-4 border border-border rounded'>
+                <div className='mb-6'>
+                    <p className='text-sm font-semibold'>
+                        Logs
+                    </p>
+                    <p className='text-xs'>
+                        Log file location: <span className='font-mono bg-containerhover px-1 py-0.5'>{logPath}</span>
+                    </p>
+                </div>
+
                 <div className="bg-container border border-border font-mono text-xs rounded min-h-[200px] max-h-[200px] overflow-y-auto">
                     <table className="w-full border-collapse">
                         <thead className="sticky top-0 z-10">

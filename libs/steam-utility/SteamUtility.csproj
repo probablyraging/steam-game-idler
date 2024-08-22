@@ -8,8 +8,8 @@
         <ProjectGuid>{5D53F071-E827-4905-A9D9-E09E59902F32}</ProjectGuid>
         <OutputType>WinExe</OutputType>
         <OutputPath>..\..\src-tauri\libs\</OutputPath>
-        <RootNamespace>Idler</RootNamespace>
-        <AssemblyName>Idler</AssemblyName>
+        <RootNamespace>SteamUtility</RootNamespace>
+        <AssemblyName>SteamUtility</AssemblyName>
         <ApplicationIcon>icon.ico</ApplicationIcon>
         <AppDesignerFolder>Properties</AppDesignerFolder>
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>

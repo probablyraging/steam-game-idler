@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Idler.Properties
+namespace SteamUtility.Properties
 {
 
 

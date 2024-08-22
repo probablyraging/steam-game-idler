@@ -157,8 +157,8 @@ export default function GameIdleList({ gameList, favorites, cardFarming, achieve
                         </div>
                     );
                 })}
-                <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
             </div>
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }
