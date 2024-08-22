@@ -16,7 +16,7 @@ export async function startIdler(appId, appName, quiet = false) {
         const steamRunning = await invoke('check_status');
         if (steamRunning) {
             const path = await invoke('get_file_path');
-            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtil.exe');
+            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
             await invoke('start_idle', { filePath: fullPath, appId: appId.toString(), quiet: quiet.toString() });
             idleCounter++;
             updateIdleStats();
