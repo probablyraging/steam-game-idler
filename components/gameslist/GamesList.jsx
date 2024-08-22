@@ -7,7 +7,7 @@ import Loader from '../Loader';
 
 export default function GamesList({ steamId, inputValue, isQuery, activePage, setActivePage, setAppId, showAchievements, setShowAchievements }) {
     const scrollContainerRef = useRef(null);
-    let [isLoading, setIsLoading] = useState(false);
+    let [isLoading, setIsLoading] = useState(true);
     let [gameList, setGameList] = useState(null);
     const [sortStyle, setSortStyle] = useState('a-z');
     const [favorites, setFavorites] = useState(null);
