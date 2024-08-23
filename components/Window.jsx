@@ -37,7 +37,16 @@ export default function Window() {
     }, []);
 
     useEffect(() => {
-        const defaultSettings = { achievementUnlocker: { random: true, interval: 60 } };
+        const defaultSettings = {
+            cardFarming: {
+                listGames: true,
+                allGames: false
+            },
+            achievementUnlocker: {
+                interval: [30, 130],
+                idle: false
+            }
+        };
         updateLaunchedStats('launched');
         const userSummaryData = localStorage.getItem('userSummary');
         setUserSummary(JSON.parse(userSummaryData));

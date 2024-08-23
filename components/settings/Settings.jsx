@@ -3,13 +3,14 @@ import ExtLink from '../ExtLink';
 import CardSettings from './CardSettings';
 import AchievementSettings from './AchievementSettings';
 import Logs from './Logs';
-import { BiCoffeeTogo, BiListUl, BiSolidBug, BiSolidHelpCircle } from 'react-icons/bi';
+import { BiCoffeeTogo, BiListUl, BiReset, BiSolidBug, BiSolidHelpCircle } from 'react-icons/bi';
 import { getVersion } from '@tauri-apps/api/app';
 import { Tab, Tabs } from '@nextui-org/react';
 
 export default function Settings() {
     const [settings, setSettings] = useState(null);
     const [version, setVersion] = useState('v0.0.0');
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         const getAppVersion = async () => {
@@ -45,10 +46,17 @@ export default function Settings() {
             localStorage.setItem('settings', JSON.stringify(updatedSettings));
         }
         setSettings(updatedSettings);
-    }, []);
+    }, [refreshKey]);
+
+    const resetSettings = () => {
+        localStorage.removeItem('settings');
+        localStorage.removeItem('steamCookies')
+        setSettings(null);
+        setRefreshKey(prevKey => prevKey + 1);
+    };
 
     return (
-        <React.Fragment>
+        <React.Fragment key={refreshKey}>
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto'>
                 <div className='p-4'>
                     <div className='flex justify-between items-center'>
@@ -82,6 +90,11 @@ export default function Settings() {
                                     <BiCoffeeTogo fontSize={18} /> Buy me a coffee
                                 </p>
                             </ExtLink>
+                            <div className='bg-red-400 hover:bg-opacity-90 px-3 py-2 rounded-sm duration-200 w-[135px] cursor-pointer' onClick={resetSettings}>
+                                <p className='flex items-center gap-2 font-medium text-xs text-white'>
+                                    <BiReset fontSize={18} /> Reset settings
+                                </p>
+                            </div>
                         </div>
                     </div>
 
