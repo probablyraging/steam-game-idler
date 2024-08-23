@@ -3,9 +3,9 @@ import ExtLink from '../ExtLink';
 import CardSettings from './CardSettings';
 import AchievementSettings from './AchievementSettings';
 import Logs from './Logs';
-import { BiCoffeeTogo, BiListUl, BiReset, BiSolidBug, BiSolidHelpCircle } from 'react-icons/bi';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { getVersion } from '@tauri-apps/api/app';
-import { Tab, Tabs } from '@nextui-org/react';
+import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Tab, Tabs } from '@nextui-org/react';
 
 export default function Settings() {
     const [settings, setSettings] = useState(null);
@@ -50,7 +50,7 @@ export default function Settings() {
 
     const resetSettings = () => {
         localStorage.removeItem('settings');
-        localStorage.removeItem('steamCookies')
+        localStorage.removeItem('steamCookies');
         setSettings(null);
         setRefreshKey(prevKey => prevKey + 1);
     };
@@ -69,32 +69,46 @@ export default function Settings() {
                             </p>
                         </div>
 
-                        <div className='flex gap-2'>
-                            <ExtLink className={'bg-sidebar hover:bg-opacity-90 px-3 py-2 rounded-sm duration-200'} href={'https://github.com/probablyraging/steam-game-idler/wiki'}>
-                                <p className='flex items-center gap-2 font-medium text-xs text-white'>
-                                    <BiSolidHelpCircle fontSize={18} /> Help
+                        <div className='flex items-center gap-2'>
+                            <Button size='sm' className='flex justify-center items-center bg-red-400 px-3 py-2 rounded-sm' onClick={resetSettings}>
+                                <p className='flex items-center gap-2 font-medium text-xs text-offwhite'>
+                                    Reset settings
                                 </p>
-                            </ExtLink>
-                            <ExtLink className={'bg-sidebar hover:bg-opacity-90 px-3 py-2 rounded-sm duration-200'} href={'https://github.com/probablyraging/steam-game-idler/releases'}>
-                                <p className='flex items-center gap-2 font-medium text-xs text-white'>
-                                    <BiListUl fontSize={18} /> Changelog
-                                </p>
-                            </ExtLink>
-                            <ExtLink className={'bg-sidebar hover:bg-opacity-90 px-3 py-2 rounded-sm duration-200'} href={'https://github.com/probablyraging/steam-game-idler/issues/new?assignees=ProbablyRaging&labels=bug%2Cinvestigating&projects=&template=issue_report.yml&title=Title'}>
-                                <p className='flex items-center gap-2 font-medium text-xs text-white'>
-                                    <BiSolidBug fontSize={18} /> Report an issue
-                                </p>
-                            </ExtLink>
-                            <ExtLink className={'bg-sidebar hover:bg-opacity-90 px-3 py-2 rounded-sm duration-200'} href={'https://buymeacoffee.com/probablyraging'}>
-                                <p className='flex items-center gap-2 font-medium text-xs text-white'>
-                                    <BiCoffeeTogo fontSize={18} /> Buy me a coffee
-                                </p>
-                            </ExtLink>
-                            <div className='bg-red-400 hover:bg-opacity-90 px-3 py-2 rounded-sm duration-200 w-[135px] cursor-pointer' onClick={resetSettings}>
-                                <p className='flex items-center gap-2 font-medium text-xs text-white'>
-                                    <BiReset fontSize={18} /> Reset settings
-                                </p>
-                            </div>
+                            </Button>
+
+                            <Dropdown classNames={{ content: ['rounded p-0'] }}>
+                                <DropdownTrigger>
+                                    <Button
+                                        isIconOnly
+                                        size='sm'
+                                        className='bg-base border border-border rounded-sm'
+                                    >
+                                        <BiDotsVerticalRounded size={24} />
+                                    </Button>
+                                </DropdownTrigger>
+                                <DropdownMenu aria-label='Settings actions'>
+                                    <DropdownItem key='help' className='rounded p-0 m-0'>
+                                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki'} className={'flex w-full px-2 py-1'}>
+                                            Help
+                                        </ExtLink>
+                                    </DropdownItem>
+                                    <DropdownItem key='changelog' className='rounded p-0 m-0'>
+                                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/releases'} className={'flex w-full px-2 py-1'}>
+                                            Changelog
+                                        </ExtLink>
+                                    </DropdownItem>
+                                    <DropdownItem key='report' className='rounded p-0 m-0'>
+                                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/issues/new?assignees=ProbablyRaging&labels=bug%2Cinvestigating&projects=&template=issue_report.yml&title=Title'} className={'flex w-full px-2 py-1'}>
+                                            Report an issue
+                                        </ExtLink>
+                                    </DropdownItem>
+                                    <DropdownItem key='coffee' className='rounded p-0 m-0'>
+                                        <ExtLink href={'https://buymeacoffee.com/probablyraging'} className={'flex w-full px-2 py-1'}>
+                                            Buy me a coffee
+                                        </ExtLink>
+                                    </DropdownItem>
+                                </DropdownMenu>
+                            </Dropdown>
                         </div>
                     </div>
 
@@ -111,6 +125,6 @@ export default function Settings() {
                     </Tabs>
                 </div>
             </div>
-        </React.Fragment>
+        </React.Fragment >
     );
 }

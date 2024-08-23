@@ -189,7 +189,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                             placeholder='Search for an achievement'
                             startContent={<RiSearchLine />}
                             className='max-w-[400px]'
-                            classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
+                            classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-sm'] }}
                             value={inputValue}
                             onChange={handleInputChange}
                             onClear={() => { setInputValue(''); }}
@@ -204,11 +204,16 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                                 size='sm'
                                 startContent={<MdSort fontSize={26} />}
                                 items={sortOptions}
-                                className='w-[200px] border border-border hover:border-borderhover rounded-sm'
+                                className='w-[200px]'
+                                classNames={{
+                                    value: ['text-xs'],
+                                    trigger: ['bg-input border border-inputborder data-[hover=true]:!bg-titlebar data-[open=true]:!bg-titlebar duration-100 rounded-sm'],
+                                    popoverContent: ['bg-base border border-border rounded']
+                                }}
                                 defaultSelectedKeys={['percent']}
                                 onSelectionChange={(e) => { handleChange(e); }}
                             >
-                                {(item) => <SelectItem>{item.label}</SelectItem>}
+                                {(item) => <SelectItem classNames={{ title: ['text-xs'], base: ['rounded-sm'] }}>{item.label}</SelectItem>}
                             </Select>
                         </div>
                     </div>
@@ -221,7 +226,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                             </div>
                             <div className='flex items-center gap-2'>
                                 <ExtLink href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`}>
-                                    <Button color='primary' size='sm' className='text-white dark:text-black font-medium rounded-sm'>
+                                    <Button color='primary' size='sm' className='text-offwhite dark:text-black font-medium rounded-sm'>
                                         Change Account Privacy
                                     </Button>
                                 </ExtLink>
@@ -258,10 +263,10 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                         <div className='flex w-full justify-end'>
                             {needConfirmation ? (
                                 <div className='flex gap-2'>
-                                    <Button size='sm' isLoading={btnLoading} className='bg-sgi font-semibold text-white rounded-sm' onClick={() => { handleUnlockAll(2); }}>
+                                    <Button size='sm' isLoading={btnLoading} className='bg-sgi font-semibold text-offwhite rounded-sm' onClick={() => { handleUnlockAll(2); }}>
                                         Continue
                                     </Button>
-                                    <Button size='sm' isLoading={btnLoading} className='bg-red-400 font-semibold text-white rounded-sm' onClick={() => { handleUnlockAll(3); }}>
+                                    <Button size='sm' isLoading={btnLoading} className='bg-red-400 font-semibold text-offwhite rounded-sm' onClick={() => { handleUnlockAll(3); }}>
                                         Cancel
                                     </Button>
                                 </div>
@@ -270,7 +275,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                                     size='sm'
                                     isLoading={btnLoading}
                                     isDisabled={!achievementList || inputValue.length > 0}
-                                    className='bg-sgi font-semibold text-white rounded-sm'
+                                    className='bg-sgi font-semibold text-offwhite rounded-sm'
                                     onClick={() => { handleUnlockAll(1); }}
                                 >
                                     Unlock all achievements
@@ -278,7 +283,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                             )}
                         </div>
 
-                        <div className='grid grid-cols-3 gap-4 max-h-[405px] p-2 w-full border border-border rounded overflow-y-auto'>
+                        <div className='grid grid-cols-1 gap-4 max-h-[405px] p-2 w-full border border-border rounded overflow-y-auto'>
                             {achievementList && achievementList.map((item) => {
                                 const isUnlocked = userAchievementsMap.get(item.name) || false;
                                 const percentage = percentageMap.get(item.name);
@@ -316,7 +321,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                                             )}
                                         </div>
                                         <div className='p-1'>
-                                            <div className='w-full bg-gray-200 rounded-full h-2.5 mb-1'>
+                                            <div className='w-full bg-titlehover rounded-full h-2.5 mb-1'>
                                                 <div className='bg-sgi h-2.5 rounded-full' style={{ width: `${percentage}%` }}></div>
                                             </div>
                                             <p className='text-xs text-right'>{percentage.toFixed(1)}% unlock rate</p>

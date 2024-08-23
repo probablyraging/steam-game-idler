@@ -55,11 +55,11 @@ export default function Automate({ setActivePage }) {
             <Dropdown classNames={{ content: ['rounded p-0'] }}>
                 <DropdownTrigger>
                     <Button size='sm' className='bg-sgi rounded-full'>
-                        <div className='flex items-center gap-1'>
-                            <p className='font-semibold text-white'>
+                        <div className='flex items-center gap-1 text-offwhite'>
+                            <p className='font-semibold'>
                                 Automate
                             </p>
-                            <IoPlay fontSize={18} color='white' />
+                            <IoPlay fontSize={18} />
                         </div>
                     </Button>
                 </DropdownTrigger>

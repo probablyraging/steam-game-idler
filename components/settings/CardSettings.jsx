@@ -186,10 +186,10 @@ export default function CardSettings({ settings, setSettings }) {
                                     value={slsValue}
                                     onChange={handleSlsChange}
                                 />
-                                <Button isDisabled={hasCookies || !sidValue || !slsValue} size='sm' className='bg-sgi font-semibold text-white rounded-sm' onClick={handleSave}>
+                                <Button isDisabled={hasCookies || !sidValue || !slsValue} size='sm' className='bg-sgi font-semibold text-offwhite rounded-sm' onClick={handleSave}>
                                     Save
                                 </Button>
-                                <Button isDisabled={!hasCookies} size='sm' className='font-semibold text-white bg-red-400 rounded-sm' onClick={handleClear}>
+                                <Button isDisabled={!hasCookies} size='sm' className='font-semibold text-offwhite bg-red-400 rounded-sm' onClick={handleClear}>
                                     Clear
                                 </Button>
                             </div>

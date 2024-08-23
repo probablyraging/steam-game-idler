@@ -18,9 +18,7 @@ body:
       label: Which branch of SGI?
       options:
         - "Base"
-        - "Lite"
         - "CLI + WebUI"
-        - "Other"
     validations:
       required: true
   - type: input

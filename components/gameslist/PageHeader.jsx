@@ -1,10 +1,9 @@
 import React from 'react';
-import { Button, Select, SelectItem, Tooltip } from '@nextui-org/react';
-import { IoIosStats } from 'react-icons/io';
+import { Select, SelectItem } from '@nextui-org/react';
 import { MdSort } from 'react-icons/md';
 import Automate from './Automate';
 
-export default function PageHeader({ activePage, setActivePage, sortStyle, setSortStyle, showStats, handleShowStats, filteredGames, visibleGames }) {
+export default function PageHeader({ activePage, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames }) {
     const sortOptions = [
         { key: 'a-z', label: 'Title Ascending' },
         { key: 'z-a', label: 'Title Descending' },
@@ -24,42 +23,28 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
     return (
         <React.Fragment>
             <div className='flex justify-between items-center pb-4'>
-                <div className='flex justify-center items-center'>
-                    {activePage === 'games' ? (
-                        <div className='flex flex-col'>
-                            <p className='text-lg font-semibold'>
-                                Game Idler
-                            </p>
-                            <p className='text-xs'>
-                                Click one or more games to begin idling manually
-                            </p>
-                        </div>
-                    ) : (
-                        <div className='flex flex-col'>
-                            <p className='text-lg font-semibold'>
-                                Achievement Unlocker
-                            </p>
-                            <p className='text-xs'>
-                                Click a game to unlock achievements manually
-                            </p>
-                        </div>
-                    )}
+                <div className='flex items-center gap-4'>
+                    <div className='flex justify-center items-center'>
+                        {activePage === 'games' ? (
+                            <div className='flex flex-col'>
+                                <p className='text-lg font-semibold'>
+                                    Game Idler
+                                </p>
+                            </div>
+                        ) : (
+                            <div className='flex flex-col'>
+                                <p className='text-lg font-semibold'>
+                                    Achievement Unlocker
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className='flex justify-end items-center gap-2'>
                     <div className='flex items-center gap-1'>
                         <Automate setActivePage={setActivePage} />
                     </div>
-
-                    <Tooltip closeDelay={0} placement='top' className='text-xs' content='Show game information'>
-                        <Button
-                            isIconOnly
-                            startContent={<IoIosStats fontSize={18} />}
-                            size='sm'
-                            className={`${showStats && 'text-sgi'} bg-container border border-border hover:bg-containerhover hover:border-borderhover rounded-sm`}
-                            onClick={() => handleShowStats()}
-                        />
-                    </Tooltip>
 
                     <Select
                         aria-label='sort'
@@ -68,21 +53,24 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
                         size='sm'
                         startContent={<MdSort fontSize={26} />}
                         items={sortOptions}
-                        className='w-[240px] border border-border hover:border-borderhover rounded-sm'
+                        className='w-[240px]'
                         defaultSelectedKeys={[sortStyle]}
                         onSelectionChange={(e) => { handleSorting(e); }}
-                        classNames={{ listboxWrapper: ['min-h-[278px]'] }}
+                        classNames={{
+                            listboxWrapper: ['min-h-[248px]'],
+                            value: ['text-xs'],
+                            trigger: ['bg-input border border-inputborder data-[hover=true]:!bg-titlebar data-[open=true]:!bg-titlebar duration-100 rounded-sm'],
+                            popoverContent: ['bg-base border border-border rounded'],
+                        }}
                     >
-                        {(item) => <SelectItem>{item.label}</SelectItem>}
+                        {(item) => <SelectItem classNames={{ title: ['text-xs'], base: ['rounded-sm'] }}>{item.label}</SelectItem>}
                     </Select>
                 </div>
             </div>
 
-            <div className='flex w-full'>
-                <p className='text-xs text-gray-500 mb-2'>
-                    Showing {visibleGames.length} of {filteredGames.length} games
-                </p>
+            <div className='text-xs text-gray-400 mb-2'>
+                Showing {visibleGames.length} of {filteredGames.length} games
             </div>
-        </React.Fragment >
+        </React.Fragment>
     );
 }

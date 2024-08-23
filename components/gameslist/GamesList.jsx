@@ -13,7 +13,6 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
     const [favorites, setFavorites] = useState(null);
     const [cardFarming, setCardFarming] = useState(null);
     const [achievementUnlocker, setAchievementUnlocker] = useState(null);
-    const [showStats, setShowStats] = useState(false);
     const [filteredGames, setFilteredGames] = useState([]);
     const [visibleGames, setVisibleGames] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,8 +20,6 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
 
     useEffect(() => {
         setIsLoading(true);
-        const showStats = localStorage.getItem('showStats');
-        setShowStats(JSON.parse(showStats));
         const sortStyle = localStorage.getItem('sortStyle');
         if (sortStyle) setSortStyle(sortStyle);
         const cachedGameList = sessionStorage.getItem('gamesListCache');
@@ -125,11 +122,6 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
         }
     }, [gameList, currentPage, visibleGames, filteredGames, gamesPerPage]);
 
-    const handleShowStats = () => {
-        localStorage.setItem('showStats', !showStats);
-        setShowStats(!showStats);
-    };
-
     const handleScroll = (event) => {
         const { scrollTop, scrollHeight, clientHeight } = event.target;
         if (scrollTop + clientHeight >= scrollHeight - 20) {
@@ -158,8 +150,6 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                             setActivePage={setActivePage}
                             sortStyle={sortStyle}
                             setSortStyle={setSortStyle}
-                            showStats={showStats}
-                            handleShowStats={handleShowStats}
                             filteredGames={filteredGames}
                             visibleGames={visibleGames}
                         />
@@ -174,7 +164,6 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                             setFavorites={setFavorites}
                             setCardFarming={setCardFarming}
                             setAchievementUnlocker={setAchievementUnlocker}
-                            showStats={showStats}
                             showAchievements={showAchievements}
                             setShowAchievements={setShowAchievements}
                             setAppId={setAppId}
@@ -188,7 +177,6 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                             setFavorites={setFavorites}
                             setCardFarming={setCardFarming}
                             setAchievementUnlocker={setAchievementUnlocker}
-                            showStats={showStats}
                             showAchievements={showAchievements}
                             setShowAchievements={setShowAchievements}
                             setAppId={setAppId}

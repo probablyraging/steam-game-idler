@@ -58,18 +58,18 @@ export default function UpdateScreen() {
 
     return (
         <React.Fragment>
-            <div className='flex justify-between items-center w-screen h-[30px] bg-sgi rounded-tr-lg rounded-tl-lg' data-tauri-drag-region>
-                <div className='flex items-center gap-1 px-2 bg-sgi h-full w-[62px] rounded-tl-lg'>
-                    <BiSolidLeaf className='text-white' fontSize={20} />
+            <div className='flex justify-between items-center w-screen h-[62px] bg-sgi rounded-tr-[10px] rounded-tl-xl' data-tauri-drag-region>
+                <div className='flex items-center gap-1 px-2 bg-sgi h-full w-[62px] rounded-tl-[10px]'>
+                    <BiSolidLeaf className='text-offwhite' fontSize={40} />
                 </div>
-                <div className='flex justify-center items-center h-full ml-2'>
+                <div className='flex justify-center items-center h-full ml-2 text-offwhite'>
                     <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowMinimize}>
                         <HiMiniMinus />
                     </div>
                     <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                         <BiWindows fontSize={12} />
                     </div>
-                    <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-lg cursor-pointer' onClick={windowClose}>
+                    <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-xl cursor-pointer' onClick={windowClose}>
                         <IoClose />
                     </div>
                 </div>

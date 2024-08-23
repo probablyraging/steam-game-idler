@@ -68,7 +68,7 @@ export default function Setup({ setUserSummary }) {
                         <Button
                             isLoading={isLoading}
                             size='sm'
-                            className='bg-sgi text-white font-semibold rounded-sm'
+                            className='bg-sgi text-offwhite font-semibold rounded-sm'
                             onClick={handleClick}
                         >
                             Continue

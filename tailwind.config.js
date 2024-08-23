@@ -33,6 +33,7 @@ module.exports = {
             light: {
                 colors: {
                     'sgi': '#137eb5',
+                    'offwhite': '#ffffff',
                     'sidebar': '#1a8fcb',
                     'titlebar': '#efefef',
                     'titletext': '#0a0a0a',
@@ -62,6 +63,7 @@ module.exports = {
             dark: {
                 colors: {
                     'sgi': '#137eb5',
+                    'offwhite': '#ebebeb',
                     'sidebar': '#1a8fcb',
                     'titlebar': '#1c1c1c',
                     'titletext': '#efefef',

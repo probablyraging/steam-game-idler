@@ -17,7 +17,7 @@ export default function Private({ steamId }) {
                     <div className='flex justify-center items-center flex-col gap-7 pb-6'>
                         <p className='text-center px-3'>This account has no games or their games list set to private so we&apos;re unable to view their games.</p>
                         <ExtLink href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`}>
-                            <Button color='primary' size='sm' className='text-white dark:text-black font-medium rounded-sm'>
+                            <Button color='primary' size='sm' className='text-offwhite dark:text-black font-medium rounded-sm'>
                                 Change Account Privacy
                             </Button>
                         </ExtLink>

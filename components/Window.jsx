@@ -3,7 +3,6 @@ import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
 import UpdateScreen from './UpdateScreen';
 import { logEvent, updateLaunchedStats } from '@/utils/utils';
-import { invoke } from '@tauri-apps/api/tauri';
 import Setup from './Setup';
 
 export default function Window() {
@@ -22,18 +21,6 @@ export default function Window() {
             }
         };
         checkForUpdates();
-    }, []);
-
-    useEffect(() => {
-        const checkSteamStatus = async () => {
-            const path = await invoke('get_file_path');
-            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
-            const result = await invoke('check_steam_status', { filePath: fullPath });
-            if (result === 'not_running') {
-                setUserSummary(null);
-            }
-        };
-        checkSteamStatus();
     }, []);
 
     useEffect(() => {
@@ -67,7 +54,7 @@ export default function Window() {
     );
 
     return (
-        <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-lg rounded-tl-lg'>
+        <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-[10px] rounded-tl-xl'>
             <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} />
         </div>
     );

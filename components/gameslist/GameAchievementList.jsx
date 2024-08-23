@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import CardMenu from './CardMenu';
-import CardStats from './CardStats';
 import Loader from '../Loader';
 import { FaAward } from 'react-icons/fa';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { startIdler, logEvent } from '@/utils/utils';
 
-export default function GameAchievementList({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showStats, showAchievements, setShowAchievements, setAppId }) {
+export default function GameAchievementList({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showAchievements, setShowAchievements, setAppId }) {
     const [isLoading, setIsLoading] = useState(true);
 
     setTimeout(() => {
@@ -105,60 +104,47 @@ export default function GameAchievementList({ gameList, favorites, cardFarming, 
 
     return (
         <React.Fragment>
-            <div className='flex flex-wrap gap-4'>
-                {gameList && gameList.map((item) => {
-                    return (
-                        <div key={item.game.id} className='relative flex flex-col w-full max-w-[220px] bg-container border border-border hover:border-borderhover rounded'>
-                            <div className='flex w-fit min-h-[100px] overflow-hidden group' onClick={() => { viewAchievments(item); }}>
-                                <Image
-                                    className='rounded-tl rounded-tr object-cover group-hover:scale-105 duration-200 cursor-pointer'
-                                    src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.game.id}/header.jpg`}
-                                    width={220}
-                                    height={100}
-                                    alt={`${item.game.name} image`}
-                                    priority={true}
-                                />
-
-                                <div className='absolute max-h-[100px] inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 duration-200 pointer-events-none'>
-                                    <div className='flex justify-center items-center bg-black bg-opacity-50 rounded-lg p-2'>
-                                        <FaAward className='text-white' fontSize={50} />
-                                    </div>
+            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4'>
+                {gameList && gameList.map((item) => (
+                    <div key={item.game.id} className='relative group'>
+                        <div
+                            className='aspect-[460/215] rounded-lg overflow-hidden cursor-pointer transition-transform duration-200 ease-in-out transform group-hover:scale-105'
+                            onClick={() => viewAchievments(item)}
+                        >
+                            <Image
+                                src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.game.id}/header.jpg`}
+                                layout='fill'
+                                objectFit='cover'
+                                alt={`${item.game.name} image`}
+                                priority={true}
+                            />
+                            <div className='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-200 flex items-center justify-center'>
+                                <div className='flex flex-col justify-center items-center bg-black bg-opacity-0 group-hover:bg-opacity-40 p-2 rounded-md duration-200'>
+                                    <FaAward className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={40} />
                                 </div>
-                            </div>
-
-                            <div className='flex flex-col px-2'>
-                                <div className='flex justify-between items-center w-full gap-2'>
-                                    <p className='text-sm font-bold truncate'>
-                                        {item.game.name}
-                                    </p>
-
-                                    <div className='flex justify-end items-center gap-2 p-1'>
-                                        <CardMenu
-                                            item={item}
-                                            favorites={favorites}
-                                            cardFarming={cardFarming}
-                                            achievementUnlocker={achievementUnlocker}
-                                            handleIdle={handleIdle}
-                                            viewAchievments={viewAchievments}
-                                            addToFavorites={addToFavorites}
-                                            removeFromFavorites={removeFromFavorites}
-                                            addToCardFarming={addToCardFarming}
-                                            removeFromCardFarming={removeFromCardFarming}
-                                            addToAchievementUnlocker={addToAchievementUnlocker}
-                                            removeFromAchievementUnlocker={removeFromAchievementUnlocker}
-                                        />
-                                    </div>
-                                </div>
-
-                                {showStats && (
-                                    <CardStats item={item} />
-                                )}
                             </div>
                         </div>
-                    );
-                })}
-                <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
+
+                        <div className='absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200'>
+                            <CardMenu
+                                item={item}
+                                favorites={favorites}
+                                cardFarming={cardFarming}
+                                achievementUnlocker={achievementUnlocker}
+                                handleIdle={handleIdle}
+                                viewAchievments={viewAchievments}
+                                addToFavorites={addToFavorites}
+                                removeFromFavorites={removeFromFavorites}
+                                addToCardFarming={addToCardFarming}
+                                removeFromCardFarming={removeFromCardFarming}
+                                addToAchievementUnlocker={addToAchievementUnlocker}
+                                removeFromAchievementUnlocker={removeFromAchievementUnlocker}
+                            />
+                        </div>
+                    </div>
+                ))}
             </div>
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

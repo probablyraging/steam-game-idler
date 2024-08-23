@@ -192,7 +192,7 @@ export default function CardFarming({ setActivePage }) {
                         {!isComplete ? (
                             <div className='flex justify-center flex-col items-center h-[100px] gap-4'>
                                 <Spinner label={<p className='text-xs'>This may take a minute</p>} />
-                                <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-white rounded-sm' onClick={handleCancel}>
+                                <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-offwhite rounded-sm' onClick={handleCancel}>
                                     Cancel
                                 </Button>
                             </div>
@@ -201,7 +201,7 @@ export default function CardFarming({ setActivePage }) {
                                 <div className='border border-border rounded-full inline-block p-2 w-fit'>
                                     <IoCheckmark className='text-green-400' fontSize={50} />
                                 </div>
-                                <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-white rounded-sm' onClick={handleCancel}>
+                                <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-offwhite rounded-sm' onClick={handleCancel}>
                                     Back
                                 </Button>
                             </div>

@@ -195,7 +195,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                             <p>To change your privacy settings go to <span className='font-bold'>Steam &gt; Profile &gt; Edit Profile &gt; Privacy Settings &gt; Game Details &gt; Public</span></p>
                             <p>It may take up to 5 minutes for the changes to be applied</p>
 
-                            <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-white rounded-sm' onClick={handleCancel}>
+                            <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-offwhite rounded-sm' onClick={handleCancel}>
                                 Back
                             </Button>
                         </div>
@@ -220,7 +220,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                                     {!isComplete ? (
                                         <div className='flex justify-center flex-col items-center h-[100px] gap-4'>
                                             <Spinner label={<p className='text-xs'>This may take a minute</p>} />
-                                            <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-white rounded-sm' onClick={handleCancel}>
+                                            <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-offwhite rounded-sm' onClick={handleCancel}>
                                                 Cancel
                                             </Button>
                                         </div>
@@ -229,7 +229,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                                             <div className='border border-border rounded-full inline-block p-2 w-fit'>
                                                 <IoCheckmark className='text-green-400' fontSize={50} />
                                             </div>
-                                            <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-white rounded-sm' onClick={handleCancel}>
+                                            <Button size='sm' className='bg-red-400 min-h-[30px] font-semibold text-offwhite rounded-sm' onClick={handleCancel}>
                                                 Back
                                             </Button>
                                         </div>

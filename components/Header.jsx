@@ -7,6 +7,7 @@ import { HiMiniMinus } from 'react-icons/hi2';
 import { BiWindows } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 import { RiSearchLine } from 'react-icons/ri';
+import ExtLink from './ExtLink';
 
 export default function Header({ userSummary, inputValue, setInputValue, setIsQuery }) {
     const [appWindow, setAppWindow] = useState();
@@ -46,10 +47,10 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
 
     return (
         <React.Fragment>
-            <div className='relative w-full h-[62px] bg-titlebar rounded-tr-lg rounded-tl-lg select-none'>
+            <div className='relative w-full h-[62px] bg-titlebar rounded-tr-[10px] rounded-tl-xl select-none'>
                 <div className='flex justify-between items-center h-full text-titletext'>
-                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px] rounded-tl-lg'>
-                        <BiSolidLeaf className='text-white' fontSize={40} />
+                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi dark:bg-[#181818] h-full w-[62px] rounded-tl-[10px]'>
+                        <BiSolidLeaf className='text-offwhite' fontSize={40} />
                     </div>
 
                     <div className='flex justify-center items-center flex-grow h-full border-b border-titleborder'>
@@ -59,7 +60,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                                 placeholder='Search for a game'
                                 startContent={<RiSearchLine />}
                                 className='max-w-[400px]'
-                                classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
+                                classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-sm'] }}
                                 value={inputValue}
                                 onChange={handleChange}
                                 onKeyDown={handleKeyDown}
@@ -70,17 +71,19 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
 
                         <div className='flex items-center gap-2 h-full'>
                             <ThemeSwitch />
-                            <div className='flex items-center gap-2 h-full p-2'>
-                                <div className='text-end'>
-                                    <p className='font-medium'>
-                                        {userSummary.personaName}
-                                    </p>
-                                    <p className='text-xs text-neutral-400'>
-                                        {userSummary.steamId}
-                                    </p>
+                            <ExtLink href={`https://steamcommunity.com/profiles/${userSummary.steamId}`}>
+                                <div className='flex items-center gap-2 h-full p-2'>
+                                    <div className='text-end'>
+                                        <p className='font-medium'>
+                                            {userSummary.personaName}
+                                        </p>
+                                        <p className='text-xs text-neutral-400'>
+                                            {userSummary.steamId}
+                                        </p>
+                                    </div>
+                                    <Image src={userSummary.avatar} height={40} width={40} alt='user avatar' className='w-[40px] h-[40px] rounded-full' />
                                 </div>
-                                <Image src={userSummary.avatar} height={40} width={40} alt='user avatar' className='w-[40px] h-[40px] rounded-full' />
-                            </div>
+                            </ExtLink>
                         </div>
 
                         <Divider className='w-[1px] h-full bg-titleborder mx-2' />
@@ -92,7 +95,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                             <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                                 <BiWindows fontSize={12} />
                             </div>
-                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-lg cursor-pointer' onClick={windowClose}>
+                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-xl cursor-pointer' onClick={windowClose}>
                                 <IoClose />
                             </div>
                         </div>

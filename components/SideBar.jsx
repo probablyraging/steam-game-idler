@@ -16,9 +16,9 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
 
     return (
         <React.Fragment>
-            <div className='flex justify-between flex-col w-[62px] min-h-calc max-h-calc bg-sidebar'>
+            <div className='flex justify-between flex-col w-[62px] min-h-calc max-h-calc bg-sidebar dark:bg-titlebar'>
                 <div className='flex justify-center items-center flex-col'>
-                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi cursor-pointer' onClick={() => setActivePage('games')}>
+                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer' onClick={() => setActivePage('games')}>
                         {activePage === 'games' && (
                             <motion.div
                                 className='absolute w-full border-r-4 border-white'
@@ -31,9 +31,9 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                                 }}
                             />
                         )}
-                        <IoGameController className='text-white' fontSize={24} />
+                        <IoGameController className='text-offwhite' fontSize={24} />
                     </div>
-                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi cursor-pointer' onClick={() => setActivePage('achievements')}>
+                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer' onClick={() => setActivePage('achievements')}>
                         {activePage === 'achievements' && (
                             <motion.div
                                 className='absolute w-full border-r-4 border-white'
@@ -46,12 +46,12 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                                 }}
                             />
                         )}
-                        <FaAward className='text-white' fontSize={24} />
+                        <FaAward className='text-offwhite' fontSize={24} />
                     </div>
                 </div>
 
                 <div className='flex flex-col justify-center items-center'>
-                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi cursor-pointer' onClick={() => setActivePage('settings')}>
+                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer' onClick={() => setActivePage('settings')}>
                         {activePage === 'settings' && (
                             <motion.div
                                 className='absolute w-full border-r-4 border-white'
@@ -64,10 +64,10 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                                 }}
                             />
                         )}
-                        <IoSettings className='text-white' fontSize={24} />
+                        <IoSettings className='text-offwhite' fontSize={24} />
                     </div>
                     <div className='flex justify-center items-center w-full h-[62px] hover:bg-red-500 cursor-pointer' onClick={handleLogout}>
-                        <FaSignOutAlt className='text-white rotate-180' fontSize={24} />
+                        <FaSignOutAlt className='text-offwhite rotate-180' fontSize={24} />
                     </div>
                 </div>
             </div>
