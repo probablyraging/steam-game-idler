@@ -143,7 +143,7 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
     return (
         <React.Fragment>
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto overflow-x-hidden' onScroll={handleScroll}>
-                <div className='p-4'>
+                <div className='p-4 pt-2'>
                     {!showAchievements && (
                         <PageHeader
                             activePage={activePage}

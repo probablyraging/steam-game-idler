@@ -7,8 +7,10 @@ import ExtLink from './ExtLink';
 import { invoke } from '@tauri-apps/api/tauri';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useTheme } from 'next-themes';
 
 export default function Setup({ setUserSummary }) {
+    const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(false);
     const [steamId, setSteamId] = useState(null);
 
@@ -84,7 +86,7 @@ export default function Setup({ setUserSummary }) {
                     </div>
                 </motion.div>
             </div>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment >
     );
 }

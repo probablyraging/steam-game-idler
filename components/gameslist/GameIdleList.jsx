@@ -6,8 +6,10 @@ import { IoGameController } from 'react-icons/io5';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { startIdler, logEvent } from '@/utils/utils';
+import { useTheme } from 'next-themes';
 
 export default function GameIdleList({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showAchievements, setShowAchievements, setAppId }) {
+    const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
 
     setTimeout(() => {
@@ -118,7 +120,7 @@ export default function GameIdleList({ gameList, favorites, cardFarming, achieve
                                 alt={`${item.game.name} image`}
                                 priority={true}
                             />
-                            <div className='absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-opacity duration-200 flex items-center justify-center'>
+                            <div className='absolute inset-0 bg-black bg-opacity-0 dark:bg-opacity-20 group-hover:bg-opacity-40 dark:group-hover:bg-opacity-50 transition-opacity duration-200 flex items-center justify-center'>
                                 <div className='flex flex-col justify-center items-center bg-black bg-opacity-0 group-hover:bg-opacity-40 p-2 rounded-md duration-200'>
                                     <IoGameController className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={40} />
                                 </div>
@@ -144,7 +146,7 @@ export default function GameIdleList({ gameList, favorites, cardFarming, achieve
                     </div>
                 ))}
             </div>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

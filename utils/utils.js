@@ -20,7 +20,7 @@ export async function startIdler(appId, appName, quiet = false) {
             await invoke('start_idle', { filePath: fullPath, appId: appId.toString(), quiet: quiet.toString() });
             idleCounter++;
             updateIdleStats();
-            logEvent(`Started idling ${appName}`);
+            logEvent(`[Idle] Started ${appName}`);
             return true;
         } else {
             return false;
@@ -33,7 +33,7 @@ export async function startIdler(appId, appName, quiet = false) {
 export async function stopIdler(appId) {
     try {
         await invoke('stop_idle', { appId: appId.toString() });
-        logEvent(`Stopped idling ${appId}`);
+        logEvent(`[Idling] Stopped ${appId}`);
     } catch (error) {
         console.log(error);
     }
@@ -52,9 +52,9 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
         });
         achievementCounter++;
         updateAchievementStats();
-        logEvent(`Unlocked achievement ${achievementId} (${appId})`);
+        logEvent(`[Achievement Unlocker] Unlocked/locked ${achievementId} (${appId})`);
     } else {
-        logEvent(`[Error] Achievement failed - Steam is not running`);
+        logEvent(`[Error] [Achievement Unlocker] Steam is not running`);
     }
 }
 
@@ -117,7 +117,6 @@ const updateIdleStats = debounce(async () => {
 
 const updateAchievementStats = debounce(async () => {
     try {
-        console.log('updating db..', achievementCounter);
         await fetch('https://apibase.vercel.app/api/route', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

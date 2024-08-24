@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import ExtLink from '../ExtLink';
 import CardSettings from './CardSettings';
 import AchievementSettings from './AchievementSettings';
 import Logs from './Logs';
-import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { getVersion } from '@tauri-apps/api/app';
-import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Tab, Tabs } from '@nextui-org/react';
+import { Button, Tab, Tabs } from '@nextui-org/react';
+import SettingsMenu from './SettingsMenu';
+import { logEvent } from '@/utils/utils';
 
 export default function Settings() {
     const [settings, setSettings] = useState(null);
@@ -27,8 +27,8 @@ export default function Settings() {
                 allGames: false
             },
             achievementUnlocker: {
+                idle: true,
                 interval: [30, 130],
-                idle: false
             }
         };
         let currentSettings = JSON.parse(localStorage.getItem('settings')) || {};
@@ -53,12 +53,13 @@ export default function Settings() {
         localStorage.removeItem('steamCookies');
         setSettings(null);
         setRefreshKey(prevKey => prevKey + 1);
+        logEvent('[Settings] Reset to default');
     };
 
     return (
         <React.Fragment key={refreshKey}>
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto'>
-                <div className='p-4'>
+                <div className='p-4 pt-2'>
                     <div className='flex justify-between items-center'>
                         <div className='flex flex-col'>
                             <p className='text-lg font-semibold'>
@@ -76,43 +77,25 @@ export default function Settings() {
                                 </p>
                             </Button>
 
-                            <Dropdown classNames={{ content: ['rounded p-0'] }}>
-                                <DropdownTrigger>
-                                    <Button
-                                        isIconOnly
-                                        size='sm'
-                                        className='bg-base border border-border rounded-sm'
-                                    >
-                                        <BiDotsVerticalRounded size={24} />
-                                    </Button>
-                                </DropdownTrigger>
-                                <DropdownMenu aria-label='Settings actions'>
-                                    <DropdownItem key='help' className='rounded p-0 m-0'>
-                                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki'} className={'flex w-full px-2 py-1'}>
-                                            Help
-                                        </ExtLink>
-                                    </DropdownItem>
-                                    <DropdownItem key='changelog' className='rounded p-0 m-0'>
-                                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/releases'} className={'flex w-full px-2 py-1'}>
-                                            Changelog
-                                        </ExtLink>
-                                    </DropdownItem>
-                                    <DropdownItem key='report' className='rounded p-0 m-0'>
-                                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/issues/new?assignees=ProbablyRaging&labels=bug%2Cinvestigating&projects=&template=issue_report.yml&title=Title'} className={'flex w-full px-2 py-1'}>
-                                            Report an issue
-                                        </ExtLink>
-                                    </DropdownItem>
-                                    <DropdownItem key='coffee' className='rounded p-0 m-0'>
-                                        <ExtLink href={'https://buymeacoffee.com/probablyraging'} className={'flex w-full px-2 py-1'}>
-                                            Buy me a coffee
-                                        </ExtLink>
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
+                            <SettingsMenu />
                         </div>
                     </div>
 
-                    <Tabs aria-label='Settings tabs' color='primary' variant='underlined' className='mt-6' classNames={{ tab: ['pl-0'] }}>
+                    <Tabs
+                        size='sm'
+                        aria-label='Settings tabs'
+                        color='default'
+                        variant='solid'
+                        className='mt-6'
+                        classNames={{
+                            base: 'bg-titlebar rounded-t-sm p-0',
+                            tabList: 'gap-0 w-full bg-transparent',
+                            tab: 'px-6 py-3 rounded-none bg-transparent px-4',
+                            tabContent: 'text-xs',
+                            cursor: 'bg-base w-full rounded-sm',
+                            panel: 'bg-base border border-border rounded-b rounded-tr',
+                        }}
+                    >
                         <Tab key='card-farming' title='Card Farming'>
                             <CardSettings settings={settings} setSettings={setSettings} />
                         </Tab>

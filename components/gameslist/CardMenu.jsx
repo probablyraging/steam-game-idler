@@ -8,9 +8,9 @@ import { FaAward } from 'react-icons/fa';
 export default function CardMenu({ item, favorites, cardFarming, achievementUnlocker, handleIdle, viewAchievments, addToFavorites, removeFromFavorites, addToCardFarming, removeFromCardFarming, addToAchievementUnlocker, removeFromAchievementUnlocker }) {
     return (
         <React.Fragment>
-            <Dropdown classNames={{ content: ['rounded p-0'] }}>
+            <Dropdown classNames={{ content: ['rounded p-0 bg-base border border-border'] }}>
                 <DropdownTrigger>
-                    <div className='p-1 border border-border bg-black text-offwhite bg-opacity-50 hover:bg-containerhover hover:bg-opacity-80 hover:border-borderhover cursor-pointer rounded duration-200'>
+                    <div className='p-1 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 cursor-pointer rounded duration-200'>
                         <BsThreeDotsVertical />
                     </div>
                 </DropdownTrigger>
@@ -21,7 +21,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                         startContent={<IoPlay />}
                         onClick={() => handleIdle(item.game.id, item.game.name)}
                     >
-                        Idle game
+                        <p className='text-xs'>Idle game</p>
                     </DropdownItem>
                     <DropdownItem
                         className='rounded'
@@ -29,7 +29,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                         startContent={<FaAward />}
                         onClick={() => viewAchievments(item)}
                     >
-                        View achievements
+                        <p className='text-xs'>View achievements</p>
                     </DropdownItem>
                     {favorites.some(arr => arr.game.id === item.game.id) ? (
                         <DropdownItem
@@ -38,7 +38,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             startContent={<TiHeartFullOutline />}
                             onClick={(e) => removeFromFavorites(e, item)}
                         >
-                            Remove from favorites
+                            <p className='text-xs'>Remove from favorites</p>
                         </DropdownItem>
                     ) : (
                         <DropdownItem
@@ -47,7 +47,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             startContent={<TiHeartFullOutline />}
                             onClick={(e) => addToFavorites(e, item)}
                         >
-                            Add to favorites
+                            <p className='text-xs'>Add to favorites</p>
                         </DropdownItem>
                     )}
                     {cardFarming.some(arr => arr.game.id === item.game.id) ? (
@@ -57,7 +57,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             startContent={<TiMinus />}
                             onClick={(e) => removeFromCardFarming(e, item)}
                         >
-                            Remove from card farming
+                            <p className='text-xs'>Remove from card farming</p>
                         </DropdownItem>
                     ) : (
                         <DropdownItem
@@ -66,7 +66,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             startContent={<TiPlus />}
                             onClick={(e) => addToCardFarming(e, item)}
                         >
-                            Add to card farming
+                            <p className='text-xs'>Add to card farming</p>
                         </DropdownItem>
                     )}
                     {achievementUnlocker.some(arr => arr.game.id === item.game.id) ? (
@@ -76,7 +76,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             startContent={<TiMinus />}
                             onClick={(e) => removeFromAchievementUnlocker(e, item)}
                         >
-                            Remove from achievement unlocker
+                            <p className='text-xs'>Remove from achievement unlocker</p>
                         </DropdownItem>
                     ) : (
                         <DropdownItem
@@ -85,7 +85,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             startContent={<TiPlus />}
                             onClick={(e) => addToAchievementUnlocker(e, item)}
                         >
-                            Add to achievement unlocker
+                            <p className='text-xs'>Add to achievement unlocker</p>
                         </DropdownItem>
                     )}
                 </DropdownMenu>

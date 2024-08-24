@@ -39,7 +39,7 @@ export default function CardSettings({ settings, setSettings }) {
                     logEvent(`[Settings - Card Farming] Logged in as ${data.steamUser}`);
                 } else {
                     setValidationError(true);
-                    logEvent('[Error] Incorrect \'Card Farming\' credentials');
+                    logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
                 }
                 setIsLoading(false);
             });
@@ -74,7 +74,7 @@ export default function CardSettings({ settings, setSettings }) {
                     logEvent(`[Settings - Card Farming] Logged in as ${data.steamUser}`);
                 } else {
                     setValidationError(true);
-                    logEvent('[Error] Incorrect \'Card Farming\' credentials');
+                    logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
                     setTimeout(() => {
                         setValidationError(false);
                     }, 4000);
@@ -132,16 +132,7 @@ export default function CardSettings({ settings, setSettings }) {
 
     return (
         <React.Fragment>
-            <div className='mt-4 p-4 border border-border rounded'>
-                <div className='mb-6'>
-                    <p className='text-sm font-semibold'>
-                        Card Farming
-                    </p>
-                    <p className='text-xs mb-2'>
-                        Steam credentials are required in order to use the Card Farming feature. <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/Settings#steam-credentials'} className='text-blue-400'>Learn more</ExtLink>
-                    </p>
-                </div>
-
+            <div className='p-2'>
                 <div className='flex flex-col gap-4'>
                     <Checkbox
                         name='listGames'
@@ -168,6 +159,9 @@ export default function CardSettings({ settings, setSettings }) {
                     </Checkbox>
 
                     <div className='w-full'>
+                        <p className='text-xs my-2'>
+                            Steam credentials are required in order to use the Card Farming feature. <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/Settings#steam-credentials'} className='text-blue-400'>Learn more</ExtLink>
+                        </p>
                         <div className='flex flex-col'>
                             <div className='flex gap-4'>
                                 <Input
@@ -186,7 +180,12 @@ export default function CardSettings({ settings, setSettings }) {
                                     value={slsValue}
                                     onChange={handleSlsChange}
                                 />
-                                <Button isDisabled={hasCookies || !sidValue || !slsValue} size='sm' className='bg-sgi font-semibold text-offwhite rounded-sm' onClick={handleSave}>
+                                <Button
+                                    isDisabled={hasCookies || !sidValue || !slsValue}
+                                    size='sm'
+                                    className='bg-sgi font-semibold text-offwhite rounded-sm'
+                                    onClick={handleSave}
+                                >
                                     Save
                                 </Button>
                                 <Button isDisabled={!hasCookies} size='sm' className='font-semibold text-offwhite bg-red-400 rounded-sm' onClick={handleClear}>
@@ -194,33 +193,27 @@ export default function CardSettings({ settings, setSettings }) {
                                 </Button>
                             </div>
 
-                            <div className='mt-2'>
-                                {isLoading ? (
-                                    <div className='flex py-1 h-[16px]'>
-                                        <Skeleton className='w-[70px] h-[8px] rounded' />
-                                    </div>
-                                ) : (
-                                    <React.Fragment>
-                                        {loginState ? (
-                                            <p className='text-xs text-green-400' >
-                                                Logged in as {steamUser}
-                                            </p>
-                                        ) : (
-                                            <React.Fragment>
-                                                {validationError ? (
-                                                    <p className='text-xs text-red-400'>
-                                                        Incorrect credentials
-                                                    </p>
-                                                ) : (
-                                                    <p className='text-xs text-red-400'>
-                                                        Not logged in
-                                                    </p>
-                                                )}
-                                            </React.Fragment>
-                                        )}
-                                    </React.Fragment>
-                                )}
-                            </div>
+                            {isLoading ? (
+                                <div className='flex py-1 h-[16px]'>
+                                    <Skeleton className='w-[70px] h-[8px] rounded' />
+                                </div>
+                            ) : (
+                                <React.Fragment>
+                                    {loginState ? (
+                                        <p className='text-xs text-green-400' >
+                                            Logged in as {steamUser}
+                                        </p>
+                                    ) : (
+                                        <React.Fragment>
+                                            {validationError && (
+                                                <p className='text-xs text-red-400'>
+                                                    Incorrect credentials
+                                                </p>
+                                            )}
+                                        </React.Fragment>
+                                    )}
+                                </React.Fragment>
+                            )}
                         </div>
                     </div>
                 </div>

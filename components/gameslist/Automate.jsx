@@ -6,8 +6,11 @@ import { FaAward } from 'react-icons/fa';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { invoke } from '@tauri-apps/api/tauri';
+import { useTheme } from 'next-themes';
 
 export default function Automate({ setActivePage }) {
+    const { theme } = useTheme();
+
     const startCardFarming = async () => {
         const steamRunning = await invoke('check_status');
         const steamCookies = JSON.parse(localStorage.getItem('steamCookies')) || {};
@@ -52,7 +55,7 @@ export default function Automate({ setActivePage }) {
 
     return (
         <React.Fragment>
-            <Dropdown classNames={{ content: ['rounded p-0'] }}>
+            <Dropdown classNames={{ content: ['rounded p-0 bg-base border border-border'] }}>
                 <DropdownTrigger>
                     <Button size='sm' className='bg-sgi rounded-full'>
                         <div className='flex items-center gap-1 text-offwhite'>
@@ -70,7 +73,7 @@ export default function Automate({ setActivePage }) {
                         startContent={<IoGameController />}
                         onClick={startCardFarming}
                     >
-                        Start card farming
+                        <p className='text-xs'>Start card farming</p>
                     </DropdownItem>
                     <DropdownItem
                         className='rounded'
@@ -78,7 +81,7 @@ export default function Automate({ setActivePage }) {
                         startContent={<FaAward />}
                         onClick={startAchievementUnlocker}
                     >
-                        Start achievement unlocker
+                        <p className='text-xs'>Start achievement unlocker</p>
                     </DropdownItem>
                     <DropdownItem
                         className='rounded'
@@ -86,11 +89,11 @@ export default function Automate({ setActivePage }) {
                         startContent={<IoSettings />}
                         onClick={() => setActivePage('settings')}
                     >
-                        Change settings
+                        <p className='text-xs'>Change settings</p>
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

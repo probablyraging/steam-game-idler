@@ -7,12 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaUnlockAlt, FaLock, FaInfoCircle } from 'react-icons/fa';
 import { IoIosClose, IoMdArrowRoundBack } from 'react-icons/io';
 import { RiSearchLine } from 'react-icons/ri';
-import ExtLink from '../ExtLink';
 import { TiWarning } from 'react-icons/ti';
 import { MdSort } from 'react-icons/md';
 import { unlockAchievement } from '@/utils/utils';
+import { useTheme } from 'next-themes';
 
 export default function Achievements({ steamId, appId, setShowAchievements }) {
+    const { theme } = useTheme();
     let [isLoading, setIsLoading] = useState(true);
     let [achievementList, setAchievementList] = useState([]);
     let [userAchievements, setUserAchievements] = useState([]);
@@ -175,7 +176,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                     <div className='flex justify-between items-center mb-4'>
                         <Button
                             size='sm'
-                            className='w-fit font-semibold bg-[#F4F4F5] dark:bg-[#27272A] hover:bg-[#e4e4e4] dark:hover:bg-[#2e2e2e] border border-border hover:border-borderhover rounded-sm duration-50'
+                            className='w-fit bg-[#f7f7f7] dark:bg-[#181818] hover:!bg-titlebar border border-inputborder rounded-sm duration-50'
                             startContent={<IoMdArrowRoundBack fontSize={18} />}
                             onClick={handleClick}
                         >
@@ -206,6 +207,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                                 items={sortOptions}
                                 className='w-[200px]'
                                 classNames={{
+                                    listbox: ['p-0'],
                                     value: ['text-xs'],
                                     trigger: ['bg-input border border-inputborder data-[hover=true]:!bg-titlebar data-[open=true]:!bg-titlebar duration-100 rounded-sm'],
                                     popoverContent: ['bg-base border border-border rounded']
@@ -219,17 +221,12 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                     </div>
 
                     {achievementsUnavailable && showAlertOne !== 'false' && (
-                        <div className='flex justify-between items-center w-full p-2 bg-red-100 border border-red-300 rounded my-2'>
+                        <div className='flex justify-between items-center w-full p-1 bg-red-100 border border-red-300 rounded my-2'>
                             <div className='flex items-center gap-2 text-xs font-semibold text-red-400'>
                                 <TiWarning fontSize={18} />
-                                <p>Either this game has no achievements or your &quot;Game details&quot; setting might be set to private in your privacy settings. You can still unlock achievements but the changes won&apos;t be reflected here.</p>
+                                <p>Either this game has no achievements or your &quot;Game details&quot; setting might be set to private in your Steam privacy settings. You can still unlock achievements but the changes won&apos;t be reflected here.</p>
                             </div>
                             <div className='flex items-center gap-2'>
-                                <ExtLink href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`}>
-                                    <Button color='primary' size='sm' className='text-offwhite dark:text-black font-medium rounded-sm'>
-                                        Change Account Privacy
-                                    </Button>
-                                </ExtLink>
                                 <Button
                                     isIconOnly
                                     size='sm'
@@ -242,11 +239,11 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                     )}
 
                     {showAlertTwo !== 'false' && (
-                        <div className='flex justify-between items-center w-full p-2 bg-blue-100 border border-blue-300 rounded my-2'>
+                        <div className='flex justify-between items-center w-full p-1 bg-blue-100 border border-blue-300 rounded my-2'>
                             <div className='flex justify-between items-center w-full gap-2 text-xs font-semibold text-blue-400'>
                                 <div className='flex items-center gap-2'>
                                     <FaInfoCircle fontSize={18} />
-                                    <p>Please note that unlocking/locking achievements is instant but may take up to 5 minutes to be reflected on this page. Check your Steam game achievements for real-time changes.</p>
+                                    <p>Please note that unlocking/locking achievements is instant but may take up to 5 minutes to be reflected on this page. Check your game&apos;s achievements page on Steam for real-time changes.</p>
                                 </div>
                                 <Button
                                     isIconOnly
@@ -271,19 +268,30 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                                     </Button>
                                 </div>
                             ) : (
-                                <Button
-                                    size='sm'
-                                    isLoading={btnLoading}
-                                    isDisabled={!achievementList || inputValue.length > 0}
-                                    className='bg-sgi font-semibold text-offwhite rounded-sm'
-                                    onClick={() => { handleUnlockAll(1); }}
-                                >
-                                    Unlock all achievements
-                                </Button>
+                                <React.Fragment>
+                                    {!achievementsUnavailable && (
+                                        <Button
+                                            size='sm'
+                                            isLoading={btnLoading}
+                                            isDisabled={!achievementList || inputValue.length > 0}
+                                            className='bg-sgi font-semibold text-offwhite rounded-sm'
+                                            onClick={() => { handleUnlockAll(1); }}
+                                        >
+                                            Unlock all achievements
+                                        </Button>
+                                    )}
+                                </React.Fragment>
                             )}
                         </div>
 
-                        <div className='grid grid-cols-1 gap-4 max-h-[405px] p-2 w-full border border-border rounded overflow-y-auto'>
+                        <div className='grid grid-cols-1 gap-4 max-h-[430px] p-2 w-full border border-border rounded overflow-y-auto'>
+                            {achievementsUnavailable && (
+                                <div className='flex justify-center items-center w-full'>
+                                    <p className='text-xs'>
+                                        No achievements found
+                                    </p>
+                                </div>
+                            )}
                             {achievementList && achievementList.map((item) => {
                                 const isUnlocked = userAchievementsMap.get(item.name) || false;
                                 const percentage = percentageMap.get(item.name);
@@ -333,7 +341,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                     </div>
                 </div>
             </div>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme='dark' transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
+            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

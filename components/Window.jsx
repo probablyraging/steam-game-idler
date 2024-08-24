@@ -30,8 +30,8 @@ export default function Window() {
                 allGames: false
             },
             achievementUnlocker: {
+                idle: true,
                 interval: [30, 130],
-                idle: false
             }
         };
         updateLaunchedStats('launched');

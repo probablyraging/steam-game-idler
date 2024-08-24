@@ -73,11 +73,11 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                             <ThemeSwitch />
                             <ExtLink href={`https://steamcommunity.com/profiles/${userSummary.steamId}`}>
                                 <div className='flex items-center gap-2 h-full p-2'>
-                                    <div className='text-end'>
-                                        <p className='font-medium'>
+                                    <div className='text-end max-w-[180px]'>
+                                        <p className='font-medium truncate'>
                                             {userSummary.personaName}
                                         </p>
-                                        <p className='text-xs text-neutral-400'>
+                                        <p className='text-xs text-neutral-400 truncate'>
                                             {userSummary.steamId}
                                         </p>
                                     </div>
@@ -95,7 +95,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                             <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                                 <BiWindows fontSize={12} />
                             </div>
-                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-xl cursor-pointer' onClick={windowClose}>
+                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-[8px] cursor-pointer' onClick={windowClose}>
                                 <IoClose />
                             </div>
                         </div>

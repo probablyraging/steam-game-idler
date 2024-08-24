@@ -22,9 +22,9 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
 
     return (
         <React.Fragment>
-            <div className='flex justify-between items-center pb-4'>
+            <div className='flex justify-between items-center pb-2'>
                 <div className='flex items-center gap-4'>
-                    <div className='flex justify-center items-center'>
+                    <div className='flex flex-col justify-center'>
                         {activePage === 'games' ? (
                             <div className='flex flex-col'>
                                 <p className='text-lg font-semibold'>
@@ -38,6 +38,9 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
                                 </p>
                             </div>
                         )}
+                        <p className='text-xs text-gray-400'>
+                            Showing {visibleGames.length} of {filteredGames.length} games
+                        </p>
                     </div>
                 </div>
 
@@ -57,7 +60,7 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
                         defaultSelectedKeys={[sortStyle]}
                         onSelectionChange={(e) => { handleSorting(e); }}
                         classNames={{
-                            listboxWrapper: ['min-h-[248px]'],
+                            listbox: ['p-0'],
                             value: ['text-xs'],
                             trigger: ['bg-input border border-inputborder data-[hover=true]:!bg-titlebar data-[open=true]:!bg-titlebar duration-100 rounded-sm'],
                             popoverContent: ['bg-base border border-border rounded'],
@@ -66,10 +69,6 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
                         {(item) => <SelectItem classNames={{ title: ['text-xs'], base: ['rounded-sm'] }}>{item.label}</SelectItem>}
                     </Select>
                 </div>
-            </div>
-
-            <div className='text-xs text-gray-400 mb-2'>
-                Showing {visibleGames.length} of {filteredGames.length} games
             </div>
         </React.Fragment>
     );

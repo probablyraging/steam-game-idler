@@ -62,11 +62,7 @@ export default function AchievementSettings({ settings, setSettings }) {
 
     return (
         <React.Fragment>
-            <div className='mt-4 p-4 border border-border rounded'>
-                <p className='text-sm font-semibold mb-6'>
-                    Achievement Unlocker
-                </p>
-
+            <div className='p-2'>
                 <div className='flex flex-col gap-6'>
                     <div className='flex flex-col gap-4'>
                         <Checkbox

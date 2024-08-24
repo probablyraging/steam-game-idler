@@ -49,7 +49,7 @@ export default function TitleBar() {
                             <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                                 <BiWindows fontSize={12} />
                             </div>
-                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-xl cursor-pointer' onClick={windowClose}>
+                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-[8px] cursor-pointer' onClick={windowClose}>
                                 <IoClose />
                             </div>
                         </div>
