@@ -30,10 +30,10 @@ export async function startIdler(appId, appName, quiet = false) {
     }
 };
 
-export async function stopIdler(appId) {
+export async function stopIdler(appId, appName) {
     try {
         await invoke('stop_idle', { appId: appId.toString() });
-        logEvent(`[Idling] Stopped ${appId}`);
+        logEvent(`[Idling] Stopped ${appName}`);
     } catch (error) {
         console.log(error);
     }
@@ -81,8 +81,8 @@ export async function getAllGamesWithDrops(steamId, sid, sls) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ route: 'games-with-drops', steamId: steamId, sid: sid, sls: sls }),
-    })
-    if (response.status !== 500) {
+    });
+    if (response.status !== 500 || response.status !== 504) {
         const data = await response.json();
         return data.games;
     } else {

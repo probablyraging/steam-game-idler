@@ -13,10 +13,10 @@ export default function StopButton({ setActivePage, isMountedRef, abortControlle
         setActivePage('games');
         try {
             if (screen === 'card-farming') {
-                const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId));
+                const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId, game.name));
                 await Promise.all(stopPromises);
             } else {
-                await stopIdler(currentGame.appId);
+                await stopIdler(currentGame.appId, currentGame.name);
             }
         } catch (error) {
             console.error('Error stopping games:', error);

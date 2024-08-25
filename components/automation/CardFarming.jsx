@@ -32,7 +32,7 @@ export default function CardFarming({ setActivePage }) {
                 }
             } catch (error) {
                 console.log('Error in card farming:', error);
-                logEvent(`[Error] [Card Farming] ${error}`);
+                logEvent(`[Error] [Card Farming] (startCardFarming) ${error}`);
             }
         };
 
@@ -61,7 +61,7 @@ export default function CardFarming({ setActivePage }) {
                 const gamesWithDrops = await getAllGamesWithDrops(userSummary.steamId, steamCookies.sid, steamCookies.sls);
                 for (const gameData of gamesWithDrops) {
                     if (gamesSet.size < 30) {
-                        gamesSet.add({ appId: gameData.game.id, appName: gameData.game.name });
+                        gamesSet.add({ appId: gameData.game.id, name: gameData.game.name });
                         totalDrops += gameData.game.remaining;
                         logEvent(`[Card Farming] ${gameData.game.remaining} drops remaining for ${gameData.game.name} - starting`);
                     } else {
@@ -74,7 +74,7 @@ export default function CardFarming({ setActivePage }) {
                     const dropsRemaining = await checkDrops(userSummary.steamId, gameData.game.id, steamCookies.sid, steamCookies.sls);
                     if (dropsRemaining > 0) {
                         if (gamesSet.size < 30) {
-                            gamesSet.add({ appId: gameData.game.id, appName: gameData.game.name });
+                            gamesSet.add({ appId: gameData.game.id, name: gameData.game.name });
                             totalDrops += dropsRemaining;
                             logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - starting`);
                         }
@@ -86,7 +86,7 @@ export default function CardFarming({ setActivePage }) {
                 await Promise.all(dropCheckPromises);
             }
         } catch (error) {
-            logEvent(`[Error] [Card Farming] ${error}`);
+            logEvent(`[Error] [Card Farming] (checkGamesForDrops) ${error}`);
         }
 
         return { totalDrops, gamesSet };
@@ -99,22 +99,22 @@ export default function CardFarming({ setActivePage }) {
 
     const farmGame = async (game) => {
         try {
-            await startAndStopIdler(game.appId, game.appName, longDelay);
+            await startAndStopIdler(game.appId, game.name, longDelay);
             await delay(mediumDelay);
-            await startAndStopIdler(game.appId, game.appName, shortDelay);
+            await startAndStopIdler(game.appId, game.name, shortDelay);
             await delay(mediumDelay);
-            await startAndStopIdler(game.appId, game.appName, farmingInterval);
+            await startAndStopIdler(game.appId, game.name, farmingInterval);
             await delay(mediumDelay);
-            await startAndStopIdler(game.appId, game.appName, shortDelay);
+            await startAndStopIdler(game.appId, game.name, shortDelay);
         } catch (error) {
-            logEvent(`[Error] [Card Farming] ${error}`);
+            logEvent(`[Error] [Card Farming] (farmGame) ${error}`);
         }
     };
 
-    const startAndStopIdler = async (appId, appName, duration) => {
-        startIdler(appId, appName, true);
+    const startAndStopIdler = async (appId, name, duration) => {
+        startIdler(appId, name, true);
         await delay(duration);
-        stopIdler(appId);
+        stopIdler(appId, name);
     };
 
     const delay = (ms) => {
@@ -149,7 +149,7 @@ export default function CardFarming({ setActivePage }) {
     const handleCancel = async () => {
         setActivePage('games');
         try {
-            const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId));
+            const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId, game.name));
             await Promise.all(stopPromises);
         } catch (error) {
             console.error('Error stopping games:', error);
@@ -214,7 +214,7 @@ export default function CardFarming({ setActivePage }) {
                         {[...Array.from(gamesWithDrops)].map((item) => (
                             <div key={item.appId} className='flex gap-1 border border-border rounded p-1'>
                                 <div className='flex flex-col px-2'>
-                                    <p className='text-sm font-semibold'>{item.appName}</p>
+                                    <p className='text-sm font-semibold'>{item.name}</p>
                                     <p className='text-xs'>{item.appId}</p>
                                 </div>
                             </div>

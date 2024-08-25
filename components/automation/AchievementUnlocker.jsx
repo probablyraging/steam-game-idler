@@ -23,7 +23,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 if (achievementUnlocker.length < 1) {
                     logEvent('[Achievement Unlocker - Auto] No games left - stopping');
                     if (currentGame) {
-                        stopIdler(currentGame.appId);
+                        stopIdler(currentGame.appId, currentGame.name);
                     }
                     setGamesWithAchievements(0);
                     setIsComplete(true);
@@ -43,7 +43,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 }
             } catch (error) {
                 console.log('Error in achievement unlocker:', error);
-                logEvent(`[Error] [Achievement Unlocker - Auto] ${error}`);
+                logEvent(`[Error] [Achievement Unlocker - Auto] (startAchievementUnlocker) ${error}`);
             }
         };
 
@@ -61,61 +61,65 @@ export default function AchievementUnlocker({ setActivePage }) {
         const game = JSON.parse(gameData);
         const userSummary = JSON.parse(localStorage.getItem('userSummary')) || {};
 
-        setCurrentGame({ appId: game.game.id, name: game.game.name });
+        try {
+            setCurrentGame({ appId: game.game.id, name: game.game.name });
 
-        const [userAchievementsResponse, gameAchievementsResponse, gameSchemaResponse] = await Promise.all([
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'user-achievements', steamId: userSummary.steamId, appId: game.game.id }),
-            }),
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'game-achievement-percentage', appId: game.game.id }),
-            }),
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'game-schema', appId: game.game.id }),
-            })
-        ]);
+            const [userAchievementsResponse, gameAchievementsResponse, gameSchemaResponse] = await Promise.all([
+                fetch('https://apibase.vercel.app/api/route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ route: 'user-achievements', steamId: userSummary.steamId, appId: game.game.id }),
+                }),
+                fetch('https://apibase.vercel.app/api/route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ route: 'game-achievement-percentage', appId: game.game.id }),
+                }),
+                fetch('https://apibase.vercel.app/api/route', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ route: 'game-schema', appId: game.game.id }),
+                })
+            ]);
 
-        if (userAchievementsResponse.status === 500 || gameAchievementsResponse.status === 500) {
-            setHasPrivateGames(true);
-            return { achievements: [], game };
+            if (userAchievementsResponse.status === 500 || gameAchievementsResponse.status === 500) {
+                setHasPrivateGames(true);
+                return { achievements: [], game };
+            }
+
+            const userAchievements = await userAchievementsResponse.json();
+            const gameAchievements = await gameAchievementsResponse.json();
+            const gameSchema = await gameSchemaResponse.json();
+
+            const achievements = userAchievements.achievements
+                .filter(achievement => {
+                    const schemaAchievement = gameSchema.availableGameStats.achievements.find(
+                        a => a.name === achievement.name
+                    );
+                    if (settings.achievementUnlocker.hidden) {
+                        return !achievement.unlocked && schemaAchievement.hidden === 0;
+                    } else {
+                        return !achievement.unlocked;
+                    }
+                })
+                .map(achievement => {
+                    const percentageData = gameAchievements.find(a => a.name === achievement.name);
+                    return {
+                        appId: game.game.id,
+                        name: achievement.name,
+                        gameName: userAchievements.game,
+                        percentage: percentageData ? percentageData.percent : null
+                    };
+                })
+                .sort((a, b) => b.percentage - a.percentage);
+
+            setAchievementCount(achievements.length);
+            setGamesWithAchievements(achievements.length);
+
+            return { achievements, game };
+        } catch (error) {
+            logEvent(`[Error] [Achievement Unlocker - Auto] (fetchAchievements) ${error}`);
         }
-
-        const userAchievements = await userAchievementsResponse.json();
-        const gameAchievements = await gameAchievementsResponse.json();
-        const gameSchema = await gameSchemaResponse.json();
-
-        const achievements = userAchievements.achievements
-            .filter(achievement => {
-                const schemaAchievement = gameSchema.availableGameStats.achievements.find(
-                    a => a.name === achievement.name
-                );
-                if (settings.achievementUnlocker.hidden) {
-                    return !achievement.unlocked && schemaAchievement.hidden === 0;
-                } else {
-                    return !achievement.unlocked;
-                }
-            })
-            .map(achievement => {
-                const percentageData = gameAchievements.find(a => a.name === achievement.name);
-                return {
-                    appId: game.game.id,
-                    name: achievement.name,
-                    gameName: userAchievements.game,
-                    percentage: percentageData ? percentageData.percent : null
-                };
-            })
-            .sort((a, b) => b.percentage - a.percentage);
-
-        setAchievementCount(achievements.length);
-        setGamesWithAchievements(achievements.length);
-
-        return { achievements, game };
     };
 
     const unlockAchievements = async (achievements, settings) => {
@@ -196,7 +200,7 @@ export default function AchievementUnlocker({ setActivePage }) {
         isMountedRef.current = false;
         abortControllerRef.current.abort();
         setActivePage('games');
-        stopIdler(currentGame.appId);
+        stopIdler(currentGame.appId, currentGame.name);
     };
 
     return (
