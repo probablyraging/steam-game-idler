@@ -31,6 +31,7 @@ export default function Window() {
             },
             achievementUnlocker: {
                 idle: true,
+                hidden: false,
                 interval: [30, 130],
             }
         };

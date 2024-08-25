@@ -77,6 +77,18 @@ export default function AchievementSettings({ settings, setSettings }) {
                             </div>
                         </Checkbox>
 
+                        <Checkbox
+                            name='hidden'
+                            isSelected={localSettings.achievementUnlocker.hidden}
+                            onChange={handleCheckboxChange}
+                        >
+                            <div className='flex items-center gap-1'>
+                                <p className='text-xs'>
+                                    Skip hidden achievements
+                                </p>
+                            </div>
+                        </Checkbox>
+
                         <Slider
                             label={
                                 <div className='flex justify-between items-center gap-1 min-w-[350px]'>

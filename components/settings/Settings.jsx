@@ -28,6 +28,7 @@ export default function Settings() {
             },
             achievementUnlocker: {
                 idle: true,
+                hidden: false,
                 interval: [30, 130],
             }
         };

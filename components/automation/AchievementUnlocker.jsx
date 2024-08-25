@@ -18,19 +18,22 @@ export default function AchievementUnlocker({ setActivePage }) {
         const startAchievementUnlocker = async () => {
             try {
                 const achievementUnlocker = JSON.parse(localStorage.getItem('achievementUnlocker')) || [];
+                const settings = JSON.parse(localStorage.getItem('settings')) || {};
 
                 if (achievementUnlocker.length < 1) {
                     logEvent('[Achievement Unlocker - Auto] No games left - stopping');
-                    stopIdler(currentGame.appId);
+                    if (currentGame) {
+                        stopIdler(currentGame.appId);
+                    }
                     setGamesWithAchievements(0);
                     setIsComplete(true);
                     return;
                 }
 
-                const { achievements, game } = await fetchAchievements(achievementUnlocker[0]);
+                const { achievements, game } = await fetchAchievements(achievementUnlocker[0], settings);
 
                 if (achievements.length > 0) {
-                    await unlockAchievements(achievements, game);
+                    await unlockAchievements(achievements, settings);
                 }
 
                 removeGameFromUnlockerList(game.game.id);
@@ -54,13 +57,13 @@ export default function AchievementUnlocker({ setActivePage }) {
         };
     }, []);
 
-    const fetchAchievements = async (gameData) => {
+    const fetchAchievements = async (gameData, settings) => {
         const game = JSON.parse(gameData);
         const userSummary = JSON.parse(localStorage.getItem('userSummary')) || {};
 
         setCurrentGame({ appId: game.game.id, name: game.game.name });
 
-        const [userAchievementsResponse, gameAchievementsResponse] = await Promise.all([
+        const [userAchievementsResponse, gameAchievementsResponse, gameSchemaResponse] = await Promise.all([
             fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -70,6 +73,11 @@ export default function AchievementUnlocker({ setActivePage }) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ route: 'game-achievement-percentage', appId: game.game.id }),
+            }),
+            fetch('https://apibase.vercel.app/api/route', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ route: 'game-schema', appId: game.game.id }),
             })
         ]);
 
@@ -80,9 +88,19 @@ export default function AchievementUnlocker({ setActivePage }) {
 
         const userAchievements = await userAchievementsResponse.json();
         const gameAchievements = await gameAchievementsResponse.json();
+        const gameSchema = await gameSchemaResponse.json();
 
         const achievements = userAchievements.achievements
-            .filter(achievement => !achievement.unlocked)
+            .filter(achievement => {
+                const schemaAchievement = gameSchema.availableGameStats.achievements.find(
+                    a => a.name === achievement.name
+                );
+                if (settings.achievementUnlocker.hidden) {
+                    return !achievement.unlocked && schemaAchievement.hidden === 0;
+                } else {
+                    return !achievement.unlocked;
+                }
+            })
             .map(achievement => {
                 const percentageData = gameAchievements.find(a => a.name === achievement.name);
                 return {
@@ -100,8 +118,7 @@ export default function AchievementUnlocker({ setActivePage }) {
         return { achievements, game };
     };
 
-    const unlockAchievements = async (achievements) => {
-        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+    const unlockAchievements = async (achievements, settings) => {
         const { interval, idle } = settings.achievementUnlocker;
 
         if (idle) {
