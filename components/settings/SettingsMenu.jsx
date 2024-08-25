@@ -17,22 +17,22 @@ export default function SettingsMenu() {
                     </Button>
                 </DropdownTrigger>
                 <DropdownMenu aria-label='Settings actions'>
-                    <DropdownItem key='help' className='rounded p-0 m-0'>
+                    <DropdownItem key='help' className='rounded p-0 m-0' textValue='Help'>
                         <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki'} className={'flex text-xs w-full px-2 py-1'}>
                             Help
                         </ExtLink>
                     </DropdownItem>
-                    <DropdownItem key='changelog' className='rounded p-0 m-0'>
+                    <DropdownItem key='changelog' className='rounded p-0 m-0' textValue='Changelog'>
                         <ExtLink href={'https://github.com/probablyraging/steam-game-idler/releases'} className={'flex text-xs w-full px-2 py-1'}>
                             Changelog
                         </ExtLink>
                     </DropdownItem>
-                    <DropdownItem key='report' className='rounded p-0 m-0'>
+                    <DropdownItem key='report' className='rounded p-0 m-0' textValue='Report an issue'>
                         <ExtLink href={'https://github.com/probablyraging/steam-game-idler/issues/new?assignees=ProbablyRaging&labels=bug%2Cinvestigating&projects=&template=issue_report.yml&title=Title'} className={'flex text-xs w-full px-2 py-1'}>
                             Report an issue
                         </ExtLink>
                     </DropdownItem>
-                    <DropdownItem key='coffee' className='rounded p-0 m-0'>
+                    <DropdownItem key='coffee' className='rounded p-0 m-0' textValue='Buy me a coffee'>
                         <ExtLink href={'https://buymeacoffee.com/probablyraging'} className={'flex text-xs w-full px-2 py-1'}>
                             Buy me a coffee
                         </ExtLink>

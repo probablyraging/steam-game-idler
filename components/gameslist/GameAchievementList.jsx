@@ -115,8 +115,8 @@ export default function GameAchievementList({ gameList, favorites, cardFarming, 
                         >
                             <Image
                                 src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.game.id}/header.jpg`}
-                                layout='fill'
-                                objectFit='cover'
+                                width={460}
+                                height={215}
                                 alt={`${item.game.name} image`}
                                 priority={true}
                             />

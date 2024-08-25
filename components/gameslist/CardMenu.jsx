@@ -20,6 +20,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                         key='idle'
                         startContent={<IoPlay />}
                         onClick={() => handleIdle(item.game.id, item.game.name)}
+                        textValue='Idle game'
                     >
                         <p className='text-xs'>Idle game</p>
                     </DropdownItem>
@@ -28,6 +29,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                         key='achievements'
                         startContent={<FaAward />}
                         onClick={() => viewAchievments(item)}
+                        textValue='View achievements'
                     >
                         <p className='text-xs'>View achievements</p>
                     </DropdownItem>
@@ -37,6 +39,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             key='fav-rem'
                             startContent={<TiHeartFullOutline />}
                             onClick={(e) => removeFromFavorites(e, item)}
+                            textValue='Remove from favorites'
                         >
                             <p className='text-xs'>Remove from favorites</p>
                         </DropdownItem>
@@ -46,6 +49,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             key='fav-add'
                             startContent={<TiHeartFullOutline />}
                             onClick={(e) => addToFavorites(e, item)}
+                            textValue='Add to favorites'
                         >
                             <p className='text-xs'>Add to favorites</p>
                         </DropdownItem>
@@ -56,6 +60,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             key='cf-rem'
                             startContent={<TiMinus />}
                             onClick={(e) => removeFromCardFarming(e, item)}
+                            textValue='Remove from card farming'
                         >
                             <p className='text-xs'>Remove from card farming</p>
                         </DropdownItem>
@@ -65,6 +70,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             key='cf-add'
                             startContent={<TiPlus />}
                             onClick={(e) => addToCardFarming(e, item)}
+                            textValue='Add to card farming'
                         >
                             <p className='text-xs'>Add to card farming</p>
                         </DropdownItem>
@@ -75,6 +81,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             key='au-rem'
                             startContent={<TiMinus />}
                             onClick={(e) => removeFromAchievementUnlocker(e, item)}
+                            textValue='Remove from achievement unlocker'
                         >
                             <p className='text-xs'>Remove from achievement unlocker</p>
                         </DropdownItem>
@@ -84,6 +91,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             key='au-add'
                             startContent={<TiPlus />}
                             onClick={(e) => addToAchievementUnlocker(e, item)}
+                            textValue='Add to achievement unlocker'
                         >
                             <p className='text-xs'>Add to achievement unlocker</p>
                         </DropdownItem>

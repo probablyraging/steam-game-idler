@@ -72,6 +72,7 @@ export default function Automate({ setActivePage }) {
                         key='idle'
                         startContent={<IoGameController />}
                         onClick={startCardFarming}
+                        textValue='Start achievement unlocker'
                     >
                         <p className='text-xs'>Start card farming</p>
                     </DropdownItem>
@@ -80,6 +81,7 @@ export default function Automate({ setActivePage }) {
                         key='achiements'
                         startContent={<FaAward />}
                         onClick={startAchievementUnlocker}
+                        textValue='Start achievement unlocker'
                     >
                         <p className='text-xs'>Start achievement unlocker</p>
                     </DropdownItem>
@@ -88,6 +90,7 @@ export default function Automate({ setActivePage }) {
                         key='settings'
                         startContent={<IoSettings />}
                         onClick={() => setActivePage('settings')}
+                        textValue='Change settings'
                     >
                         <p className='text-xs'>Change settings</p>
                     </DropdownItem>
