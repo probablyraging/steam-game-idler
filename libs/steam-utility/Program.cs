@@ -37,6 +37,9 @@ namespace SteamUtility
                 case "unlock":
                     HandleUnlockCommand(args);
                     break;
+                case "lock_all":
+                    HandleLockAllCommand(args);
+                    break;
                 default:
                     Console.WriteLine("Unknown command. Use 'check_steam', 'idle', or 'unlock'.");
                     break;
@@ -217,6 +220,84 @@ namespace SteamUtility
                         Console.WriteLine("Failed to get achievement data. It might not exist.");
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                SteamAPI.Shutdown();
+            }
+        }
+
+        static void HandleLockAllCommand(string[] args)
+        {
+            if (args.Length < 3)
+            {
+                Console.WriteLine("Usage: SteamUtility.exe lock <AppID> <AchievementID> [LockAll]");
+                return;
+            }
+
+            uint appId;
+            if (!uint.TryParse(args[1], out appId))
+            {
+                Console.WriteLine("Invalid AppID. Please provide a valid numeric AppID.");
+                return;
+            }
+
+            string achievementId = args[2];
+
+            Environment.SetEnvironmentVariable("SteamAppId", appId.ToString());
+
+            if (!SteamAPI.Init())
+            {
+                Console.WriteLine("Make sure Steam is running first.");
+                return;
+            }
+
+            try
+            {
+                statsReceivedCallback = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
+
+                if (!SteamUserStats.RequestCurrentStats())
+                {
+                    Console.WriteLine("Failed to request stats from Steam.");
+                    return;
+                }
+
+                DateTime startTime = DateTime.Now;
+                while (!statsReceived)
+                {
+                    SteamAPI.RunCallbacks();
+                    if ((DateTime.Now - startTime).TotalSeconds > 10)
+                    {
+                        Console.WriteLine("Timed out waiting for stats from Steam.");
+                        return;
+                    }
+                    Thread.Sleep(100);
+                }
+
+                bool isAchieved;
+                if (SteamUserStats.GetAchievement(achievementId, out isAchieved))
+                    {
+                        if (isAchieved)
+                        {
+                            if (SteamUserStats.ClearAchievement(achievementId))
+                            {
+                                SteamUserStats.StoreStats();
+                                Console.WriteLine("Achievement locked successfully.");
+                            }
+                            else
+                            {
+                                Console.WriteLine("Failed to lock achievement");
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to get achievement data. It might not exist.");
+                    }
             }
             catch (Exception ex)
             {

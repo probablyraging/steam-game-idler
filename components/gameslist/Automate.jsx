@@ -3,14 +3,11 @@ import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@
 import { IoPlay, IoSettings } from 'react-icons/io5';
 import { IoGameController } from 'react-icons/io5';
 import { FaAward } from 'react-icons/fa';
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { invoke } from '@tauri-apps/api/tauri';
-import { useTheme } from 'next-themes';
 
 export default function Automate({ setActivePage }) {
-    const { theme } = useTheme();
-
     const startCardFarming = async () => {
         const steamRunning = await invoke('check_status');
         const steamCookies = JSON.parse(localStorage.getItem('steamCookies')) || {};
@@ -96,7 +93,6 @@ export default function Automate({ setActivePage }) {
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

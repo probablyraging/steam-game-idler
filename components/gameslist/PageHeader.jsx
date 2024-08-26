@@ -2,8 +2,11 @@ import React from 'react';
 import { Select, SelectItem } from '@nextui-org/react';
 import { MdSort } from 'react-icons/md';
 import Automate from './Automate';
+import { toast } from 'react-toastify';
+import moment from 'moment';
+import { IoRefresh } from 'react-icons/io5';
 
-export default function PageHeader({ activePage, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames }) {
+export default function PageHeader({ steamId, activePage, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames, setRefreshKey }) {
     const sortOptions = [
         { key: 'a-z', label: 'Title Ascending' },
         { key: 'z-a', label: 'Title Descending' },
@@ -18,6 +21,18 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
     const handleSorting = (e) => {
         localStorage.setItem('sortStyle', e.currentKey);
         setSortStyle(e.currentKey);
+    };
+
+    const handleRefetch = () => {
+        if (steamId !== '76561198158912649' && steamId !== '76561198999797359') {
+            const cooldown = sessionStorage.getItem('cooldown');
+            if (cooldown && moment().unix() < cooldown) {
+                return toast.error(`Games can be refreshed again at ${moment.unix(cooldown).format('h:mm A')}`);
+            }
+        }
+        sessionStorage.removeItem('gamesListCache');
+        sessionStorage.setItem('cooldown', moment().add(3, 'minutes').unix());
+        setRefreshKey(prevKey => prevKey + 1);
     };
 
     return (
@@ -38,16 +53,19 @@ export default function PageHeader({ activePage, setActivePage, sortStyle, setSo
                                 </p>
                             </div>
                         )}
-                        <p className='text-xs text-gray-400'>
-                            Showing {visibleGames.length} of {filteredGames.length} games
-                        </p>
+                        <div className='flex items-center gap-1'>
+                            <p className='text-xs text-gray-400'>
+                                Showing {visibleGames.length} of {filteredGames.length} games
+                            </p>
+                            <div className='flex justify-center items-center cursor-pointer' onClick={handleRefetch}>
+                                <IoRefresh className='text-gray-400' fontSize={16} />
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div className='flex justify-end items-center gap-2'>
-                    <div className='flex items-center gap-1'>
-                        <Automate setActivePage={setActivePage} />
-                    </div>
+                    <Automate setActivePage={setActivePage} />
 
                     <Select
                         aria-label='sort'

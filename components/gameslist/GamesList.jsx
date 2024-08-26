@@ -16,6 +16,7 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
     const [filteredGames, setFilteredGames] = useState([]);
     const [visibleGames, setVisibleGames] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [refreshKey, setRefreshKey] = useState(0);
     const gamesPerPage = 50;
 
     useEffect(() => {
@@ -45,7 +46,7 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                 setIsLoading(false);
             });
         }
-    }, [steamId]);
+    }, [steamId, refreshKey]);
 
     useEffect(() => {
         if (gameList) {
@@ -141,17 +142,19 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
     if (!gameList) return <Private steamId={steamId} />;
 
     return (
-        <React.Fragment>
+        <React.Fragment key={refreshKey}>
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto overflow-x-hidden' onScroll={handleScroll}>
                 <div className='p-4 pt-2'>
                     {!showAchievements && (
                         <PageHeader
+                            steamId={steamId}
                             activePage={activePage}
                             setActivePage={setActivePage}
                             sortStyle={sortStyle}
                             setSortStyle={setSortStyle}
                             filteredGames={filteredGames}
                             visibleGames={visibleGames}
+                            setRefreshKey={setRefreshKey}
                         />
                     )}
 

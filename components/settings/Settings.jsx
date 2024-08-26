@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Tab, Tabs } from '@nextui-org/react';
 import CardSettings from './CardSettings';
 import AchievementSettings from './AchievementSettings';
 import Logs from './Logs';
 import { getVersion } from '@tauri-apps/api/app';
-import { Button, Tab, Tabs } from '@nextui-org/react';
 import SettingsMenu from './SettingsMenu';
-import { logEvent } from '@/utils/utils';
+import ResetSettings from './ResetSettings';
 
 export default function Settings() {
     const [settings, setSettings] = useState(null);
@@ -49,14 +49,6 @@ export default function Settings() {
         setSettings(updatedSettings);
     }, [refreshKey]);
 
-    const resetSettings = () => {
-        localStorage.removeItem('settings');
-        localStorage.removeItem('steamCookies');
-        setSettings(null);
-        setRefreshKey(prevKey => prevKey + 1);
-        logEvent('[Settings] Reset to default');
-    };
-
     return (
         <React.Fragment key={refreshKey}>
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto'>
@@ -72,11 +64,7 @@ export default function Settings() {
                         </div>
 
                         <div className='flex items-center gap-2'>
-                            <Button size='sm' className='flex justify-center items-center bg-red-400 px-3 py-2 rounded-sm' onClick={resetSettings}>
-                                <p className='flex items-center gap-2 font-medium text-xs text-offwhite'>
-                                    Reset settings
-                                </p>
-                            </Button>
+                            <ResetSettings setSettings={setSettings} setRefreshKey={setRefreshKey} />
 
                             <SettingsMenu />
                         </div>

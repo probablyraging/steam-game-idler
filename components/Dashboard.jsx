@@ -4,7 +4,7 @@ import GamesList from './gameslist/GamesList';
 import SideBar from './SideBar';
 import Settings from './settings/Settings';
 import CardFarming from './automation/CardFarming';
-import Achievements from './gameslist/Achievements';
+import Achievements from './achievements/Achievements';
 import AchievementUnlocker from './automation/AchievementUnlocker';
 
 export default function Dashboard({ userSummary, setUserSummary }) {

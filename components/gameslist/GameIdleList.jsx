@@ -3,13 +3,11 @@ import Image from 'next/image';
 import CardMenu from './CardMenu';
 import Loader from '../Loader';
 import { IoGameController } from 'react-icons/io5';
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { startIdler, logEvent } from '@/utils/utils';
-import { useTheme } from 'next-themes';
 
 export default function GameIdleList({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showAchievements, setShowAchievements, setAppId }) {
-    const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
 
     setTimeout(() => {
@@ -146,7 +144,6 @@ export default function GameIdleList({ gameList, favorites, cardFarming, achieve
                     </div>
                 ))}
             </div>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

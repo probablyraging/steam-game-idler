@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaAward, FaSignOutAlt } from 'react-icons/fa';
 import { IoGameController, IoSettings } from 'react-icons/io5';
+import { logEvent } from '@/utils/utils';
 
 export default function SideBar({ setUserSummary, activePage, setActivePage }) {
     const handleLogout = () => {
@@ -12,6 +13,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
         localStorage.removeItem('achievementUnlocker');
         localStorage.removeItem('steamCookies');
         sessionStorage.removeItem('gamesListCache');
+        logEvent('[System] Logged out');
     };
 
     return (

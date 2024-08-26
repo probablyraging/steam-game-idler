@@ -3,13 +3,11 @@ import Image from 'next/image';
 import CardMenu from './CardMenu';
 import Loader from '../Loader';
 import { FaAward } from 'react-icons/fa';
-import { Slide, ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { startIdler, logEvent } from '@/utils/utils';
-import { useTheme } from 'next-themes';
 
 export default function GameAchievementList({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showAchievements, setShowAchievements, setAppId }) {
-    const { theme } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
 
     setTimeout(() => {
@@ -146,7 +144,6 @@ export default function GameAchievementList({ gameList, favorites, cardFarming, 
                     </div>
                 ))}
             </div>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-right' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
         </React.Fragment>
     );
 }

@@ -58,6 +58,24 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
     }
 }
 
+export async function lockAchievement(appId, achievementId) {
+    const steamRunning = await invoke('check_status');
+    if (steamRunning) {
+        const path = await invoke('get_file_path');
+        const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
+        await invoke('lock_achievement', {
+            filePath: fullPath,
+            appId: appId.toString(),
+            achievementId: achievementId
+        });
+        achievementCounter++;
+        updateAchievementStats();
+        logEvent(`[Achievement Unlocker] Locked ${achievementId} (${appId})`);
+    } else {
+        logEvent(`[Error] [Achievement Unlocker] Steam is not running`);
+    }
+}
+
 export async function checkDrops(steamId, appId, sid, sls) {
     const response = await fetch('https://apibase.vercel.app/api/route', {
         method: 'POST',
