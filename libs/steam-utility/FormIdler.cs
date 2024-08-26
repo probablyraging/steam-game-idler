@@ -42,7 +42,7 @@ namespace SteamUtility
                     {
                         appName = "Unknown App";
                     }
-                    this.Text = $"{appName} {appid} - Idling";
+                    this.Text = $"{appid} - {appName}";
                 }
             }
             catch (Exception)
