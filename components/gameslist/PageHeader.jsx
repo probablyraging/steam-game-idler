@@ -5,6 +5,7 @@ import Automate from './Automate';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { IoRefresh } from 'react-icons/io5';
+import ManualIdle from './ManualIdle';
 
 export default function PageHeader({ steamId, activePage, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames, setRefreshKey }) {
     const sortOptions = [
@@ -65,6 +66,8 @@ export default function PageHeader({ steamId, activePage, setActivePage, sortSty
                 </div>
 
                 <div className='flex justify-end items-center gap-2'>
+                    <ManualIdle />
+
                     <Automate setActivePage={setActivePage} />
 
                     <Select

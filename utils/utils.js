@@ -120,12 +120,12 @@ export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const updateIdleStats = debounce(async () => {
+export const updateIdleStats = debounce(async (num) => {
     try {
         await fetch('https://apibase.vercel.app/api/route', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ route: 'statistics', type: 'idle', count: idleCounter }),
+            body: JSON.stringify({ route: 'statistics', type: 'idle', count: idleCounter > 0 ? idleCounter : num }),
         });
         idleCounter = 0;
     } catch (error) {
