@@ -154,6 +154,7 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                             setSortStyle={setSortStyle}
                             filteredGames={filteredGames}
                             visibleGames={visibleGames}
+                            setFavorites={setFavorites}
                             setRefreshKey={setRefreshKey}
                         />
                     )}

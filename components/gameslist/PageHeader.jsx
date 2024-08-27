@@ -5,9 +5,9 @@ import Automate from './Automate';
 import { toast } from 'react-toastify';
 import moment from 'moment';
 import { IoRefresh } from 'react-icons/io5';
-import ManualIdle from './ManualIdle';
+import ManualAdd from './ManualAdd';
 
-export default function PageHeader({ steamId, activePage, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames, setRefreshKey }) {
+export default function PageHeader({ steamId, activePage, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames, setFavorites, setRefreshKey }) {
     const sortOptions = [
         { key: 'a-z', label: 'Title Ascending' },
         { key: 'z-a', label: 'Title Descending' },
@@ -66,7 +66,7 @@ export default function PageHeader({ steamId, activePage, setActivePage, sortSty
                 </div>
 
                 <div className='flex justify-end items-center gap-2'>
-                    <ManualIdle />
+                    <ManualAdd setFavorites={setFavorites} />
 
                     <Automate setActivePage={setActivePage} />
 

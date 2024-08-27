@@ -1,29 +1,34 @@
 import React, { useState } from 'react';
 import { Button, Modal, ModalContent, ModalBody, useDisclosure, Input } from '@nextui-org/react';
-import { invoke } from '@tauri-apps/api/tauri';
-import { toast } from 'react-toastify';
 import { IoAdd } from 'react-icons/io5';
 import { FaHashtag } from 'react-icons/fa';
+import { logEvent } from '@/utils/utils';
 
-export default function ManualIdle() {
+export default function ManualAdd({ setFavorites }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [inputValue, setInputValue] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleIdle = async (onClose) => {
-        try {
-            const steamRunning = await invoke('check_status');
-            if (steamRunning) {
-                const path = await invoke('get_file_path');
-                const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
-                await invoke('start_idle', { filePath: fullPath, appId: inputValue.toString(), quiet: 'false' });
-                setInputValue('');
+        setIsLoading(true);
+        fetch('https://apibase.vercel.app/api/route', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ route: 'game-details', appId: inputValue }),
+        }).then(async res => {
+            if (res.status !== 500) {
+                const data = await res.json();
+                const item = { game: { id: data.steam_appid, name: data.name } };
+                let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                favorites.push(JSON.stringify(item));
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
+                setFavorites(newFavorites.map(JSON.parse));
+                logEvent(`[Favorites] Added ${item.game.name} (${item.game.id})`);
+                setIsLoading(false);
                 onClose();
-            } else {
-                toast.error('Steam is not running');
             }
-        } catch (error) {
-            console.log(error);
-        }
+        });
     };
 
     const handleChange = (e) => {
@@ -47,10 +52,13 @@ export default function ManualIdle() {
                     {(onClose) => (
                         <ModalBody className='px-3 py-2'>
                             <p className='text-sm'>
-                                Manual idling
+                                Manually add a game
                             </p>
                             <p className='text-xs'>
-                                Useful for idling games that you do not own, but have in your library, such as family shared games
+                                Add games that you do not own, but have in your library, such as family shared games
+                            </p>
+                            <p className='text-xs'>
+                                Games will be added to your &apos;Favorites&apos;
                             </p>
                             <div className='flex gap-2 w-full'>
                                 <Input
@@ -70,6 +78,7 @@ export default function ManualIdle() {
                                 />
                                 <Button
                                     size='sm'
+                                    isLoading={isLoading}
                                     isDisabled={inputValue.length === 0}
                                     className='bg-sgi min-h-[30px] font-semibold text-offwhite rounded-sm'
                                     onClick={() => handleIdle(onClose)}
