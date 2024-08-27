@@ -83,7 +83,7 @@ export default function ManualAdd({ setFavorites }) {
                                     className='bg-sgi min-h-[30px] font-semibold text-offwhite rounded-sm'
                                     onClick={() => handleIdle(onClose)}
                                 >
-                                    Idle
+                                    Add
                                 </Button>
                             </div>
                         </ModalBody>
