@@ -63,10 +63,10 @@ export default function UpdateScreen() {
                     <BiSolidLeaf className='text-offwhite' fontSize={40} />
                 </div>
                 <div className='flex justify-center items-center h-full ml-2 text-offwhite'>
-                    <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowMinimize}>
+                    <div className='flex justify-center items-center hover:bg-[#0c70a3] w-[28px] h-full cursor-pointer' onClick={windowMinimize}>
                         <HiMiniMinus />
                     </div>
-                    <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
+                    <div className='flex justify-center items-center hover:bg-[#0c70a3] w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                         <BiWindows fontSize={12} />
                     </div>
                     <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-[8px] cursor-pointer' onClick={windowClose}>

@@ -7,6 +7,7 @@ import ExtLink from './ExtLink';
 import { invoke } from '@tauri-apps/api/tauri';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { logEvent } from '@/utils/utils';
 
 export default function Setup({ setUserSummary }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -39,6 +40,7 @@ export default function Setup({ setUserSummary }) {
             return toast.error('The Steam desktop app is not running, or you are not signed in');
         } else {
             setSteamId(result);
+            logEvent('[System] Logged in');
         }
     };
 

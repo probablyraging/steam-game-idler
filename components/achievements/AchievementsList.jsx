@@ -29,7 +29,7 @@ export default function AchievementsList({ appId, achievementsUnavailable, achie
                                 />
                                 <div className='flex flex-col w-full'>
                                     <p className='font-bold text-xs'>{item.displayName}</p>
-                                    <div className='max-w-[250px]'>
+                                    <div className='w-full'>
                                         <p className='text-xs text-gray-600 dark:text-gray-400'>{item.description || 'Hidden achievement'}</p>
                                     </div>
                                 </div>
