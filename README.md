@@ -11,11 +11,6 @@
 </div>
 <div align="center" style="margin-top: 10px;">
   <img src="./assets/example.png" width='700' alt='Click for larger image' />
-  <p>
-	  <sub>
-		  <a href="https://github.com/probablyraging/steam-game-idler/wiki/User-interface#screenshots">view more screenshots</a>
-	  </sub>
-  </p>
 </div>
 
 # Download
