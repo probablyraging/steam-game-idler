@@ -5,7 +5,7 @@ import { unlockAchievement } from '@/utils/utils';
 export default function AchievementsList({ appId, achievementsUnavailable, achievementList, userAchievementsMap, percentageMap }) {
     return (
         <React.Fragment>
-            <div className='grid grid-cols-1 gap-4 max-h-[430px] p-2 w-full border border-border rounded overflow-y-auto'>
+            <div className='grid grid-cols-1 gap-4 max-h-[430px] pr-2 w-full overflow-y-auto'>
                 {achievementsUnavailable && (
                     <div className='flex justify-center items-center w-full'>
                         <p className='text-xs'>

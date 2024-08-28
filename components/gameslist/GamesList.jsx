@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
 import PageHeader from './PageHeader';
-import GameIdleList from './GameIdleList';
-import GameAchievementList from './GameAchievementList';
+import GameCard from './GameCard';
 import Private from './Private';
 import Loader from '../Loader';
 
-export default function GamesList({ steamId, inputValue, isQuery, activePage, setActivePage, setAppId, showAchievements, setShowAchievements }) {
+export default function GamesList({ steamId, inputValue, isQuery, setActivePage, setAppId, setAppName, showAchievements, setShowAchievements }) {
     const scrollContainerRef = useRef(null);
     let [isLoading, setIsLoading] = useState(true);
     let [gameList, setGameList] = useState(null);
@@ -148,7 +147,6 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                     {!showAchievements && (
                         <PageHeader
                             steamId={steamId}
-                            activePage={activePage}
                             setActivePage={setActivePage}
                             sortStyle={sortStyle}
                             setSortStyle={setSortStyle}
@@ -159,33 +157,19 @@ export default function GamesList({ steamId, inputValue, isQuery, activePage, se
                         />
                     )}
 
-                    {activePage === 'games' ? (
-                        <GameIdleList
-                            gameList={visibleGames}
-                            favorites={favorites}
-                            cardFarming={cardFarming}
-                            achievementUnlocker={achievementUnlocker}
-                            setFavorites={setFavorites}
-                            setCardFarming={setCardFarming}
-                            setAchievementUnlocker={setAchievementUnlocker}
-                            showAchievements={showAchievements}
-                            setShowAchievements={setShowAchievements}
-                            setAppId={setAppId}
-                        />
-                    ) : (
-                        <GameAchievementList
-                            gameList={visibleGames}
-                            favorites={favorites}
-                            cardFarming={cardFarming}
-                            achievementUnlocker={achievementUnlocker}
-                            setFavorites={setFavorites}
-                            setCardFarming={setCardFarming}
-                            setAchievementUnlocker={setAchievementUnlocker}
-                            showAchievements={showAchievements}
-                            setShowAchievements={setShowAchievements}
-                            setAppId={setAppId}
-                        />
-                    )}
+                    <GameCard
+                        gameList={visibleGames}
+                        favorites={favorites}
+                        cardFarming={cardFarming}
+                        achievementUnlocker={achievementUnlocker}
+                        setFavorites={setFavorites}
+                        setCardFarming={setCardFarming}
+                        setAchievementUnlocker={setAchievementUnlocker}
+                        showAchievements={showAchievements}
+                        setShowAchievements={setShowAchievements}
+                        setAppId={setAppId}
+                        setAppName={setAppName}
+                    />
                 </div>
             </div>
         </React.Fragment>

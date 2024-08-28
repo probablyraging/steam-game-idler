@@ -47,26 +47,23 @@ export default function ManualAdd({ setFavorites }) {
                 onClick={onOpen}
             />
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={() => setInputValue('')} hideCloseButton className='bg-base border border-border rounded-sm w-[350px]'>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={() => setInputValue('')} className='bg-base border border-border rounded-md'>
                 <ModalContent>
                     {(onClose) => (
-                        <ModalBody className='px-3 py-2'>
-                            <p className='text-sm'>
+                        <ModalBody className='p-4'>
+                            <p>
                                 Manually add a game
                             </p>
-                            <p className='text-xs'>
-                                Add games that you do not own, but have in your library, such as family shared games
+                            <p className='text-xs mb-2'>
+                                Add games that you do not own, but have in your library, such as family shared games. Games will be added to your &apos;Favorites&apos; list.
                             </p>
-                            <p className='text-xs'>
-                                Games will be added to your &apos;Favorites&apos;
-                            </p>
-                            <div className='flex gap-2 w-full'>
+
+                            <div className='flex flex-col gap-2 w-full mt-2'>
                                 <Input
                                     isClearable
                                     size='sm'
                                     placeholder='Enter a game ID'
                                     startContent={<FaHashtag />}
-                                    className='max-w-[200px]'
                                     classNames={{
                                         inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-sm group-data-[focus-visible=true]:ring-transparent group-data-[focus-visible=true]:ring-offset-transparent'],
                                         input: ['text-xs']

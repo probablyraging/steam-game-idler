@@ -1,7 +1,6 @@
 import React from 'react';
 import { Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { IoPlay, IoSettings } from 'react-icons/io5';
-import { IoGameController } from 'react-icons/io5';
 import { FaAward } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -59,7 +58,6 @@ export default function Automate({ setActivePage }) {
                             <p className='font-semibold'>
                                 Automate
                             </p>
-                            <IoPlay fontSize={18} />
                         </div>
                     </Button>
                 </DropdownTrigger>
@@ -67,7 +65,7 @@ export default function Automate({ setActivePage }) {
                     <DropdownItem
                         className='rounded'
                         key='idle'
-                        startContent={<IoGameController />}
+                        startContent={<IoPlay />}
                         onClick={startCardFarming}
                         textValue='Start achievement unlocker'
                     >

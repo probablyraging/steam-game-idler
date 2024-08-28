@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaAward, FaSignOutAlt } from 'react-icons/fa';
+import { FaSignOutAlt } from 'react-icons/fa';
 import { IoGameController, IoSettings } from 'react-icons/io5';
 import { logEvent } from '@/utils/utils';
 
@@ -35,24 +35,9 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                         )}
                         <IoGameController className='text-offwhite' fontSize={24} />
                     </div>
-                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer' onClick={() => setActivePage('achievements')}>
-                        {activePage === 'achievements' && (
-                            <motion.div
-                                className='absolute w-full border-r-4 border-white'
-                                initial={{ height: 0 }}
-                                whileInView={{ height: 30 }}
-                                transition={{
-                                    type: 'spring',
-                                    stiffness: 350,
-                                    damping: 18,
-                                }}
-                            />
-                        )}
-                        <FaAward className='text-offwhite' fontSize={24} />
-                    </div>
                 </div>
 
-                <div className='flex flex-col justify-center items-center'>
+                <div className='flex flex-col justify-end items-center h-full'>
                     <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer' onClick={() => setActivePage('settings')}>
                         {activePage === 'settings' && (
                             <motion.div

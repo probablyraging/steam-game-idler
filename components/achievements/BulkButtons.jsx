@@ -3,7 +3,7 @@ import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-o
 import { lockAchievement, unlockAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
 
-export default function BulkButtons({ appId, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading }) {
+export default function BulkButtons({ appId, appName, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [state, setState] = useState('');
 
@@ -52,43 +52,50 @@ export default function BulkButtons({ appId, achievementsUnavailable, btnLoading
 
     return (
         <React.Fragment>
-            <div className='flex w-full justify-end'>
-                {!achievementsUnavailable && (
-                    <div className='flex items-center gap-2'>
-                        <Button
-                            size='sm'
-                            isLoading={btnLoading}
-                            isDisabled={!achievementList || inputValue.length > 0}
-                            className='bg-sgi font-semibold text-offwhite rounded-sm'
-                            onClick={() => handleSetState('unlock')}
-                        >
-                            Unlock all
-                        </Button>
-                        <Button
-                            size='sm'
-                            isLoading={btnLoading}
-                            isDisabled={!achievementList || inputValue.length > 0}
-                            className='bg-red-400 font-semibold text-offwhite rounded-sm'
-                            onClick={() => handleSetState('lock')}
-                        >
-                            Lock all
-                        </Button>
-                    </div>
-                )}
+            <div className='flex justify-center items-center w-full'>
+                <div className='w-full'>
+                    <p className='m-0 p-0'>
+                        {appName}
+                    </p>
+                </div>
+                <div className='flex justify-end w-full'>
+                    {!achievementsUnavailable && (
+                        <div className='flex items-center gap-2'>
+                            <Button
+                                size='sm'
+                                isLoading={btnLoading}
+                                isDisabled={!achievementList || inputValue.length > 0}
+                                className='bg-sgi font-semibold text-offwhite rounded-sm'
+                                onClick={() => handleSetState('unlock')}
+                            >
+                                Unlock all
+                            </Button>
+                            <Button
+                                size='sm'
+                                isLoading={btnLoading}
+                                isDisabled={!achievementList || inputValue.length > 0}
+                                className='bg-red-400 font-semibold text-offwhite rounded-sm'
+                                onClick={() => handleSetState('lock')}
+                            >
+                                Lock all
+                            </Button>
+                        </div>
+                    )}
+                </div>
             </div>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton className='bg-base border border-border rounded-sm w-fit'>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='bg-base border border-border rounded-md'>
                 <ModalContent>
                     {(onClose) => (
-                        <ModalBody className='px-3 py-2'>
+                        <ModalBody className='p-4'>
                             <div className='flex flex-col gap-2 w-full'>
-                                <p className='font-semibold text-sm'>
+                                <p>
                                     Confirm
                                 </p>
-                                <p className='text-xs'>
+                                <p className='text-xs mb-2'>
                                     Are you sure you want to {state} all achievements?
                                 </p>
-                                <div className='flex gap-2'>
+                                <div className='flex gap-2 mt-2'>
                                     <Button
                                         size='sm'
                                         className='bg-sgi min-h-[30px] font-semibold text-offwhite rounded-sm'

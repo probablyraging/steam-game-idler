@@ -26,18 +26,18 @@ export default function ResetSettings({ setSettings, setRefreshKey }) {
                 </p>
             </Button>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} hideCloseButton className='bg-base border border-border rounded-sm w-fit'>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='bg-base border border-border rounded-md'>
                 <ModalContent>
                     {(onClose) => (
-                        <ModalBody className='px-3 py-2'>
+                        <ModalBody className='p-4'>
                             <div className='flex flex-col gap-2 w-full'>
-                                <p className='font-semibold text-sm'>
+                                <p>
                                     Confirm
                                 </p>
-                                <p className='text-xs'>
+                                <p className='text-xs mb-2'>
                                     Are you sure you want to reset settings to default?
                                 </p>
-                                <div className='flex gap-2'>
+                                <div className='flex gap-2 mt-2'>
                                     <Button
                                         size='sm'
                                         className='bg-sgi min-h-[30px] font-semibold text-offwhite rounded-sm'

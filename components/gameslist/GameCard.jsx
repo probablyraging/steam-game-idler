@@ -2,25 +2,32 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import CardMenu from './CardMenu';
 import Loader from '../Loader';
-import { FaAward } from 'react-icons/fa';
+import { IoPlay } from 'react-icons/io5';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { startIdler, logEvent } from '@/utils/utils';
+import { FaAward } from 'react-icons/fa';
 
-export default function GameAchievementList({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showAchievements, setShowAchievements, setAppId }) {
+export default function GameCard({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showAchievements, setShowAchievements, setAppId, setAppName }) {
     const [isLoading, setIsLoading] = useState(true);
 
     setTimeout(() => {
         setIsLoading(false);
     }, 100);
 
-    const handleIdle = async (appId, appName) => {
-        const idleStatus = await startIdler(appId, appName);
+    const handleIdle = async (item) => {
+        const idleStatus = await startIdler(item.game.id, item.game.name);
         if (idleStatus) {
-            toast.success(`Started idling ${appName}`);
+            toast.success(`Started idling ${item.game.name}`);
         } else {
             toast.error('Steam is not running');
         }
+    };
+
+    const viewAchievments = (item) => {
+        setAppId(item.game.id);
+        setAppName(item.game.name);
+        setShowAchievements(!showAchievements);
     };
 
     const addToFavorites = (e, item) => {
@@ -95,22 +102,14 @@ export default function GameAchievementList({ gameList, favorites, cardFarming, 
         }, 500);
     };
 
-    const viewAchievments = (item) => {
-        setAppId(item.game.id);
-        setShowAchievements(!showAchievements);
-    };
-
     if (isLoading) return <Loader />;
 
     return (
         <React.Fragment>
-            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4'>
+            <div className='grid grid-cols-5 2xl:grid-cols-7 gap-4'>
                 {gameList && gameList.map((item) => (
                     <div key={item.game.id} className='relative group'>
-                        <div
-                            className='aspect-[460/215] rounded-lg overflow-hidden cursor-pointer transition-transform duration-200 ease-in-out transform group-hover:scale-105'
-                            onClick={() => viewAchievments(item)}
-                        >
+                        <div className='aspect-[460/215] rounded-lg overflow-hidden transition-transform duration-200 ease-in-out transform group-hover:scale-105'>
                             <Image
                                 src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.game.id}/header.jpg`}
                                 width={460}
@@ -118,9 +117,17 @@ export default function GameAchievementList({ gameList, favorites, cardFarming, 
                                 alt={`${item.game.name} image`}
                                 priority={true}
                             />
-                            <div className='absolute inset-0 bg-black bg-opacity-0 dark:bg-opacity-20 group-hover:bg-opacity-40 dark:group-hover:bg-opacity-50 transition-opacity duration-200 flex items-center justify-center'>
-                                <div className='flex flex-col justify-center items-center bg-black bg-opacity-0 group-hover:bg-opacity-40 p-2 rounded-md duration-200'>
-                                    <FaAward className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={40} />
+                            <div className='absolute flex items-center justify-evenly inset-0 bg-black bg-opacity-0 dark:bg-opacity-20 group-hover:bg-opacity-40 dark:group-hover:bg-opacity-50 transition-opacity duration-200'>
+                                <div className='flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 hover:scale-105 duration-200' onClick={() => handleIdle(item)}>
+                                    <div className='p-2 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 cursor-pointer rounded duration-200'>
+                                        <IoPlay className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={36} />
+                                    </div>
+                                </div>
+
+                                <div className='flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 hover:scale-105 duration-200' onClick={() => viewAchievments(item)}>
+                                    <div className='p-2 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 cursor-pointer rounded duration-200'>
+                                        <FaAward className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={36} />
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -10,6 +10,7 @@ import AchievementUnlocker from './automation/AchievementUnlocker';
 export default function Dashboard({ userSummary, setUserSummary }) {
     const [activePage, setActivePage] = useState('games');
     const [appId, setAppId] = useState(null);
+    const [appName, setAppName] = useState(null);
     const [showAchievements, setShowAchievements] = useState(false);
     const [isQuery, setIsQuery] = useState(false);
     const [inputValue, setInputValue] = useState('');
@@ -20,7 +21,7 @@ export default function Dashboard({ userSummary, setUserSummary }) {
 
             <div className='flex w-full'>
                 {showAchievements ? (
-                    <Achievements steamId={userSummary.steamId} appId={appId} setShowAchievements={setShowAchievements} isQuery={isQuery} />
+                    <Achievements steamId={userSummary.steamId} appId={appId} appName={appName} setShowAchievements={setShowAchievements} isQuery={isQuery} />
                 ) : activePage === 'games' ? (
                     <React.Fragment>
                         <SideBar setUserSummary={setUserSummary} activePage={activePage} setActivePage={setActivePage} />
@@ -28,23 +29,9 @@ export default function Dashboard({ userSummary, setUserSummary }) {
                             steamId={userSummary.steamId}
                             inputValue={inputValue}
                             isQuery={isQuery}
-                            activePage={activePage}
                             setActivePage={setActivePage}
                             setAppId={setAppId}
-                            showAchievements={showAchievements}
-                            setShowAchievements={setShowAchievements}
-                        />
-                    </React.Fragment>
-                ) : activePage === 'achievements' ? (
-                    <React.Fragment>
-                        <SideBar setUserSummary={setUserSummary} activePage={activePage} setActivePage={setActivePage} />
-                        <GamesList
-                            steamId={userSummary.steamId}
-                            inputValue={inputValue}
-                            isQuery={isQuery}
-                            activePage={activePage}
-                            setActivePage={setActivePage}
-                            setAppId={setAppId}
+                            setAppName={setAppName}
                             showAchievements={showAchievements}
                             setShowAchievements={setShowAchievements}
                         />

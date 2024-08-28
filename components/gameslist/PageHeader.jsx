@@ -7,7 +7,7 @@ import moment from 'moment';
 import { IoRefresh } from 'react-icons/io5';
 import ManualAdd from './ManualAdd';
 
-export default function PageHeader({ steamId, activePage, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames, setFavorites, setRefreshKey }) {
+export default function PageHeader({ steamId, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames, setFavorites, setRefreshKey }) {
     const sortOptions = [
         { key: 'a-z', label: 'Title Ascending' },
         { key: 'z-a', label: 'Title Descending' },
@@ -38,23 +38,13 @@ export default function PageHeader({ steamId, activePage, setActivePage, sortSty
 
     return (
         <React.Fragment>
-            <div className='flex justify-between items-center pb-2'>
-                <div className='flex items-center gap-4'>
+            <div className='flex justify-between items-center pb-3'>
+                <div className='flex items-center gap-1'>
                     <div className='flex flex-col justify-center'>
-                        {activePage === 'games' ? (
-                            <div className='flex flex-col'>
-                                <p className='text-lg font-semibold'>
-                                    Game Idler
-                                </p>
-                            </div>
-                        ) : (
-                            <div className='flex flex-col'>
-                                <p className='text-lg font-semibold'>
-                                    Achievement Unlocker
-                                </p>
-                            </div>
-                        )}
-                        <div className='flex items-center gap-1'>
+                        <p className='text-lg font-semibold'>
+                            Games
+                        </p>
+                        <div className='flex gap-1'>
                             <p className='text-xs text-gray-400'>
                                 Showing {visibleGames.length} of {filteredGames.length} games
                             </p>

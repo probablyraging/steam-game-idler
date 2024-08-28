@@ -5,7 +5,7 @@ import Alerts from './Alerts';
 import BulkButtons from './BulkButtons';
 import AchievementsList from './AchievementsList';
 
-export default function Achievements({ steamId, appId, setShowAchievements }) {
+export default function Achievements({ steamId, appId, appName, setShowAchievements }) {
     let [isLoading, setIsLoading] = useState(true);
     let [achievementList, setAchievementList] = useState([]);
     let [userAchievements, setUserAchievements] = useState([]);
@@ -110,6 +110,7 @@ export default function Achievements({ steamId, appId, setShowAchievements }) {
                     <div className='flex flex-wrap gap-4 mt-2'>
                         <BulkButtons
                             appId={appId}
+                            appName={appName}
                             achievementsUnavailable={achievementsUnavailable}
                             btnLoading={btnLoading}
                             achievementList={achievementList}
