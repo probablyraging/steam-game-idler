@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Modal, ModalContent, ModalBody, Button, useDisclosure } from '@nextui-org/react';
+import { Modal, ModalContent, ModalBody, Button, useDisclosure, ModalFooter } from '@nextui-org/react';
 import { lockAchievement, unlockAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export default function BulkButtons({ appId, appName, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -13,41 +14,53 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
     };
 
     const handleUnlockAll = async (onClose) => {
-        setBtnLoading(true);
-        onClose();
-        let unlocked = 0;
-        const total = achievementList.length;
-        for (const ach of achievementList) {
-            try {
-                await unlockAchievement(appId, ach.name, true);
-                unlocked++;
-                toast.info(`Unlocked ${unlocked} of ${total} achievements`, { autoClose: 1000 });
-                await new Promise(resolve => setTimeout(resolve, 200));
-            } catch (error) {
-                console.error(`Failed to unlock achievement ${ach.name}:`, error);
+        const steamRunning = await invoke('check_status');
+        if (steamRunning) {
+            setBtnLoading(true);
+            onClose();
+            let unlocked = 0;
+            const total = achievementList.length;
+            for (const ach of achievementList) {
+                try {
+                    await unlockAchievement(appId, ach.name, true);
+                    unlocked++;
+                    toast.info(`Unlocked ${unlocked} of ${total} achievements`, { autoClose: 1000 });
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                } catch (error) {
+                    console.error(`Failed to unlock achievement ${ach.name}:`, error);
+                }
             }
+            setBtnLoading(false);
+            toast.success(`Successfully unlocked ${unlocked} of ${total} achievements.`);
+        } else {
+            onClose();
+            toast.error('Steam is not running');
         }
-        setBtnLoading(false);
-        toast.success(`Successfully unlocked ${unlocked} of ${total} achievements.`);
     };
 
     const handleLockAll = async (onClose) => {
-        setBtnLoading(true);
-        onClose();
-        let locked = 0;
-        const total = achievementList.length;
-        for (const ach of achievementList) {
-            try {
-                await lockAchievement(appId, ach.name);
-                locked++;
-                toast.info(`Locked ${locked} of ${total} achievements`, { autoClose: 1000 });
-                await new Promise(resolve => setTimeout(resolve, 200));
-            } catch (error) {
-                console.error(`Failed to unlock achievement ${ach.name}:`, error);
+        const steamRunning = await invoke('check_status');
+        if (steamRunning) {
+            setBtnLoading(true);
+            onClose();
+            let locked = 0;
+            const total = achievementList.length;
+            for (const ach of achievementList) {
+                try {
+                    await lockAchievement(appId, ach.name);
+                    locked++;
+                    toast.info(`Locked ${locked} of ${total} achievements`, { autoClose: 1000 });
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                } catch (error) {
+                    console.error(`Failed to unlock achievement ${ach.name}:`, error);
+                }
             }
+            setBtnLoading(false);
+            toast.success(`Successfully locked ${locked} of ${total} achievements.`);
+        } else {
+            onClose();
+            toast.error('Steam is not running');
         }
-        setBtnLoading(false);
-        toast.success(`Successfully locked ${locked} of ${total} achievements.`);
     };
 
     return (
@@ -84,35 +97,36 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                 </div>
             </div>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='bg-base border border-border rounded-md'>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='bg-container border border-border rounded-md w-[350px]'>
                 <ModalContent>
                     {(onClose) => (
-                        <ModalBody className='p-4'>
-                            <div className='flex flex-col gap-2 w-full'>
-                                <p>
+                        <React.Fragment>
+                            <ModalBody className='flex gap-5 p-4'>
+                                <p className='text-sm font-semibold uppercase'>
                                     Confirm
                                 </p>
                                 <p className='text-xs mb-2'>
                                     Are you sure you want to {state} all achievements?
                                 </p>
-                                <div className='flex gap-2 mt-2'>
-                                    <Button
-                                        size='sm'
-                                        className='bg-sgi min-h-[30px] font-semibold text-offwhite rounded-sm'
-                                        onClick={state === 'unlock' ? () => handleUnlockAll(onClose) : () => handleLockAll(onClose)}
-                                    >
-                                        Confirm
-                                    </Button>
-                                    <Button
-                                        size='sm'
-                                        className='bg-red-400 min-h-[30px] font-semibold text-offwhite rounded-sm'
-                                        onClick={onClose}
-                                    >
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </div>
-                        </ModalBody>
+                            </ModalBody>
+                            <ModalFooter className='border-t border-border bg-footer px-4 py-3'>
+                                <Button
+                                    size='sm'
+                                    variant='light'
+                                    className='max-h-[25px] font-semibold rounded-sm'
+                                    onClick={onClose}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    size='sm'
+                                    className='bg-sgi max-h-[25px] font-semibold text-offwhite rounded-sm'
+                                    onClick={state === 'unlock' ? () => handleUnlockAll(onClose) : () => handleLockAll(onClose)}
+                                >
+                                    Confirm
+                                </Button>
+                            </ModalFooter>
+                        </React.Fragment>
                     )}
                 </ModalContent>
             </Modal>

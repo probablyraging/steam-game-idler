@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, ModalContent, ModalBody, useDisclosure } from '@nextui-org/react';
+import { Button, Modal, ModalContent, ModalBody, useDisclosure, ModalFooter } from '@nextui-org/react';
 import { logEvent } from '@/utils/utils';
 
 export default function ResetSettings({ setSettings, setRefreshKey }) {
@@ -26,35 +26,36 @@ export default function ResetSettings({ setSettings, setRefreshKey }) {
                 </p>
             </Button>
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='bg-base border border-border rounded-md'>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='bg-container border border-border rounded-md w-[350px]'>
                 <ModalContent>
                     {(onClose) => (
-                        <ModalBody className='p-4'>
-                            <div className='flex flex-col gap-2 w-full'>
-                                <p>
+                        <React.Fragment>
+                            <ModalBody className='flex gap-5 p-4'>
+                                <p className='text-sm font-semibold uppercase'>
                                     Confirm
                                 </p>
                                 <p className='text-xs mb-2'>
                                     Are you sure you want to reset settings to default?
                                 </p>
-                                <div className='flex gap-2 mt-2'>
-                                    <Button
-                                        size='sm'
-                                        className='bg-sgi min-h-[30px] font-semibold text-offwhite rounded-sm'
-                                        onClick={() => handleResetSettings(onClose)}
-                                    >
-                                        Confirm
-                                    </Button>
-                                    <Button
-                                        size='sm'
-                                        className='bg-red-400 min-h-[30px] font-semibold text-offwhite rounded-sm'
-                                        onClick={onClose}
-                                    >
-                                        Cancel
-                                    </Button>
-                                </div>
-                            </div>
-                        </ModalBody>
+                            </ModalBody>
+                            <ModalFooter className='border-t border-border bg-footer px-4 py-3'>
+                                <Button
+                                    size='sm'
+                                    variant='light'
+                                    className='max-h-[25px] font-semibold rounded-sm'
+                                    onClick={onClose}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    size='sm'
+                                    className='bg-sgi max-h-[25px] font-semibold text-offwhite rounded-sm'
+                                    onClick={() => handleResetSettings(onClose)}
+                                >
+                                    Confirm
+                                </Button>
+                            </ModalFooter>
+                        </React.Fragment>
                     )}
                 </ModalContent>
             </Modal>

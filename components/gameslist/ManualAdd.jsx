@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalContent, ModalBody, useDisclosure, Input } from '@nextui-org/react';
+import { Button, Modal, ModalContent, ModalBody, useDisclosure, Input, ModalFooter } from '@nextui-org/react';
 import { IoAdd } from 'react-icons/io5';
-import { FaHashtag } from 'react-icons/fa';
+import { FaInfoCircle } from 'react-icons/fa';
 import { logEvent } from '@/utils/utils';
 
 export default function ManualAdd({ setFavorites }) {
@@ -47,23 +47,29 @@ export default function ManualAdd({ setFavorites }) {
                 onClick={onOpen}
             />
 
-            <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={() => setInputValue('')} className='bg-base border border-border rounded-md'>
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} onClose={() => setInputValue('')} className='bg-container border border-border rounded-md w-[350px]'>
                 <ModalContent>
                     {(onClose) => (
-                        <ModalBody className='p-4'>
-                            <p>
-                                Manually add a game
-                            </p>
-                            <p className='text-xs mb-2'>
-                                Add games that you do not own, but have in your library, such as family shared games. Games will be added to your &apos;Favorites&apos; list.
-                            </p>
+                        <React.Fragment>
+                            <ModalBody className='flex gap-5 p-4'>
+                                <p className='text-sm font-semibold uppercase'>
+                                    Add a game
+                                </p>
+                                <p className='text-xs'>
+                                    Add games that you do not own, but have in your library, such as family shared games.
+                                </p>
 
-                            <div className='flex flex-col gap-2 w-full mt-2'>
+                                <div className='flex items-center gap-1 w-full p-1 bg-[#c3e3fb] dark:text-[#bdddff] dark:bg-[#366f9b] border border-[#93c4e9] dark:border-[#5585aa] rounded-sm'>
+                                    <FaInfoCircle fontSize={14} />
+                                    <p className='text-xs'>
+                                        Games will be added to your &apos;Favorites&apos; list.
+                                    </p>
+                                </div>
+
                                 <Input
                                     isClearable
                                     size='sm'
                                     placeholder='Enter a game ID'
-                                    startContent={<FaHashtag />}
                                     classNames={{
                                         inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-sm group-data-[focus-visible=true]:ring-transparent group-data-[focus-visible=true]:ring-offset-transparent'],
                                         input: ['text-xs']
@@ -73,17 +79,27 @@ export default function ManualAdd({ setFavorites }) {
                                     onClear={() => { setInputValue(''); }}
                                     autoFocus
                                 />
+                            </ModalBody>
+                            <ModalFooter className='border-t border-border bg-footer px-4 py-3'>
+                                <Button
+                                    size='sm'
+                                    variant='light'
+                                    className='max-h-[25px] font-semibold rounded-sm'
+                                    onClick={onClose}
+                                >
+                                    Cancel
+                                </Button>
                                 <Button
                                     size='sm'
                                     isLoading={isLoading}
                                     isDisabled={inputValue.length === 0}
-                                    className='bg-sgi min-h-[30px] font-semibold text-offwhite rounded-sm'
+                                    className='bg-sgi max-h-[25px] font-semibold text-offwhite rounded-sm'
                                     onClick={() => handleIdle(onClose)}
                                 >
                                     Add
                                 </Button>
-                            </div>
-                        </ModalBody>
+                            </ModalFooter>
+                        </React.Fragment>
                     )}
                 </ModalContent>
             </Modal>

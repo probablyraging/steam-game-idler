@@ -53,8 +53,9 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
         achievementCounter++;
         updateAchievementStats();
         logEvent(`[Achievement Unlocker] Unlocked/locked ${achievementId} (${appId})`);
+        return true;
     } else {
-        logEvent(`[Error] [Achievement Unlocker] Steam is not running`);
+        return false;
     }
 }
 
