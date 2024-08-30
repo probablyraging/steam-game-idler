@@ -1,11 +1,22 @@
 import React from 'react';
 import Image from 'next/image';
 import { unlockAchievement } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
-export default function AchievementsList({ appId, achievementsUnavailable, achievementList, userAchievementsMap, percentageMap }) {
+export default function AchievementsList({ appId, appName, achievementsUnavailable, achievementList, userGameAchievementsMap, percentageMap }) {
+    const handleUnlock = async (achievementName, type) => {
+        const status = await unlockAchievement(appId, achievementName, false);
+        console.log(status);
+        if (!status.error) {
+            toast.success(`${type} ${achievementName} for ${appName}`, { autoClose: 1500 });
+        } else {
+            toast.error(`Error: ${status.error}`);
+        }
+    };
+
     return (
         <React.Fragment>
-            <div className='grid grid-cols-1 gap-4 max-h-[430px] pr-2 w-full overflow-y-auto'>
+            <div className='grid grid-cols-1 gap-4 w-full pr-2 max-h-[345px] overflow-y-auto scroll-smooth'>
                 {achievementsUnavailable && (
                     <div className='flex justify-center items-center w-full'>
                         <p className='text-xs'>
@@ -14,12 +25,12 @@ export default function AchievementsList({ appId, achievementsUnavailable, achie
                     </div>
                 )}
                 {achievementList && achievementList.map((item) => {
-                    const isUnlocked = userAchievementsMap.get(item.name) || false;
+                    const isUnlocked = userGameAchievementsMap.get(item.name) || false;
                     const percentage = percentageMap.get(item.name);
 
                     return (
                         <div key={item.name} className='flex flex-col bg-container border border-border rounded shadow-sm'>
-                            <div className='flex items-center p-3 bg-gradient-to-r from-[#eee] to-[#f2f2f2] dark:from-[#121212] dark:to-[#1c1c1c]'>
+                            <div className='flex items-center p-3 bg-base'>
                                 <Image
                                     className='rounded-full mr-3'
                                     src={isUnlocked ? item.icon : item.icongray}
@@ -36,7 +47,7 @@ export default function AchievementsList({ appId, achievementsUnavailable, achie
                                 {isUnlocked ? (
                                     <div
                                         className='flex justify-center items-center w-[30px] h-[30px] cursor-pointer group'
-                                        onClick={() => unlockAchievement(appId, item.name, false)}
+                                        onClick={() => handleUnlock(item.name, 'Locked')}
                                     >
                                         <div className='bg-red-400 group-hover:bg-opacity-85 py-1 px-2 rounded-sm text-xs text-offwhite font-semibold mr-6 duration-200'>
                                             <p>Lock</p>
@@ -45,7 +56,7 @@ export default function AchievementsList({ appId, achievementsUnavailable, achie
                                 ) : (
                                     <div
                                         className='flex justify-center items-center w-[30px] h-[30px] cursor-pointer group'
-                                        onClick={() => unlockAchievement(appId, item.name, false)}
+                                        onClick={() => handleUnlock(item.name, 'Unlocked')}
                                     >
                                         <div className='bg-[#4fc27d] group-hover:bg-opacity-85 py-1 px-2 rounded-sm text-xs text-offwhite font-semibold mr-6 duration-200'>
                                             <p>Unlock</p>

@@ -21,6 +21,7 @@ namespace SteamUtility
                 Console.WriteLine("  check_steam");
                 Console.WriteLine("  idle <AppID> <true|false>");
                 Console.WriteLine("  unlock <AppID> <AchievementID> [UnlockAll]");
+                Console.WriteLine("  update_stat <AppID> <StatName> <NewValue>");
                 return;
             }
 
@@ -39,6 +40,9 @@ namespace SteamUtility
                     break;
                 case "lock_all":
                     HandleLockAllCommand(args);
+                    break;
+                case "update_stat":
+                    HandleStatsCommand(args);
                     break;
                 default:
                     Console.WriteLine("Unknown command. Use 'check_steam', 'idle', or 'unlock'.");
@@ -298,6 +302,95 @@ namespace SteamUtility
                     {
                         Console.WriteLine("Failed to get achievement data. It might not exist.");
                     }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+            finally
+            {
+                SteamAPI.Shutdown();
+            }
+        }
+
+        static void HandleStatsCommand(string[] args)
+        {
+            if (args.Length < 3)
+            {
+                Console.WriteLine("Usage: SteamUtility.exe update_stat <AppID> <StatName> <NewValue>");
+                return;
+            }
+
+            uint appId;
+            if (!uint.TryParse(args[1], out appId))
+            {
+                Console.WriteLine("Invalid AppID. Please provide a valid numeric AppID.");
+                return;
+            }
+
+            string statName = args[2];
+            string newValue = args[3];
+
+            Environment.SetEnvironmentVariable("SteamAppId", appId.ToString());
+
+            if (!SteamAPI.Init())
+            {
+                Console.WriteLine("Make sure Steam is running first.");
+                return;
+            }
+
+            try
+            {
+                statsReceivedCallback = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
+
+                if (!SteamUserStats.RequestCurrentStats())
+                {
+                    Console.WriteLine("Failed to request stats from Steam.");
+                    return;
+                }
+
+                DateTime startTime = DateTime.Now;
+                while (!statsReceived)
+                {
+                    SteamAPI.RunCallbacks();
+                    if ((DateTime.Now - startTime).TotalSeconds > 10)
+                    {
+                        Console.WriteLine("Timed out waiting for stats from Steam.");
+                        return;
+                    }
+                    Thread.Sleep(100);
+                }
+
+                bool success = false;
+                if (int.TryParse(newValue, out int intValue))
+                {
+                    success = SteamUserStats.SetStat(statName, intValue);
+                }
+                else if (float.TryParse(newValue, out float floatValue))
+                {
+                    success = SteamUserStats.SetStat(statName, floatValue);
+                }
+                else
+                {
+                    Console.WriteLine("Invalid new value. Please provide a valid integer or float.");
+                    return;
+                }
+
+                if (success)
+                {
+                    if (SteamUserStats.StoreStats())
+                    {
+                        Console.WriteLine($"Stat '{statName}' updated successfully to {newValue}.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Failed to store updated stats.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to update stat '{statName}'. It might not exist.");
+                }
             }
             catch (Exception ex)
             {

@@ -107,7 +107,7 @@ export default function AchievementSettings({ settings, setSettings }) {
                             defaultValue={localSettings.achievementUnlocker.interval}
                             formatOptions={{ style: 'currency', currency: 'USD' }}
                             hideValue
-                            className="max-w-[350px]"
+                            className='max-w-[350px]'
                             classNames={{ value: ['text-xs'] }}
                             onChangeEnd={handleSliderChange}
                             onChange={updateLabel}

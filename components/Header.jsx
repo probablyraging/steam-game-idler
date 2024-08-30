@@ -53,7 +53,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                         <BiSolidLeaf className='text-offwhite' fontSize={40} />
                     </div>
 
-                    <div className='flex justify-center items-center flex-grow h-full border-b border-titleborder'>
+                    <div className='flex justify-center items-center flex-grow h-full'>
                         <div className='flex flex-grow p-4' data-tauri-drag-region>
                             <Input
                                 isClearable

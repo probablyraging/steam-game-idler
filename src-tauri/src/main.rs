@@ -17,6 +17,7 @@ fn main() {
             stop_idle,
             unlock_achievement,
             lock_achievement,
+            update_stat,
             log_event,
             get_app_log_dir,
             check_steam_status
@@ -112,6 +113,15 @@ fn lock_achievement(file_path: String, app_id: String, achievement_id: String) -
         .args(&["lock_all", &app_id, &achievement_id])
         .output()
         .expect("failed to execute unlocker");
+    Ok(())
+}
+
+#[tauri::command]
+fn update_stat(file_path: String, app_id: String, stat_name: String, new_value: String) -> Result<(), String> {
+    std::process::Command::new(file_path)
+        .args(&["update_stat", &app_id, &stat_name, &new_value])
+        .output()
+        .expect("failed to execute stat updater");
     Ok(())
 }
 

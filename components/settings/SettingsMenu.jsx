@@ -32,9 +32,14 @@ export default function SettingsMenu() {
                             Report an issue
                         </ExtLink>
                     </DropdownItem>
-                    <DropdownItem key='coffee' className='rounded p-0 m-0' textValue='Buy me a coffee'>
-                        <ExtLink href={'https://buymeacoffee.com/probablyraging'} className={'flex text-xs w-full px-2 py-1'}>
-                            Buy me a coffee
+                    <DropdownItem key='feature' className='rounded p-0 m-0' textValue='Feature request'>
+                        <ExtLink href={'https://github.com/probablyraging/steam-game-idler/issues/new?assignees=ProbablyRaging&labels=feature+request&projects=&template=feature_request.yml&title=Title'} className={'flex text-xs w-full px-2 py-1'}>
+                            Feature request
+                        </ExtLink>
+                    </DropdownItem>
+                    <DropdownItem key='support-me' className='rounded p-0 m-0' textValue='Support me'>
+                        <ExtLink href={'https://github.com/sponsors/probablyraging'} className={'flex text-xs w-full px-2 py-1'}>
+                            Support me
                         </ExtLink>
                     </DropdownItem>
                 </DropdownMenu>
