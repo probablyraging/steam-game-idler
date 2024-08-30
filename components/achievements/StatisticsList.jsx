@@ -8,9 +8,11 @@ export default function StatisticsList({ appId, appName, statisticsUnavailable, 
 
     useEffect(() => {
         const initialValues = {};
-        statisticsList && statisticsList.forEach(item => {
-            initialValues[item.name] = userGameStatsMap.get(item.name) || 0;
-        });
+        if (statisticsList) {
+            statisticsList.forEach(item => {
+                initialValues[item.name] = userGameStatsMap.get(item.name) || 0;
+            });
+        }
         setInputValues(initialValues);
     }, [statisticsList, userGameStatsMap]);
 

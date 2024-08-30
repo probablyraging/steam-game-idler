@@ -24,7 +24,7 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
     useEffect(() => {
         setIsLoading(true);
         Promise.all([
-            fetch('http://localhost:3001/api/route', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ route: 'game-schema', appId: appId }),
@@ -41,7 +41,7 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                     };
                 }
             }),
-            fetch('http://localhost:3001/api/route', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ route: 'user-game-stats', steamId: steamId, appId: appId }),
@@ -51,7 +51,7 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                     setUserGameStats(data.playerstats);
                 }
             }),
-            fetch('http://localhost:3001/api/route', {
+            fetch('https://apibase.vercel.app/api/route', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ route: 'game-achievement-percentage', appId: appId }),
@@ -70,10 +70,18 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
     }, []);
 
     const userGameAchievementsMap = new Map();
-    userGameStats?.achievements && userGameStats.achievements.forEach(item => userGameAchievementsMap.set(item.name, item.achieved));
+    if (userGameStats?.achievements) {
+        userGameStats.achievements.forEach(item => {
+            userGameAchievementsMap.set(item.name, item.achieved);
+        });
+    }
 
     const userGameStatsMap = new Map();
-    userGameStats?.stats && userGameStats.stats.forEach(item => userGameStatsMap.set(item.name, item.value));
+    if (userGameStats?.stats) {
+        userGameStats.stats.forEach(item => {
+            userGameStatsMap.set(item.name, item.value);
+        });
+    }
 
     const percentageMap = new Map();
     gameAchievementsPercentages.forEach(item => percentageMap.set(item.name, item.percent));
