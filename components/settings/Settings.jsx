@@ -82,7 +82,7 @@ export default function Settings() {
                             tab: 'px-6 py-3 rounded-none bg-transparent px-4',
                             tabContent: 'text-xs',
                             cursor: 'bg-base w-full rounded-sm',
-                            panel: 'bg-base border border-border rounded-b rounded-tr',
+                            panel: 'bg-titlebar rounded-sm rounded-tl-none',
                         }}
                     >
                         <Tab key='card-farming' title='Card Farming'>

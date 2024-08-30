@@ -132,89 +132,87 @@ export default function CardSettings({ settings, setSettings }) {
 
     return (
         <React.Fragment>
-            <div className='p-2'>
-                <div className='flex flex-col gap-4'>
-                    <Checkbox
-                        name='listGames'
-                        isSelected={localSettings?.cardFarming?.listGames}
-                        onChange={handleCheckboxChange}
-                    >
-                        <div className='flex items-center gap-1'>
-                            <p className='text-xs'>
-                                Card farming list
-                            </p>
-                        </div>
-                    </Checkbox>
-
-                    <Checkbox
-                        name='allGames'
-                        isSelected={localSettings?.cardFarming?.allGames}
-                        onChange={handleCheckboxChange}
-                    >
-                        <div className='flex items-center gap-1'>
-                            <p className='text-xs'>
-                                All games with drops
-                            </p>
-                        </div>
-                    </Checkbox>
-
-                    <div className='w-full'>
-                        <p className='text-xs my-2'>
-                            Steam credentials are required in order to use the Card Farming feature. <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/Settings#steam-credentials'} className='text-blue-400'>Learn more</ExtLink>
+            <div className='flex flex-col gap-4 p-2'>
+                <Checkbox
+                    name='listGames'
+                    isSelected={localSettings?.cardFarming?.listGames}
+                    onChange={handleCheckboxChange}
+                >
+                    <div className='flex items-center gap-1'>
+                        <p className='text-xs'>
+                            Card farming list
                         </p>
-                        <div className='flex flex-col'>
-                            <div className='flex gap-4'>
-                                <Input
-                                    size='sm'
-                                    placeholder='sessionid'
-                                    className='max-w-[200px]'
-                                    classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
-                                    value={sidValue}
-                                    onChange={handleSidChange}
-                                />
-                                <Input
-                                    size='sm'
-                                    placeholder='steamLoginSecure'
-                                    className='max-w-[200px]'
-                                    classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
-                                    value={slsValue}
-                                    onChange={handleSlsChange}
-                                />
-                                <Button
-                                    isDisabled={hasCookies || !sidValue || !slsValue}
-                                    size='sm'
-                                    className='bg-sgi font-semibold text-offwhite rounded-sm'
-                                    onClick={handleSave}
-                                >
-                                    Save
-                                </Button>
-                                <Button isDisabled={!hasCookies} size='sm' className='font-semibold text-offwhite bg-red-400 rounded-sm' onClick={handleClear}>
-                                    Clear
-                                </Button>
-                            </div>
+                    </div>
+                </Checkbox>
 
-                            {isLoading ? (
-                                <div className='flex py-1 h-[16px]'>
-                                    <Skeleton className='w-[70px] h-[8px] rounded' />
-                                </div>
-                            ) : (
-                                <React.Fragment>
-                                    {loginState ? (
-                                        <p className='text-xs text-green-400' >
-                                            Logged in as {steamUser}
-                                        </p>
-                                    ) : (
-                                        <React.Fragment>
-                                            {validationError && (
-                                                <p className='text-xs text-red-400'>
-                                                    Incorrect credentials
-                                                </p>
-                                            )}
-                                        </React.Fragment>
-                                    )}
-                                </React.Fragment>
-                            )}
+                <Checkbox
+                    name='allGames'
+                    isSelected={localSettings?.cardFarming?.allGames}
+                    onChange={handleCheckboxChange}
+                >
+                    <div className='flex items-center gap-1'>
+                        <p className='text-xs'>
+                            All games with drops
+                        </p>
+                    </div>
+                </Checkbox>
+
+                <div className='w-full'>
+                    <p className='text-xs my-2'>
+                        Steam credentials are required in order to use the Card Farming feature. <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/Settings#steam-credentials'} className='text-blue-400'>Learn more</ExtLink>
+                    </p>
+                    <div className='flex flex-col'>
+                        <div className='flex gap-4'>
+                            <Input
+                                size='sm'
+                                placeholder='sessionid'
+                                className='max-w-[200px]'
+                                classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
+                                value={sidValue}
+                                onChange={handleSidChange}
+                            />
+                            <Input
+                                size='sm'
+                                placeholder='steamLoginSecure'
+                                className='max-w-[200px]'
+                                classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
+                                value={slsValue}
+                                onChange={handleSlsChange}
+                            />
+                            <Button
+                                isDisabled={hasCookies || !sidValue || !slsValue}
+                                size='sm'
+                                className='bg-sgi font-semibold text-offwhite rounded-sm'
+                                onClick={handleSave}
+                            >
+                                Save
+                            </Button>
+                            <Button isDisabled={!hasCookies} size='sm' className='font-semibold text-offwhite bg-red-400 rounded-sm' onClick={handleClear}>
+                                Clear
+                            </Button>
                         </div>
+
+                        {isLoading ? (
+                            <div className='flex py-1 h-[16px]'>
+                                <Skeleton className='w-[70px] h-[8px] rounded' />
+                            </div>
+                        ) : (
+                            <React.Fragment>
+                                {loginState ? (
+                                    <p className='text-xs text-green-400' >
+                                        Logged in as {steamUser}
+                                    </p>
+                                ) : (
+                                    <React.Fragment>
+                                        {validationError && (
+                                            <p className='text-xs text-red-400'>
+                                                Incorrect credentials
+                                            </p>
+                                        )}
+                                    </React.Fragment>
+                                )}
+                            </React.Fragment>
+                        )}
                     </div>
                 </div>
             </div>

@@ -39,7 +39,7 @@ export default function Logs() {
                 <div className='bg-container border border-border font-mono text-xs rounded min-h-[200px] max-h-[calc(100vh-280px)] overflow-y-auto'>
                     <table className='w-full border-collapse'>
                         <thead className='sticky top-0 z-10'>
-                            <tr className='border-b border-border bg-titlebar'>
+                            <tr className='border-b border-border bg-[#dedede] dark:bg-base'>
                                 <th className='text-left p-1.5 w-[200px]'>Time</th>
                                 <th className='text-left p-1.5'>Message</th>
                             </tr>

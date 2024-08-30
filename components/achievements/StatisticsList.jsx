@@ -34,7 +34,7 @@ export default function StatisticsList({ appId, appName, statisticsUnavailable, 
 
     return (
         <React.Fragment>
-            <div className='flex flex-col gap-2 w-full overflow-y-auto scroll-smooth'>
+            <div className='flex flex-col gap-2 w-full overflow-y-auto scroll-smooth p-2'>
                 {statisticsUnavailable ? (
                     <div className='flex justify-center items-center w-full'>
                         <p className='text-xs'>
@@ -42,10 +42,10 @@ export default function StatisticsList({ appId, appName, statisticsUnavailable, 
                         </p>
                     </div>
                 ) : (
-                    <div className='bg-container border border-border text-xs rounded min-h-[200px] max-h-[calc(100vh-270px)] overflow-y-auto'>
+                    <div className='bg-container border border-border text-xs rounded min-h-[200px] max-h-[calc(100vh-286px)] overflow-y-auto'>
                         <table className='w-full border-collapse'>
                             <thead className='sticky top-0 z-10'>
-                                <tr className='border-b border-border bg-container'>
+                                <tr className='border-b border-border bg-[#dedede] dark:bg-base'>
                                     <th className='text-left p-1.5 w-1/2'>Name</th>
                                     <th className='text-left p-1.5 w-full'>Value</th>
                                     <th className='text-left p-1.5'></th>
