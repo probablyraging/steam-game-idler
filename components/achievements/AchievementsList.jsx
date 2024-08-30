@@ -16,7 +16,7 @@ export default function AchievementsList({ appId, appName, achievementsUnavailab
 
     return (
         <React.Fragment>
-            <div className='grid grid-cols-1 gap-4 w-full pr-2 max-h-[345px] overflow-y-auto scroll-smooth'>
+            <div className='grid grid-cols-1 gap-4 w-full pr-2 max-h-[calc(100vh-270px)] overflow-y-auto scroll-smooth'>
                 {achievementsUnavailable && (
                     <div className='flex justify-center items-center w-full'>
                         <p className='text-xs'>
