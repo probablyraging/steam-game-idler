@@ -2,17 +2,12 @@ import React from 'react';
 import { Button } from '@nextui-org/react';
 import { TiWarning } from 'react-icons/ti';
 import { IoIosClose } from 'react-icons/io';
-import { FaInfoCircle } from 'react-icons/fa';
 
-export default function Alerts({ achievementsUnavailable, showAlertOne, setShowAlertOne, showAlertTwo, setShowAlertTwo }) {
+export default function Alerts({ achievementsUnavailable, showAlertOne, setShowAlertOne }) {
     const handleAlert = (val) => {
         if (val === 1) {
             localStorage.setItem('alertOne', false);
             setShowAlertOne('false');
-        }
-        if (val === 2) {
-            localStorage.setItem('alertTwo', false);
-            setShowAlertTwo('false');
         }
     };
 
@@ -31,24 +26,6 @@ export default function Alerts({ achievementsUnavailable, showAlertOne, setShowA
                             className='bg-transparent text-red-400 hover:text-red-500'
                             startContent={<IoIosClose fontSize={24} />}
                             onClick={() => { handleAlert(1); }}
-                        />
-                    </div>
-                </div>
-            )}
-
-            {showAlertTwo !== 'false' && (
-                <div className='flex justify-between items-center w-full p-1 bg-blue-100 border border-blue-300 rounded my-2'>
-                    <div className='flex justify-between items-center w-full gap-2 text-xs font-semibold text-blue-400'>
-                        <div className='flex items-center gap-2'>
-                            <FaInfoCircle fontSize={18} />
-                            <p>Please note that unlocking/locking achievements is instant but may take up to 5 minutes to be reflected on this page. Check your game&apos;s achievements page on Steam for real-time changes.</p>
-                        </div>
-                        <Button
-                            isIconOnly
-                            size='sm'
-                            className='bg-transparent text-blue-400 hover:text-blue-500'
-                            startContent={<IoIosClose fontSize={24} />}
-                            onClick={() => { handleAlert(2); }}
                         />
                     </div>
                 </div>

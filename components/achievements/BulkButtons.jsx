@@ -4,7 +4,7 @@ import { lockAchievement, unlockAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
 import { invoke } from '@tauri-apps/api/tauri';
 
-export default function BulkButtons({ appId, appName, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading }) {
+export default function BulkButtons({ appId, appName, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading, currentTab }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [state, setState] = useState('');
 
@@ -77,7 +77,7 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                             <Button
                                 size='sm'
                                 isLoading={btnLoading}
-                                isDisabled={!achievementList || inputValue.length > 0}
+                                isDisabled={!achievementList || inputValue.length > 0 || currentTab === 'statistics'}
                                 className='bg-sgi font-semibold text-offwhite rounded-sm'
                                 onClick={() => handleSetState('unlock')}
                             >
@@ -86,7 +86,7 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                             <Button
                                 size='sm'
                                 isLoading={btnLoading}
-                                isDisabled={!achievementList || inputValue.length > 0}
+                                isDisabled={!achievementList || inputValue.length > 0 || currentTab === 'statistics'}
                                 className='bg-red-400 font-semibold text-offwhite rounded-sm'
                                 onClick={() => handleSetState('lock')}
                             >
