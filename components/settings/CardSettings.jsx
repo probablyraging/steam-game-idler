@@ -14,7 +14,7 @@ export default function CardSettings({ settings, setSettings }) {
     const [localSettings, setLocalSettings] = useState(null);
 
     useEffect(() => {
-        if (settings) {
+        if (settings && settings.cardFarming) {
             setLocalSettings(settings);
         }
     }, [settings]);

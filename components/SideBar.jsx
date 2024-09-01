@@ -6,13 +6,17 @@ import { logEvent } from '@/utils/utils';
 
 export default function SideBar({ setUserSummary, activePage, setActivePage }) {
     const handleLogout = () => {
+        const settings = JSON.parse(localStorage.getItem('settings'));
+        const { clearData } = settings?.general || {};
         setUserSummary(null);
-        localStorage.removeItem('userSummary');
-        localStorage.removeItem('favorites');
-        localStorage.removeItem('cardFarming');
-        localStorage.removeItem('achievementUnlocker');
-        localStorage.removeItem('steamCookies');
         sessionStorage.removeItem('gamesListCache');
+        localStorage.removeItem('userSummary');
+        if (clearData) {
+            localStorage.removeItem('steamCookies');
+            localStorage.removeItem('favorites');
+            localStorage.removeItem('cardFarming');
+            localStorage.removeItem('achievementUnlocker');
+        }
         logEvent('[System] Logged out');
     };
 
@@ -20,7 +24,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
         <React.Fragment>
             <div className='flex justify-between flex-col w-[62px] min-h-calc max-h-calc bg-sidebar dark:bg-titlebar'>
                 <div className='flex justify-center items-center flex-col'>
-                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer' onClick={() => setActivePage('games')}>
+                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer duration-200' onClick={() => setActivePage('games')}>
                         {activePage === 'games' && (
                             <motion.div
                                 className='absolute w-full border-r-4 border-white'
@@ -38,7 +42,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                 </div>
 
                 <div className='flex flex-col justify-end items-center h-full'>
-                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer' onClick={() => setActivePage('settings')}>
+                    <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer duration-200' onClick={() => setActivePage('settings')}>
                         {activePage === 'settings' && (
                             <motion.div
                                 className='absolute w-full border-r-4 border-white'
@@ -53,7 +57,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                         )}
                         <IoSettings className='text-offwhite' fontSize={24} />
                     </div>
-                    <div className='flex justify-center items-center w-full h-[62px] hover:bg-red-500 cursor-pointer' onClick={handleLogout}>
+                    <div className='flex justify-center items-center w-full h-[62px] hover:bg-red-500 cursor-pointer duration-200' onClick={handleLogout}>
                         <FaSignOutAlt className='text-offwhite rotate-180' fontSize={24} />
                     </div>
                 </div>

@@ -96,8 +96,11 @@ export default function AchievementSettings({ settings, setSettings }) {
                                 isDisabled={!localSettings.achievementUnlocker.schedule}
                                 value={localSettings.achievementUnlocker.scheduleFrom}
                                 size='sm'
-                                className='w-[100px]'
-                                classNames={{ inputWrapper: ['rounded-sm'] }}
+                                className='w-[80px]'
+                                classNames={{
+                                    inputWrapper: ['rounded-sm min-h-[25px] max-h-[25px] border border-border'],
+                                    input: ['text-xs'],
+                                }}
                                 onChange={(value) => handleScheduleChange(value, 'scheduleFrom')}
                             />
                             <p className='text-xs'>
@@ -108,8 +111,11 @@ export default function AchievementSettings({ settings, setSettings }) {
                                 isDisabled={!localSettings.achievementUnlocker.schedule}
                                 value={localSettings.achievementUnlocker.scheduleTo}
                                 size='sm'
-                                className='w-[100px] max-h-[30px]'
-                                classNames={{ inputWrapper: ['rounded-sm'] }}
+                                className='w-[80px]'
+                                classNames={{
+                                    inputWrapper: ['rounded-sm min-h-[25px] max-h-[25px] border border-border'],
+                                    input: ['text-xs'],
+                                }}
                                 onChange={(value) => handleScheduleChange(value, 'scheduleTo')}
                             />
                         </div>
@@ -150,13 +156,13 @@ export default function AchievementSettings({ settings, setSettings }) {
                                 </div>
                             }
                             size='sm'
-                            step={1}
-                            minValue={1}
+                            step={5}
+                            minValue={5}
                             maxValue={720}
                             defaultValue={localSettings.achievementUnlocker.interval}
                             formatOptions={{ style: 'currency', currency: 'USD' }}
                             hideValue
-                            className='w-[410px]'
+                            className='w-[500px]'
                             classNames={{ value: ['text-xs'] }}
                             onChangeEnd={handleSliderChange}
                             onChange={updateLabel}

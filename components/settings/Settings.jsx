@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs } from '@nextui-org/react';
+import GeneralSettings from './GeneralSettings';
 import CardSettings from './CardSettings';
 import AchievementSettings from './AchievementSettings';
 import Logs from './Logs';
@@ -8,7 +9,7 @@ import SettingsMenu from './SettingsMenu';
 import ResetSettings from './ResetSettings';
 import { Time } from '@internationalized/date';
 
-export default function Settings() {
+export default function Settings({ setHasUpdate }) {
     const [settings, setSettings] = useState(null);
     const [version, setVersion] = useState('v0.0.0');
     const [refreshKey, setRefreshKey] = useState(0);
@@ -23,6 +24,10 @@ export default function Settings() {
 
     useEffect(() => {
         const defaultSettings = {
+            general: {
+                disableUpdates: false,
+                clearData: true
+            },
             cardFarming: {
                 listGames: true,
                 allGames: false
@@ -31,13 +36,17 @@ export default function Settings() {
                 idle: true,
                 hidden: false,
                 schedule: false,
-                scheduleFrom: new Time(23, 30),
-                scheduleTo: new Time(5, 0),
+                scheduleFrom: new Time(8, 30),
+                scheduleTo: new Time(23, 0),
                 interval: [30, 130],
             }
         };
         let currentSettings = JSON.parse(localStorage.getItem('settings')) || {};
         let updatedSettings = {
+            general: {
+                ...defaultSettings.general,
+                ...currentSettings.general
+            },
             cardFarming: {
                 ...defaultSettings.cardFarming,
                 ...currentSettings.cardFarming
@@ -70,7 +79,7 @@ export default function Settings() {
                         <div className='flex items-center gap-2'>
                             <ResetSettings setSettings={setSettings} setRefreshKey={setRefreshKey} />
 
-                            <SettingsMenu />
+                            <SettingsMenu setHasUpdate={setHasUpdate} />
                         </div>
                     </div>
 
@@ -83,12 +92,15 @@ export default function Settings() {
                         classNames={{
                             base: 'bg-titlebar rounded-t-sm p-0',
                             tabList: 'gap-0 w-full bg-transparent',
-                            tab: 'px-6 py-3 rounded-none bg-transparent px-4',
+                            tab: 'px-6 py-3 rounded-none bg-transparent px-4 data-[hover-unselected=true]:bg-gray-500 data-[hover-unselected=true]:bg-opacity-5 data-[hover-unselected=true]:opacity-100',
                             tabContent: 'text-xs',
                             cursor: 'bg-base w-full rounded-sm',
                             panel: 'bg-titlebar rounded-sm rounded-tl-none',
                         }}
                     >
+                        <Tab key='general' title='General'>
+                            <GeneralSettings settings={settings} setSettings={setSettings} />
+                        </Tab>
                         <Tab key='card-farming' title='Card Farming'>
                             <CardSettings settings={settings} setSettings={setSettings} />
                         </Tab>

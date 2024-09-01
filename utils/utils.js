@@ -202,7 +202,7 @@ export async function updateLaunchedStats(type) {
     }
 }
 
-function debounce(func, wait) {
+export function debounce(func, wait) {
     let timeout;
     return function executedFunction(...args) {
         const later = () => {

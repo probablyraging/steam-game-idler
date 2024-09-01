@@ -13,6 +13,9 @@ export default function Window() {
     useEffect(() => {
         const checkForUpdates = async () => {
             try {
+                const settings = JSON.parse(localStorage.getItem('settings'));
+                const { disableUpdates } = settings?.general || {};
+                if (disableUpdates) return;
                 const { shouldUpdate } = await checkUpdate();
                 if (shouldUpdate) {
                     setHasUpdate(true);
@@ -26,6 +29,10 @@ export default function Window() {
 
     useEffect(() => {
         const defaultSettings = {
+            general: {
+                disableUpdates: false,
+                clearData: true
+            },
             cardFarming: {
                 listGames: true,
                 allGames: false
@@ -34,8 +41,8 @@ export default function Window() {
                 idle: true,
                 hidden: false,
                 schedule: false,
-                scheduleFrom: new Time(23, 30),
-                scheduleTo: new Time(5, 0),
+                scheduleFrom: new Time(8, 30),
+                scheduleTo: new Time(23, 0),
                 interval: [30, 130],
             }
         };
@@ -60,7 +67,7 @@ export default function Window() {
 
     return (
         <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-[10px] rounded-tl-xl'>
-            <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} />
+            <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} setHasUpdate={setHasUpdate} />
         </div>
     );
 }

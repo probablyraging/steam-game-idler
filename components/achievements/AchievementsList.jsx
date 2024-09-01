@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import { unlockAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
+import { Tooltip } from '@nextui-org/react';
 
 export default function AchievementsList({ appId, appName, achievementsUnavailable, achievementList, userGameAchievementsMap, percentageMap }) {
     const handleUnlock = async (achievementName, type) => {
@@ -38,7 +39,11 @@ export default function AchievementsList({ appId, appName, achievementsUnavailab
                                     alt={`${item.name} image`}
                                 />
                                 <div className='flex flex-col w-full'>
-                                    <p className='font-bold text-xs'>{item.displayName}</p>
+                                    <Tooltip size='sm' closeDelay={0} content={<p className='font-semibold'>{item.name}</p>}>
+                                        <p className='font-bold text-xs w-fit'>
+                                            {item.displayName}
+                                        </p>
+                                    </Tooltip>
                                     <div className='w-full'>
                                         <p className='text-xs text-gray-600 dark:text-gray-400'>{item.description || 'Hidden achievement'}</p>
                                     </div>
