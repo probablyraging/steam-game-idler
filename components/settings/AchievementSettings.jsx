@@ -146,7 +146,7 @@ export default function AchievementSettings({ settings, setSettings }) {
 
                         <Slider
                             label={
-                                <div className='flex justify-between items-center gap-1 min-w-[350px]'>
+                                <div className='flex justify-between items-center gap-1 min-w-[500px]'>
                                     <p className='text-xs'>
                                         Unlock interval
                                     </p>
