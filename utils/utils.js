@@ -1,5 +1,6 @@
 import moment from "moment";
 import { invoke } from '@tauri-apps/api/tauri';
+import { Time } from "@internationalized/date";
 
 let idleCounter = 0;
 let achievementCounter = 0;
@@ -211,4 +212,16 @@ function debounce(func, wait) {
         clearTimeout(timeout);
         timeout = setTimeout(later, wait);
     };
+}
+
+export function isOutsideSchedule(scheduleFrom, scheduleTo) {
+    const now = new Date();
+    const currentTime = new Time(now.getHours(), now.getMinutes());
+    const scheduleFromTime = new Time(scheduleFrom.hour, scheduleFrom.minute);
+    const scheduleToTime = new Time(scheduleTo.hour, scheduleTo.minute);
+    if (scheduleToTime.compare(scheduleFromTime) < 0) {
+        return currentTime.compare(scheduleFromTime) >= 0 || currentTime.compare(scheduleToTime) < 0;
+    } else {
+        return currentTime.compare(scheduleFromTime) >= 0 && currentTime.compare(scheduleToTime) < 0;
+    }
 }

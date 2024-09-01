@@ -10,6 +10,7 @@
         "tauri": "tauri"
     },
     "dependencies": {
+        "@internationalized/date": "^3.5.5",
         "@nextui-org/react": "^2.3.6",
         "@tauri-apps/api": "^1.5.6",
         "discord-rpc": "^4.0.1",

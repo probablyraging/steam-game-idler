@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 export default function AchievementsList({ appId, appName, achievementsUnavailable, achievementList, userGameAchievementsMap, percentageMap }) {
     const handleUnlock = async (achievementName, type) => {
         const status = await unlockAchievement(appId, achievementName, false);
-        console.log(status);
         if (!status.error) {
             toast.success(`${type} ${achievementName} for ${appName}`, { autoClose: 1500 });
         } else {

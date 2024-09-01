@@ -3,6 +3,7 @@ import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
 import UpdateScreen from './UpdateScreen';
 import { logEvent, updateLaunchedStats } from '@/utils/utils';
+import { Time } from '@internationalized/date';
 import Setup from './Setup';
 
 export default function Window() {
@@ -32,6 +33,9 @@ export default function Window() {
             achievementUnlocker: {
                 idle: true,
                 hidden: false,
+                schedule: false,
+                scheduleFrom: new Time(23, 30),
+                scheduleTo: new Time(5, 0),
                 interval: [30, 130],
             }
         };

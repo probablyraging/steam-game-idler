@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import StopButton from './StopButton';
 import { Button, Spinner } from '@nextui-org/react';
-import { logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
+import { isOutsideSchedule, logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
 import { IoCheckmark } from 'react-icons/io5';
 
 export default function AchievementUnlocker({ setActivePage }) {
@@ -13,6 +13,7 @@ export default function AchievementUnlocker({ setActivePage }) {
     const [gamesWithAchievements, setGamesWithAchievements] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
     const [countdownTimer, setCountdownTimer] = useState('');
+    const [isWaitingForSchedule, setIsWaitingForSchedule] = useState(false);
 
     useEffect(() => {
         const startAchievementUnlocker = async () => {
@@ -33,10 +34,10 @@ export default function AchievementUnlocker({ setActivePage }) {
                 const { achievements, game } = await fetchAchievements(achievementUnlocker[0], settings);
 
                 if (achievements.length > 0) {
-                    await unlockAchievements(achievements, settings);
+                    await unlockAchievements(achievements, settings, game);
+                } else {
+                    removeGameFromUnlockerList(game.game.id);
                 }
-
-                removeGameFromUnlockerList(game.game.id);
 
                 if (isMountedRef.current) {
                     startAchievementUnlocker();
@@ -122,15 +123,41 @@ export default function AchievementUnlocker({ setActivePage }) {
         }
     };
 
-    const unlockAchievements = async (achievements, settings) => {
-        const { interval, idle } = settings.achievementUnlocker;
+    const waitUntilInSchedule = async (scheduleFrom, scheduleTo) => {
+        setIsWaitingForSchedule(true);
+        while (isOutsideSchedule(scheduleFrom, scheduleTo)) {
+            if (!isMountedRef.current) {
+                setIsWaitingForSchedule(false);
+                throw new DOMException('Achievement unlocking stopped due to being outside of the scheduled time', 'Stop');
+            }
+            await new Promise(resolve => setTimeout(resolve, 60000));
+        }
+        setIsWaitingForSchedule(false);
+    };
 
-        if (idle) {
-            startIdler(achievements[0].appId, achievements[0].gameName, false);
+    const unlockAchievements = async (achievements, settings, game) => {
+        const { interval, idle, schedule, scheduleFrom, scheduleTo } = settings.achievementUnlocker;
+
+        let isGameIdling = false;
+
+        if (idle && (schedule && !isOutsideSchedule(scheduleFrom, scheduleTo))) {
+            await startIdler(achievements[0].appId, achievements[0].gameName, false);
+            isGameIdling = true;
         }
 
         for (const achievement of achievements) {
             if (isMountedRef.current) {
+                if (schedule && isOutsideSchedule(scheduleFrom, scheduleTo)) {
+                    if (game) {
+                        await stopIdler(game.game.id, game.game.name);
+                        isGameIdling = false;
+                    }
+                    await waitUntilInSchedule(scheduleFrom, scheduleTo);
+                } else {
+                    if (!isGameIdling && idle) {
+                        await startIdler(achievements[0].appId, achievements[0].gameName, false);
+                    }
+                }
                 unlockAchievement(achievement.appId, achievement.name, true);
                 logEvent(`[Achievement Unlocker - Auto] Unlocked ${achievement.name} for ${achievement.gameName}`);
                 setAchievementCount(prevCount => Math.max(prevCount - 1, 0));
@@ -258,11 +285,21 @@ export default function AchievementUnlocker({ setActivePage }) {
                                 </React.Fragment>
                             )}
 
-                            {!isComplete && (
-                                <p className='text-sm'>
-                                    Next unlock in <span className='font-bold text-sgi'>{countdownTimer}</span>
+                            {isWaitingForSchedule ? (
+                                <p className='text-sm text-yellow-400'>
+                                    Achievement unlocking paused due to being outside of the scheduled time and will resume again once inside of scheduled time
                                 </p>
+                            ) : (
+                                <React.Fragment>
+                                    {!isComplete && (
+                                        <p className='text-sm'>
+                                            Next unlock in <span className='font-bold text-sgi'>{countdownTimer}</span>
+                                        </p>
+                                    )}
+                                </React.Fragment>
                             )}
+
+
                         </React.Fragment>
                     )}
                 </div>

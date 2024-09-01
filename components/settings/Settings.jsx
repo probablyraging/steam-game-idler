@@ -6,6 +6,7 @@ import Logs from './Logs';
 import { getVersion } from '@tauri-apps/api/app';
 import SettingsMenu from './SettingsMenu';
 import ResetSettings from './ResetSettings';
+import { Time } from '@internationalized/date';
 
 export default function Settings() {
     const [settings, setSettings] = useState(null);
@@ -29,6 +30,9 @@ export default function Settings() {
             achievementUnlocker: {
                 idle: true,
                 hidden: false,
+                schedule: false,
+                scheduleFrom: new Time(23, 30),
+                scheduleTo: new Time(5, 0),
                 interval: [30, 130],
             }
         };
