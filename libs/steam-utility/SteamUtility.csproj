@@ -15,7 +15,7 @@
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <PlatformTarget>x86</PlatformTarget>
         <DebugSymbols>false</DebugSymbols>
-        <IntermediateOutputPath>$(OutputPath)temp\</IntermediateOutputPath>
+        <IntermediateOutputPath>..\..\libs\temp\</IntermediateOutputPath>
     </PropertyGroup>
     <!-- References -->
     <ItemGroup>

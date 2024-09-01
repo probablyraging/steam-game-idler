@@ -9,7 +9,7 @@
     },
     "package": {
         "productName": "Steam Game Idler",
-        "version": "1.4.5"
+        "version": "1.4.6"
     },
     "tauri": {
         "allowlist": {
@@ -60,7 +60,7 @@
                 "icons/128x128@2x.png",
                 "icons/icon.ico"
             ],
-            "identifier": "com.probablyraging.steam-game-idler",
+            "identifier": "com.ProbablyRaging.steam-game-idler",
             "longDescription": "Idle any game in your Steam library",
             "shortDescription": "Steam Game Idler",
             "macOS": {

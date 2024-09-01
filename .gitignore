@@ -45,3 +45,4 @@ next-env.d.ts
 /src-tauri/libs
 /idler-csharp/bin
 /idler-csharp/obj
+/libs/temp
