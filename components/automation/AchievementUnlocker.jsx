@@ -156,6 +156,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 } else {
                     if (!isGameIdling && idle) {
                         await startIdler(achievements[0].appId, achievements[0].gameName, false);
+                        isGameIdling = true;
                     }
                 }
                 unlockAchievement(achievement.appId, achievement.name, true);
