@@ -36,6 +36,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 } else {
                     const res = await invoke('get_games_list', { steamId: steamId });
                     const gameList = res.response.games;
+                    console.log(gameList);
                     setGameList(gameList);
                     setVisibleGames(gameList.slice(0, gamesPerPage));
                     sessionStorage.setItem('gamesListCache', JSON.stringify(gameList));
@@ -56,11 +57,11 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
             } else if (sortStyle === 'z-a') {
                 sortedAndFilteredGames.sort((a, b) => b.name.localeCompare(a.name));
             } else if (sortStyle === '1-0') {
-                sortedAndFilteredGames.sort((a, b) => b.minutes - a.minutes);
+                sortedAndFilteredGames.sort((a, b) => b.playtime_forever - a.playtime_forever);
             } else if (sortStyle === '0-1') {
-                sortedAndFilteredGames.sort((a, b) => a.minutes - b.minutes);
+                sortedAndFilteredGames.sort((a, b) => a.playtime_forever - b.playtime_forever);
             } else if (sortStyle === 'recent') {
-                sortedAndFilteredGames.sort((a, b) => b.lastPlayedTimestamp - a.lastPlayedTimestamp);
+                sortedAndFilteredGames.sort((a, b) => b.rtime_last_played - a.rtime_last_played);
             } else if (sortStyle === 'favorite') {
                 const favorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
                 sortedAndFilteredGames = favorites.map(JSON.parse);

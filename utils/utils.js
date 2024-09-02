@@ -27,6 +27,8 @@ export async function startIdler(appId, appName, quiet = false) {
 };
 
 export async function stopIdler(appId, appName) {
+    console.log(appId);
+
     try {
         await invoke('stop_idle', { appId: appId.toString() });
         logEvent(`[Idling] Stopped ${appName}`);

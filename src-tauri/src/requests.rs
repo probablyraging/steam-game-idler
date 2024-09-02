@@ -28,7 +28,7 @@ pub async fn user_summary(steam_id: String) -> Result<Value, String> {
 pub async fn games_list(steam_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url = format!(
-        "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={}&steamid={}&include_appinfo=true&include_played_free_games=true&include_free_sub=true&skip_unvetted_apps=false",
+        "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={}&steamid={}&include_appinfo=true&include_played_free_games=true&include_free_sub=true&skip_unvetted_apps=false&include_extended_appinfo=true",
         key, steam_id
     );
 
