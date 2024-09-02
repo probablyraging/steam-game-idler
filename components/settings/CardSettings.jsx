@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ExtLink from '../ExtLink';
 import { Button, Checkbox, Input, Skeleton } from '@nextui-org/react';
 import { logEvent } from '@/utils/utils';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export default function CardSettings({ settings, setSettings }) {
     let [isLoading, setIsLoading] = useState(false);
@@ -20,32 +21,34 @@ export default function CardSettings({ settings, setSettings }) {
     }, [settings]);
 
     useEffect(() => {
-        setIsLoading(true);
-        const cookies = JSON.parse(localStorage.getItem('steamCookies'));
-        if (cookies && cookies.sid && cookies.sls) {
-            setHasCookies(true);
-            setSidValue(cookies.sid);
-            setSlsValue(cookies.sls);
+        const validateSession = async () => {
+            try {
+                setIsLoading(true);
+                const cookies = JSON.parse(localStorage.getItem('steamCookies'));
 
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'validate-session', sid: cookies.sid, sls: cookies.sls }),
-            }).then(async (res) => {
-                if (res.status !== 500) {
-                    const data = await res.json();
-                    setSteamUser(data.steamUser);
-                    setLoginState(true);
-                    logEvent(`[Settings - Card Farming] Logged in as ${data.steamUser}`);
+                if (cookies && cookies.sid && cookies.sls) {
+                    setHasCookies(true);
+                    setSidValue(cookies.sid);
+                    setSlsValue(cookies.sls);
+
+                    const res = await invoke('validate_session', { sid: cookies.sid, sls: cookies.sls });
+                    if (res.user) {
+                        setSteamUser(res.user);
+                        setLoginState(true);
+                        logEvent(`[Settings - Card Farming] Logged in as ${res.user}`);
+                    } else {
+                        setValidationError(true);
+                        logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
+                    }
+                    setIsLoading(false);
                 } else {
-                    setValidationError(true);
-                    logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
+                    setIsLoading(false);
                 }
-                setIsLoading(false);
-            });
-        } else {
-            setIsLoading(false);
-        }
+            } catch (error) {
+                console.error('Failed to check for updates:', error);
+            }
+        };
+        validateSession();
     }, []);
 
     const handleSidChange = (e) => {
@@ -60,27 +63,21 @@ export default function CardSettings({ settings, setSettings }) {
         if (sidValue.length > 0 && slsValue.length > 0) {
             setIsLoading(true);
 
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'validate-session', sid: sidValue, sls: slsValue }),
-            }).then(async (res) => {
-                if (res.status !== 500) {
-                    const data = await res.json();
-                    setSteamUser(data.steamUser);
-                    setLoginState(true);
-                    localStorage.setItem('steamCookies', JSON.stringify({ sid: sidValue, sls: slsValue }));
-                    setHasCookies(true);
-                    logEvent(`[Settings - Card Farming] Logged in as ${data.steamUser}`);
-                } else {
-                    setValidationError(true);
-                    logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
-                    setTimeout(() => {
-                        setValidationError(false);
-                    }, 4000);
-                }
-                setIsLoading(false);
-            });
+            const res = await invoke('validate_session', { sid: sidValue, sls: slsValue });
+            if (res.user) {
+                setSteamUser(res.user);
+                setLoginState(true);
+                localStorage.setItem('steamCookies', JSON.stringify({ sid: sidValue, sls: slsValue }));
+                setHasCookies(true);
+                logEvent(`[Settings - Card Farming] Logged in as ${res.user}`);
+            } else {
+                setValidationError(true);
+                logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
+                setTimeout(() => {
+                    setValidationError(false);
+                }, 4000);
+            }
+            setIsLoading(false);
         }
     };
 

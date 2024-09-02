@@ -1,5 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+pub mod requests;
+
 use std::env;
 use chrono::Local;
 use std::path::PathBuf;
@@ -7,8 +9,17 @@ use std::os::windows::process::CommandExt;
 use std::process::Stdio;
 use std::fs::{OpenOptions, create_dir_all};
 use std::io::{BufRead, BufReader, Write, Seek, SeekFrom};
+use serde_json::Value;
+use requests::*;
 
 fn main() {
+    if cfg!(debug_assertions) {
+        dotenv::from_filename(".env.dev").unwrap().load();
+    }else{
+        let prod_env = include_str!("../../.env.prod");
+        let result = dotenv::from_read(prod_env.as_bytes()).unwrap();
+        result.load();
+    }
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             get_file_path,
@@ -20,10 +31,58 @@ fn main() {
             update_stat,
             log_event,
             get_app_log_dir,
-            check_steam_status
+            check_steam_status,
+            get_user_summary,
+            get_games_list,
+            get_achievement_data,
+            get_achievement_unlocker_data,
+            validate_session,
+            get_drops_remaining,
+            get_games_with_drops,
+            get_game_details
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
+}
+
+#[tauri::command]
+async fn get_user_summary(steam_id: String) -> Result<Value, String> {
+    user_summary(steam_id).await
+}
+
+#[tauri::command]
+async fn get_games_list(steam_id: String) -> Result<Value, String> {
+    games_list(steam_id).await
+}
+
+#[tauri::command]
+async fn get_achievement_data(steam_id: String, app_id: String) -> Result<Value, String> {
+    achievement_data(steam_id, app_id).await
+}
+
+#[tauri::command]
+async fn get_achievement_unlocker_data(steam_id: String, app_id: String) -> Result<Value, String> {
+    achievement_unlocker_data(steam_id, app_id).await
+}
+
+#[tauri::command]
+async fn validate_session(sid: String, sls: String) -> Result<Value, String> {
+    validate(sid, sls).await
+}
+
+#[tauri::command]
+async fn get_drops_remaining(sid: String, sls: String, steam_id: String, app_id: String) -> Result<Value, String> {
+    drops_remaining(sid, sls, steam_id, app_id).await
+}
+
+#[tauri::command]
+async fn get_games_with_drops(sid: String, sls: String, steam_id: String) -> Result<Value, String> {
+    games_with_drops(sid, sls, steam_id).await
+}
+
+#[tauri::command]
+async fn get_game_details(app_id: String) -> Result<Value, String> {
+    game_details(app_id).await
 }
 
 #[tauri::command]

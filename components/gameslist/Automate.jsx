@@ -17,12 +17,8 @@ export default function Automate({ setActivePage }) {
         if (!steamCookies.sid || !steamCookies.sls) {
             return toast.error('Missing credentials in Settings');
         }
-        const response = await fetch('https://apibase.vercel.app/api/route', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ route: 'validate-session', sid: steamCookies?.sid, sls: steamCookies?.sls }),
-        });
-        if (response.status === 500) {
+        const res = await invoke('validate_session', { sid: steamCookies?.sid, sls: steamCookies?.sls });
+        if (!res.user) {
             localStorage.removeItem('steamCookies');
             return toast.error('Steam credentials need to be updated');
         }

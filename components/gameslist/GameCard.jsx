@@ -16,17 +16,17 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
     }, 100);
 
     const handleIdle = async (item) => {
-        const idleStatus = await startIdler(item.game.id, item.game.name);
+        const idleStatus = await startIdler(item.appid, item.name);
         if (idleStatus) {
-            toast.success(`Started idling ${item.game.name}`);
+            toast.success(`Started idling ${item.name}`);
         } else {
             toast.error('Steam is not running');
         }
     };
 
     const viewAchievments = (item) => {
-        setAppId(item.game.id);
-        setAppName(item.game.name);
+        setAppId(item.appid);
+        setAppName(item.name);
         setShowAchievements(!showAchievements);
     };
 
@@ -38,7 +38,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
             localStorage.setItem('favorites', JSON.stringify(favorites));
             const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
             setFavorites(newFavorites.map(JSON.parse));
-            logEvent(`[Favorites] Added ${item.game.name} (${item.game.id})`);
+            logEvent(`[Favorites] Added ${item.name} (${item.appid})`);
         }, 500);
     };
 
@@ -46,11 +46,11 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
         e.stopPropagation();
         setTimeout(() => {
             const favorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
-            const updatedFavorites = favorites.filter(arr => JSON.parse(arr).game.id !== item.game.id);
+            const updatedFavorites = favorites.filter(arr => JSON.parse(arr).appid !== item.appid);
             localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
             const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
             setCardFarming(newFavorites.map(JSON.parse));
-            logEvent(`[Favorites] Removed ${item.game.name} (${item.game.id})`);
+            logEvent(`[Favorites] Removed ${item.name} (${item.appid})`);
         }, 500);
     };
 
@@ -62,7 +62,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
             localStorage.setItem('cardFarming', JSON.stringify(cardFarming));
             const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
             setCardFarming(newCardFarming.map(JSON.parse));
-            logEvent(`[Card Farming] Added ${item.game.name} (${item.game.id})`);
+            logEvent(`[Card Farming] Added ${item.name} (${item.appid})`);
         }, 500);
     };
 
@@ -70,11 +70,11 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
         e.stopPropagation();
         setTimeout(() => {
             const cardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
-            const updatedCardFarming = cardFarming.filter(arr => JSON.parse(arr).game.id !== item.game.id);
+            const updatedCardFarming = cardFarming.filter(arr => JSON.parse(arr).appid !== item.appid);
             localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
             const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
             setCardFarming(newCardFarming.map(JSON.parse));
-            logEvent(`[Card Farming] Removed ${item.game.name} (${item.game.id})`);
+            logEvent(`[Card Farming] Removed ${item.name} (${item.appid})`);
         }, 500);
     };
 
@@ -86,7 +86,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
             localStorage.setItem('achievementUnlocker', JSON.stringify(achievementUnlocker));
             const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
             setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
-            logEvent(`[Achievement Unlocker] Added ${item.game.name} (${item.game.id})`);
+            logEvent(`[Achievement Unlocker] Added ${item.name} (${item.appid})`);
         }, 500);
     };
 
@@ -94,11 +94,11 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
         e.stopPropagation();
         setTimeout(() => {
             const achievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
-            const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).game.id !== item.game.id);
+            const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== item.appid);
             localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
             const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
             setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
-            logEvent(`[Achievement Unlocker] Removed ${item.game.name} (${item.game.id})`);
+            logEvent(`[Achievement Unlocker] Removed ${item.name} (${item.appid})`);
         }, 500);
     };
 
@@ -108,13 +108,13 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
         <React.Fragment>
             <div className='grid grid-cols-5 2xl:grid-cols-7 gap-4'>
                 {gameList && gameList.map((item) => (
-                    <div key={item.game.id} className='relative group'>
+                    <div key={item.appid} className='relative group'>
                         <div className='aspect-[460/215] rounded-lg overflow-hidden transition-transform duration-200 ease-in-out transform group-hover:scale-105'>
                             <Image
-                                src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.game.id}/header.jpg`}
+                                src={`https://cdn.cloudflare.steamstatic.com/steam/apps/${item.appid}/header.jpg`}
                                 width={460}
                                 height={215}
-                                alt={`${item.game.name} image`}
+                                alt={`${item.name} image`}
                                 priority={true}
                             />
                             <div className='absolute flex items-center justify-evenly inset-0 bg-black bg-opacity-0 dark:bg-opacity-20 group-hover:bg-opacity-40 dark:group-hover:bg-opacity-50 transition-opacity duration-200'>

@@ -3,32 +3,31 @@ import { Button, Modal, ModalContent, ModalBody, useDisclosure, Input, ModalFoot
 import { IoAdd } from 'react-icons/io5';
 import { FaInfoCircle } from 'react-icons/fa';
 import { logEvent } from '@/utils/utils';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export default function ManualAdd({ setFavorites }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleIdle = async (onClose) => {
+    const handleAdd = async (onClose) => {
         setIsLoading(true);
-        fetch('https://apibase.vercel.app/api/route', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ route: 'game-details', appId: inputValue }),
-        }).then(async res => {
-            if (res.status !== 500) {
-                const data = await res.json();
-                const item = { game: { id: data.steam_appid, name: data.name } };
-                let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-                favorites.push(JSON.stringify(item));
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-                const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
-                setFavorites(newFavorites.map(JSON.parse));
-                logEvent(`[Favorites] Added ${item.game.name} (${item.game.id})`);
-                setIsLoading(false);
-                onClose();
-            }
-        });
+        try {
+            const res = await invoke('get_game_details', { appId: inputValue });
+            const data = res[inputValue].data;
+            const item = { appid: data.steam_appid, name: data.name };
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites.push(JSON.stringify(item));
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
+            setFavorites(newFavorites.map(JSON.parse));
+            logEvent(`[Favorites] Added ${item.name} (${item.appid})`);
+            setIsLoading(false);
+            onClose();
+        } catch (error) {
+            console.error('Failed to check for updates:', error);
+            setIsLoading(false);
+        }
     };
 
     const handleChange = (e) => {
@@ -94,7 +93,7 @@ export default function ManualAdd({ setFavorites }) {
                                     isLoading={isLoading}
                                     isDisabled={inputValue.length === 0}
                                     className='bg-sgi max-h-[25px] font-semibold text-offwhite rounded-sm'
-                                    onClick={() => handleIdle(onClose)}
+                                    onClick={() => handleAdd(onClose)}
                                 >
                                     Add
                                 </Button>

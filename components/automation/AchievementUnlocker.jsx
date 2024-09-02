@@ -3,6 +3,7 @@ import StopButton from './StopButton';
 import { Button, Spinner } from '@nextui-org/react';
 import { isOutsideSchedule, logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
 import { IoCheckmark } from 'react-icons/io5';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export default function AchievementUnlocker({ setActivePage }) {
     const isMountedRef = useRef(true);
@@ -36,7 +37,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 if (achievements.length > 0) {
                     await unlockAchievements(achievements, settings, game);
                 } else {
-                    removeGameFromUnlockerList(game.game.id);
+                    removeGameFromUnlockerList(game.appid);
                 }
 
                 if (isMountedRef.current) {
@@ -63,34 +64,18 @@ export default function AchievementUnlocker({ setActivePage }) {
         const userSummary = JSON.parse(localStorage.getItem('userSummary')) || {};
 
         try {
-            setCurrentGame({ appId: game.game.id, name: game.game.name });
+            setCurrentGame({ appId: game.appid, name: game.name });
 
-            const [userAchievementsResponse, gameAchievementsResponse, gameSchemaResponse] = await Promise.all([
-                fetch('https://apibase.vercel.app/api/route', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ route: 'user-achievements', steamId: userSummary.steamId, appId: game.game.id }),
-                }),
-                fetch('https://apibase.vercel.app/api/route', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ route: 'game-achievement-percentage', appId: game.game.id }),
-                }),
-                fetch('https://apibase.vercel.app/api/route', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ route: 'game-schema', appId: game.game.id }),
-                })
-            ]);
+            const res = await invoke('get_achievement_unlocker_data', { steamId: userSummary.steamId, appId: game.appid.toString() });
 
-            if (userAchievementsResponse.status === 500 || gameAchievementsResponse.status === 500) {
+            if (!res.userAchievements || !res.percentages) {
                 setHasPrivateGames(true);
                 return { achievements: [], game };
             }
 
-            const userAchievements = await userAchievementsResponse.json();
-            const gameAchievements = await gameAchievementsResponse.json();
-            const gameSchema = await gameSchemaResponse.json();
+            const userAchievements = res.userAchievements.playerstats;
+            const gameAchievements = res.percentages.achievementpercentages.achievements;
+            const gameSchema = res.schema.game;
 
             const achievements = userAchievements.achievements
                 .filter(achievement => {
@@ -104,11 +89,11 @@ export default function AchievementUnlocker({ setActivePage }) {
                     }
                 })
                 .map(achievement => {
-                    const percentageData = gameAchievements.find(a => a.name === achievement.name);
+                    const percentageData = gameAchievements.find(a => a.name === achievement.apiname);
                     return {
-                        appId: game.game.id,
-                        name: achievement.name,
-                        gameName: userAchievements.game,
+                        appId: game.appid,
+                        name: achievement.apiname,
+                        gameName: userAchievements.gameName,
                         percentage: percentageData ? percentageData.percent : null
                     };
                 })
@@ -149,7 +134,7 @@ export default function AchievementUnlocker({ setActivePage }) {
             if (isMountedRef.current) {
                 if (schedule && isOutsideSchedule(scheduleFrom, scheduleTo)) {
                     if (game) {
-                        await stopIdler(game.game.id, game.game.name);
+                        await stopIdler(game.appid, game.name);
                         isGameIdling = false;
                     }
                     await waitUntilInSchedule(scheduleFrom, scheduleTo);
@@ -171,7 +156,7 @@ export default function AchievementUnlocker({ setActivePage }) {
 
     const removeGameFromUnlockerList = (gameId) => {
         const achievementUnlocker = JSON.parse(localStorage.getItem('achievementUnlocker')) || [];
-        const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).game.id !== gameId);
+        const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== gameId);
         localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
     };
 

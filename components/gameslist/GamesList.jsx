@@ -3,6 +3,7 @@ import PageHeader from './PageHeader';
 import GameCard from './GameCard';
 import Private from './Private';
 import Loader from '../Loader';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export default function GamesList({ steamId, inputValue, isQuery, setActivePage, setAppId, setAppName, showAchievements, setShowAchievements }) {
     const scrollContainerRef = useRef(null);
@@ -19,41 +20,41 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
     const gamesPerPage = 50;
 
     useEffect(() => {
-        setIsLoading(true);
-        const sortStyle = localStorage.getItem('sortStyle');
-        if (sortStyle) setSortStyle(sortStyle);
-        const cachedGameList = sessionStorage.getItem('gamesListCache');
-        if (cachedGameList && cachedGameList !== null) {
-            const parsedGameList = JSON.parse(cachedGameList);
-            setGameList(parsedGameList);
-            setVisibleGames(parsedGameList.slice(0, gamesPerPage));
-            setTimeout(() => {
-                setIsLoading(false);
-            }, 100);
-        } else {
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'user-games-list', steamId: steamId }),
-            }).then(async (res) => {
-                if (res.status !== 500) {
-                    const gameList = await res.json();
+        const getGamesList = async () => {
+            try {
+                setIsLoading(true);
+                const sortStyle = localStorage.getItem('sortStyle');
+                if (sortStyle) setSortStyle(sortStyle);
+                const cachedGameList = sessionStorage.getItem('gamesListCache');
+                if (cachedGameList && cachedGameList !== null) {
+                    const parsedGameList = JSON.parse(cachedGameList);
+                    setGameList(parsedGameList);
+                    setVisibleGames(parsedGameList.slice(0, gamesPerPage));
+                    setTimeout(() => {
+                        setIsLoading(false);
+                    }, 100);
+                } else {
+                    const res = await invoke('get_games_list', { steamId: steamId });
+                    const gameList = res.response.games;
                     setGameList(gameList);
                     setVisibleGames(gameList.slice(0, gamesPerPage));
                     sessionStorage.setItem('gamesListCache', JSON.stringify(gameList));
+                    setIsLoading(false);
                 }
-                setIsLoading(false);
-            });
-        }
+            } catch (error) {
+                console.error('Errorin getGamesList:', error);
+            }
+        };
+        getGamesList();
     }, [steamId, refreshKey]);
 
     useEffect(() => {
         if (gameList) {
             let sortedAndFilteredGames = [...gameList];
             if (sortStyle === 'a-z') {
-                sortedAndFilteredGames.sort((a, b) => a.game.name.localeCompare(b.game.name));
+                sortedAndFilteredGames.sort((a, b) => a.name.localeCompare(b.name));
             } else if (sortStyle === 'z-a') {
-                sortedAndFilteredGames.sort((a, b) => b.game.name.localeCompare(a.game.name));
+                sortedAndFilteredGames.sort((a, b) => b.name.localeCompare(a.name));
             } else if (sortStyle === '1-0') {
                 sortedAndFilteredGames.sort((a, b) => b.minutes - a.minutes);
             } else if (sortStyle === '0-1') {
@@ -72,7 +73,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
             }
             if (isQuery && inputValue && inputValue.trim().length > 0) {
                 sortedAndFilteredGames = sortedAndFilteredGames.filter(item =>
-                    item.game.name.toLowerCase().includes(inputValue.toLowerCase().trim())
+                    item.name.toLowerCase().includes(inputValue.toLowerCase().trim())
                 );
             }
             setFilteredGames(sortedAndFilteredGames);

@@ -6,6 +6,7 @@ import BulkButtons from './BulkButtons';
 import AchievementsList from './AchievementsList';
 import { Tab, Tabs } from '@nextui-org/react';
 import StatisticsList from './StatisticsList';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export default function Achievements({ steamId, appId, appName, setShowAchievements }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -22,46 +23,25 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
     const [currentTab, setCurrentTab] = useState(null);
 
     useEffect(() => {
-        setIsLoading(true);
-        Promise.all([
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'game-schema', appId: appId }),
-            }).then(async res => {
-                if (res.status !== 500) {
-                    const data = await res.json();
-                    setAchievementList(data.availableGameStats?.achievements);
-                    setStatisticsList(data.availableGameStats?.stats);
-                    if (!data.availableGameStats?.achievements) {
-                        setAchievementsUnavailable(true);
-                    };
-                    if (!data.availableGameStats?.stats) {
-                        setStatisticsUnavailable(true);
-                    };
-                }
-            }),
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'user-game-stats', steamId: steamId, appId: appId }),
-            }).then(async res => {
-                if (res.status !== 500) {
-                    const data = await res.json();
-                    setUserGameStats(data.playerstats);
-                }
-            }),
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'game-achievement-percentage', appId: appId }),
-            }).then(async res => {
-                if (res.status !== 500) {
-                    const data = await res.json();
-                    setGameAchievementsPercentages(data);
-                }
-            })
-        ]).finally(() => setIsLoading(false));
+        const getAchievementData = async () => {
+            try {
+                const res = await invoke('get_achievement_data', { steamId: steamId, appId: appId.toString() });
+                setAchievementList(res.schema.game?.availableGameStats?.achievements || []);
+                setStatisticsList(res.schema.game?.availableGameStats?.stats || []);
+                setUserGameStats(res.userStats?.playerstats);
+                setGameAchievementsPercentages(res.percentages?.achievementpercentages?.achievements || []);
+                if (!res.schema.game?.availableGameStats?.achievements) {
+                    setAchievementsUnavailable(true);
+                };
+                if (!res.schema.game?.availableGameStats?.stats) {
+                    setStatisticsUnavailable(true);
+                };
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error is getAchievementData:', error);
+            }
+        };
+        getAchievementData();
     }, [steamId, appId]);
 
     useEffect(() => {

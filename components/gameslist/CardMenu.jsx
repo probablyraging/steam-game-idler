@@ -33,7 +33,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                     >
                         <p className='text-xs'>View achievements</p>
                     </DropdownItem>
-                    {favorites.some(arr => arr.game.id === item.game.id) ? (
+                    {favorites.some(arr => arr.appid === item.appid) ? (
                         <DropdownItem
                             className='rounded'
                             key='fav-rem'
@@ -54,7 +54,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             <p className='text-xs'>Add to favorites</p>
                         </DropdownItem>
                     )}
-                    {cardFarming.some(arr => arr.game.id === item.game.id) ? (
+                    {cardFarming.some(arr => arr.appid === item.appid) ? (
                         <DropdownItem
                             className='rounded'
                             key='cf-rem'
@@ -75,7 +75,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             <p className='text-xs'>Add to card farming</p>
                         </DropdownItem>
                     )}
-                    {achievementUnlocker.some(arr => arr.game.id === item.game.id) ? (
+                    {achievementUnlocker.some(arr => arr.appid === item.appid) ? (
                         <DropdownItem
                             className='rounded'
                             key='au-rem'

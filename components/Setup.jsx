@@ -14,19 +14,23 @@ export default function Setup({ setUserSummary }) {
     const [steamId, setSteamId] = useState(null);
 
     useEffect(() => {
+        const getUserSummary = async () => {
+            try {
+                const res = await invoke('get_user_summary', { steamId: steamId });
+                const userSummary = {
+                    steamId: res.response.players[0].steamid,
+                    personaName: res.response.players[0].personaname,
+                    avatar: res.response.players[0].avatar
+                };
+                localStorage.setItem('userSummary', JSON.stringify(userSummary));
+                setUserSummary(userSummary);
+                setIsLoading(false);
+            } catch (error) {
+                console.error('Error in getUserSummary:', error);
+            }
+        };
         if (steamId) {
-            fetch('https://apibase.vercel.app/api/route', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ route: 'user-summary', uid: steamId }),
-            }).then(async res => {
-                if (res.status !== 500) {
-                    setIsLoading(false);
-                    const userSummary = await res.json();
-                    localStorage.setItem('userSummary', JSON.stringify(userSummary));
-                    setUserSummary(userSummary);
-                }
-            });
+            getUserSummary();
         }
     }, [steamId]);
 
