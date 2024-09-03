@@ -70,18 +70,18 @@ export default function AchievementUnlocker({ setActivePage }) {
 
             const res = await invoke('get_achievement_unlocker_data', { steamId: userSummary.steamId, appId: game.appid.toString() });
 
-            if (!res.userAchievements) {
+            const userAchievements = res?.userAchievements?.playerstats;
+            const gameAchievements = res?.percentages?.achievementpercentages?.achievements;
+            const gameSchema = res?.schema?.game;
+
+            if (!userAchievements) {
                 setHasPrivateGames(true);
                 return { achievements: [], game };
             }
 
-            if (!res.gameAchievements || !res.percentages) {
+            if (!gameAchievements || !gameSchema) {
                 return { achievements: [], game };
             }
-
-            const userAchievements = res.userAchievements.playerstats;
-            const gameAchievements = res.percentages.achievementpercentages.achievements;
-            const gameSchema = res.schema.game;
 
             const achievements = userAchievements.achievements
                 .filter(achievement => {
