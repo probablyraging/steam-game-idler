@@ -46,6 +46,18 @@ export default function GeneralSettings({ settings, setSettings }) {
         <React.Fragment>
             <div className='flex flex-col gap-4 p-2'>
                 <Checkbox
+                    name='stealthIdle'
+                    isSelected={localSettings?.general?.stealthIdle}
+                    onChange={handleCheckboxChange}
+                >
+                    <div className='flex items-center gap-1'>
+                        <p className='text-xs'>
+                            Stealth idle windows
+                        </p>
+                    </div>
+                </Checkbox>
+
+                <Checkbox
                     name='disableUpdates'
                     isSelected={localSettings?.general?.disableUpdates}
                     onChange={handleCheckboxChange}

@@ -31,6 +31,7 @@ export default function Settings({ setHasUpdate }) {
     useEffect(() => {
         const defaultSettings = {
             general: {
+                stealthIdle: false,
                 disableUpdates: false,
                 clearData: true
             },

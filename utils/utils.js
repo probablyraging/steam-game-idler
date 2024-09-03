@@ -12,11 +12,13 @@ export function minutesToHoursCompact(number) {
 
 export async function startIdler(appId, appName, quiet = false) {
     try {
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+        const stealthIdle = settings?.general?.stealthIdle;
         const steamRunning = await invoke('check_status');
         if (steamRunning) {
             const path = await invoke('get_file_path');
             const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
-            await invoke('start_idle', { filePath: fullPath, appId: appId.toString(), quiet: quiet.toString() });
+            await invoke('start_idle', { filePath: fullPath, appId: appId.toString(), quiet: stealthIdle ? stealthIdle.toString() : quiet.toString() });
             logEvent(`[Idle] Started ${appName}`);
             return true;
         } else {
@@ -166,3 +168,14 @@ export function isOutsideSchedule(scheduleFrom, scheduleTo) {
         return currentTime.compare(scheduleFromTime) >= 0 && currentTime.compare(scheduleToTime) < 0;
     }
 }
+
+export function formatTime(ms) {
+    const hours = Math.floor(ms / 3600000);
+    const minutes = Math.floor((ms % 3600000) / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+};
+
+export function getRandomDelay(min, max) {
+    return Math.floor(Math.random() * ((max - min) * 60 * 1000 + 1)) + min * 60 * 1000;
+};

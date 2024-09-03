@@ -15,7 +15,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
     const handleLogout = (onClose) => {
         try {
             onClose();
-            const settings = JSON.parse(localStorage.getItem('settings'));
+            const settings = JSON.parse(localStorage.getItem('settings')) || {};
             const { clearData } = settings?.general || {};
             setUserSummary(null);
             sessionStorage.removeItem('gamesListCache');

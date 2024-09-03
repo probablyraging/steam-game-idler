@@ -1,24 +1,76 @@
 import { useEffect } from 'react';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { NextUIProvider } from '@nextui-org/react';
-import { debounce } from '@/utils/utils';
+import { debounce, logEvent } from '@/utils/utils';
 import '../styles/globals.css';
 
 export default function MyApp({ Component, pageProps }) {
     async function setupAppWindow() {
-        const appWindow = (await import('@tauri-apps/api/window')).appWindow;
-        const PhysicalSize = (await import('@tauri-apps/api/window')).PhysicalSize;
-        const PhysicalPosition = (await import('@tauri-apps/api/window')).PhysicalPosition;
+        const { appWindow, PhysicalSize, PhysicalPosition, primaryMonitor, availableMonitors } = await import('@tauri-apps/api/window');
 
         const savedState = localStorage.getItem('windowState');
+        let defaultWidth = 1268;
+        let defaultHeight = 620;
+
+        async function setToSafePosition() {
+            try {
+                const monitor = await primaryMonitor();
+                const safeX = Math.floor(monitor.size.width * 0.1);
+                const safeY = Math.floor(monitor.size.height * 0.1);
+                await appWindow.setPosition(new PhysicalPosition(safeX, safeY));
+            } catch (error) {
+                console.error('Error in (setToSafePosition):', error);
+                logEvent(`[Error] in (setToSafePosition): ${error}`);
+            }
+        }
+
+        async function isPositionOnScreen(x, y, width, height) {
+            try {
+                const monitors = await availableMonitors();
+                for (const monitor of monitors) {
+                    if (
+                        x < monitor.position.x + monitor.size.width &&
+                        x + width > monitor.position.x &&
+                        y < monitor.position.y + monitor.size.height &&
+                        y + height > monitor.position.y
+                    ) {
+                        return true;
+                    }
+                }
+                return false;
+            } catch (error) {
+                console.error('Error in (isPositionOnScreen):', error);
+                logEvent(`[Error] in (isPositionOnScreen): ${error}`);
+            }
+        }
 
         if (savedState) {
             const { width, height, isMaximized, positionX, positionY } = JSON.parse(savedState);
             if (isMaximized) {
                 await appWindow.maximize();
             } else {
-                await appWindow.setSize(new PhysicalSize(width, height));
-                await appWindow.setPosition(new PhysicalPosition(positionX, positionY));
+                try {
+                    const isOnScreen = await isPositionOnScreen(positionX, positionY, width, height);
+                    if (isOnScreen) {
+                        await appWindow.setSize(new PhysicalSize(width, height));
+                        await appWindow.setPosition(new PhysicalPosition(positionX, positionY));
+                    } else {
+                        await appWindow.setSize(new PhysicalSize(width, height));
+                        await setToSafePosition();
+                    }
+                } catch (error) {
+                    console.error('Error in (setupAppWindow - savedState) - Failed to restore window state:', error);
+                    logEvent(`[Error] in (setupAppWindow - savedState) - Failed to restore window state: ${error}`);
+                    await setToSafePosition();
+                }
+            }
+        } else {
+            try {
+                await appWindow.setSize(new PhysicalSize(defaultWidth, defaultHeight));
+                await setToSafePosition();
+            } catch (error) {
+                console.error('Error in (setupAppWindow - savedState):', error);
+                logEvent(`[Error] in (setupAppWindow - savedState): ${error}`);
             }
         }
 
@@ -36,7 +88,8 @@ export default function MyApp({ Component, pageProps }) {
                 };
                 localStorage.setItem('windowState', JSON.stringify(windowState));
             } catch (error) {
-                console.error('Failed to save window state:', error);
+                console.error('Error in (saveWindowState):', error);
+                logEvent(`[Error] in (saveWindowState): ${error}`);
             }
         }, 500);
 
@@ -48,7 +101,11 @@ export default function MyApp({ Component, pageProps }) {
             unlistenMove();
             saveWindowState.cancel();
         };
-    };
+    }
+
+    useEffect(() => {
+        setupAppWindow();
+    }, []);
 
     useEffect(() => {
         setupAppWindow();

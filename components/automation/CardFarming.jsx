@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { checkDrops, getAllGamesWithDrops, logEvent, startIdler, stopIdler } from '@/utils/utils';
+import { checkDrops, formatTime, getAllGamesWithDrops, logEvent, startIdler, stopIdler } from '@/utils/utils';
 import StopButton from './StopButton';
 import { Button, Skeleton, Spinner } from '@nextui-org/react';
 import { IoCheckmark } from 'react-icons/io5';
@@ -10,6 +10,7 @@ export default function CardFarming({ setActivePage }) {
     const [totalDropsRemaining, setTotalDropsRemaining] = useState(0);
     const [gamesWithDrops, setGamesWithDrops] = useState(new Set());
     const [isComplete, setIsComplete] = useState(false);
+    const [countdownTimer, setCountdownTimer] = useState('');
 
     const farmingInterval = 60000 * 30;
     const shortDelay = 15000;
@@ -101,10 +102,13 @@ export default function CardFarming({ setActivePage }) {
     const farmGame = async (game) => {
         try {
             await startAndStopIdler(game.appId, game.name, longDelay);
+            startCountdown(mediumDelay / 60000);
             await delay(mediumDelay);
             await startAndStopIdler(game.appId, game.name, shortDelay);
+            startCountdown(mediumDelay / 60000);
             await delay(mediumDelay);
             await startAndStopIdler(game.appId, game.name, farmingInterval);
+            startCountdown(mediumDelay / 60000);
             await delay(mediumDelay);
             await startAndStopIdler(game.appId, game.name, shortDelay);
         } catch (error) {
@@ -115,6 +119,7 @@ export default function CardFarming({ setActivePage }) {
 
     const startAndStopIdler = async (appId, name, duration) => {
         try {
+            startCountdown(duration / 60000);
             startIdler(appId, name, true);
             await delay(duration);
             stopIdler(appId, name);
@@ -152,6 +157,26 @@ export default function CardFarming({ setActivePage }) {
         }
     };
 
+    const startCountdown = (durationInMinutes) => {
+        try {
+            const durationInMilliseconds = durationInMinutes * 60000;
+            let remainingTime = durationInMilliseconds;
+
+            const intervalId = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(intervalId);
+                    return;
+                }
+
+                setCountdownTimer(formatTime(remainingTime));
+                remainingTime -= 1000;
+            }, 1000);
+        } catch (error) {
+            console.error('Error in (startCountdown):', error);
+            logEvent(`[Error] in (startCountdown) ${error}`);
+        }
+    };
+
     const removeGameFromFarmingList = (gameId) => {
         try {
             const cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
@@ -185,9 +210,11 @@ export default function CardFarming({ setActivePage }) {
                         Card Farming
                     </p>
                     {gamesWithDrops.size > 0 && totalDropsRemaining ? (
-                        <p className='text-sm'>
-                            Idling <span className='font-bold text-sgi'>{gamesWithDrops.size}</span> game(s) with <span className='font-bold text-sgi '>{totalDropsRemaining}</span> total card drop(s) remaining
-                        </p>
+                        <React.Fragment>
+                            <p className='text-sm'>
+                                Idling <span className='font-bold text-sgi'>{gamesWithDrops.size}</span> game(s) with <span className='font-bold text-sgi '>{totalDropsRemaining}</span> total card drop(s) remaining
+                            </p>
+                        </React.Fragment>
                     ) : (
                         <React.Fragment>
                             {!isComplete ? (
@@ -204,7 +231,13 @@ export default function CardFarming({ setActivePage }) {
                 </div>
 
                 {gamesWithDrops.size > 0 ? (
-                    <StopButton setActivePage={setActivePage} gamesWithDrops={gamesWithDrops} isMountedRef={isMountedRef} abortControllerRef={abortControllerRef} screen={'card-farming'} />
+                    <React.Fragment>
+                        <StopButton setActivePage={setActivePage} gamesWithDrops={gamesWithDrops} isMountedRef={isMountedRef} abortControllerRef={abortControllerRef} screen={'card-farming'} />
+
+                        <p className='text-sm'>
+                            Next action in <span className='font-bold text-sgi'>{countdownTimer}</span>
+                        </p>
+                    </React.Fragment>
                 ) : (
                     <React.Fragment>
                         {!isComplete ? (

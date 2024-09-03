@@ -206,7 +206,8 @@ fn log_event(message: String, app_handle: tauri::AppHandle) -> Result<(), String
         .map(|line| line.unwrap_or_default())
         .collect();
     let timestamp = Local::now().format("%b %d %H:%M:%S%.3f").to_string();
-    let new_log = format!("{} + {}", timestamp, message);
+    let masked_message = message.replace("A7F2711B8063A32", "******");
+    let new_log = format!("{} + {}", timestamp, masked_message);
     lines.insert(0, new_log);
     if lines.len() > MAX_LINES {
         lines.truncate(MAX_LINES);

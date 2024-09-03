@@ -25,8 +25,8 @@ Check the [build it yourself](https://github.com/probablyraging/steam-game-idler
 
 # Features
 - **Achievement Manager**: Manually unlock and lock any achievement for any game
-- **Card Farming**: Farm trading cards for all games as quickly as possible, so you can craft badges, or sell them for real money
-- **Auto Achievement Unlocker**: Unlock achievements automatically with custom human-like settings
+- **Card Farming**: Farm trading cards that can be sold for a profit, or to craft badges
+- **Auto Achievement Unlocker**: Unlock achievements automatically with human-like settings
 - **Playtime Booster**: Boost any game's total playtime by manually idling them
 - **Fully Open Source**: So you know exactly what you are downloading and running on your system is safe to use
 - **Actively Maintained**: Which means bug fixes and new features are being rolled out frequently

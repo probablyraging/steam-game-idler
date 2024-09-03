@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { installUpdate } from '@tauri-apps/api/updater';
+import { getVersion } from '@tauri-apps/api/app';
 import { relaunch } from '@tauri-apps/api/process';
 import { Progress, Spinner } from '@nextui-org/react';
 import { HiMiniMinus } from 'react-icons/hi2';
@@ -7,16 +8,19 @@ import { BiSolidLeaf, BiWindows } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 import { logEvent } from '@/utils/utils';
 
-export default function UpdateScreen() {
+export default function UpdateScreen({ updateManifest }) {
     const [progress, setProgress] = useState(0);
     const [appWindow, setAppWindow] = useState();
-    const [checkUpdate, setCheckUpdate] = useState(true);
+    const [checkForUpdate, setCheckForUpdate] = useState(true);
 
     useEffect(() => {
         const performUpdate = async () => {
             setTimeout(async () => {
-                setCheckUpdate(false);
+                setCheckForUpdate(false);
                 try {
+                    const currentVersion = await getVersion();
+                    const newVersion = updateManifest ? updateManifest?.version : 'Unknown';
+                    logEvent(`[System] Updated Steam Game Idler (${currentVersion} > ${newVersion})`);
                     await installUpdate();
                     await relaunch();
                 } catch (error) {
@@ -64,15 +68,15 @@ export default function UpdateScreen() {
 
     return (
         <React.Fragment>
-            <div className='flex justify-between items-center w-screen h-[62px] bg-sgi rounded-tr-[8px] rounded-tl-lg' data-tauri-drag-region>
-                <div className='flex items-center gap-1 px-2 bg-sgi h-full w-[62px] rounded-tl-[10px]'>
+            <div className='flex justify-between items-center w-screen h-[62px] bg-titlebar rounded-tr-[8px] rounded-tl-xl' data-tauri-drag-region>
+                <div className='flex items-center gap-1 px-2 bg-sgi dark:bg-[#181818] h-full w-[62px] rounded-tl-[10px]'>
                     <BiSolidLeaf className='text-offwhite' fontSize={40} />
                 </div>
-                <div className='flex justify-center items-center h-full ml-2 text-offwhite'>
-                    <div className='flex justify-center items-center hover:bg-[#0c70a3] w-[28px] h-full cursor-pointer' onClick={windowMinimize}>
+                <div className='flex justify-center items-center h-full ml-2'>
+                    <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowMinimize}>
                         <HiMiniMinus />
                     </div>
-                    <div className='flex justify-center items-center hover:bg-[#0c70a3] w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
+                    <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                         <BiWindows fontSize={12} />
                     </div>
                     <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-[8px] cursor-pointer' onClick={windowClose}>
@@ -80,8 +84,8 @@ export default function UpdateScreen() {
                     </div>
                 </div>
             </div>
-            <div className='flex justify-center items-center flex-col gap-2 w-screen h-screen'>
-                {checkUpdate ? (
+            <div className='flex justify-center items-center flex-col gap-2 w-screen h-[calc(100vh-62px)]'>
+                {checkForUpdate ? (
                     <React.Fragment>
                         <p className='text-sm font-semibold'>
                             Checking for updates

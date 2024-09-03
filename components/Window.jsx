@@ -9,15 +9,18 @@ import Setup from './Setup';
 export default function Window() {
     const [hasUpdate, setHasUpdate] = useState(false);
     const [userSummary, setUserSummary] = useState(null);
+    const [updateManifest, setUpdateManifest] = useState(null);
 
     useEffect(() => {
         const checkForUpdates = async () => {
             try {
-                const settings = JSON.parse(localStorage.getItem('settings'));
+                const settings = JSON.parse(localStorage.getItem('settings')) || {};
                 const { disableUpdates } = settings?.general || {};
-                if (disableUpdates) return;
-                const { shouldUpdate } = await checkUpdate();
+                const { shouldUpdate, manifest } = await checkUpdate();
+                const latest = await fetchLatest();
+                if (disableUpdates && !latest?.major) return;
                 if (shouldUpdate) {
+                    setUpdateManifest(manifest);
                     setHasUpdate(true);
                 }
             } catch (error) {
@@ -28,9 +31,22 @@ export default function Window() {
         checkForUpdates();
     }, []);
 
+    const fetchLatest = async () => {
+        try {
+            const res = await fetch('https://raw.githubusercontent.com/probablyraging/steam-game-idler/main/latest.json');
+            const data = await res.json();
+            return data;
+        } catch (error) {
+            console.error('Error in (fetchLatest):', error);
+            logEvent(`[Error] in (fetchLatest): ${error}`);
+            return null;
+        }
+    };
+
     useEffect(() => {
         const defaultSettings = {
             general: {
+                stealthIdle: false,
                 disableUpdates: false,
                 clearData: true
             },
@@ -58,7 +74,7 @@ export default function Window() {
     }, []);
 
     if (hasUpdate) return (
-        <UpdateScreen />
+        <UpdateScreen updateManifest={updateManifest} />
     );
 
     if (!userSummary) return (

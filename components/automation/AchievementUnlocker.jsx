@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import StopButton from './StopButton';
 import { Button, Spinner } from '@nextui-org/react';
-import { isOutsideSchedule, logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
+import { formatTime, getRandomDelay, isOutsideSchedule, logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
 import { IoCheckmark } from 'react-icons/io5';
 import { invoke } from '@tauri-apps/api/tauri';
 
@@ -25,7 +25,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 if (achievementUnlocker.length < 1) {
                     logEvent('[Achievement Unlocker - Auto] No games left - stopping');
                     if (currentGame) {
-                        stopIdler(currentGame.appId, currentGame.name);
+                        await stopIdler(currentGame.appId, currentGame.name);
                     }
                     setGamesWithAchievements(0);
                     setIsComplete(true);
@@ -143,6 +143,8 @@ export default function AchievementUnlocker({ setActivePage }) {
                 isGameIdling = true;
             }
 
+            let achievementsRemaining = achievements?.length;
+
             for (const achievement of achievements) {
                 if (isMountedRef.current) {
                     if (schedule && isOutsideSchedule(scheduleFrom, scheduleTo)) {
@@ -158,8 +160,14 @@ export default function AchievementUnlocker({ setActivePage }) {
                         }
                     }
                     unlockAchievement(achievement.appId, achievement.name, true);
+                    achievementsRemaining--;
                     logEvent(`[Achievement Unlocker - Auto] Unlocked ${achievement.name} for ${achievement.gameName}`);
                     setAchievementCount(prevCount => Math.max(prevCount - 1, 0));
+                    if (achievementsRemaining === 0) {
+                        await stopIdler(game.appid, game.name);
+                        removeGameFromUnlockerList(game.appid);
+                        break;
+                    }
                     const randomDelay = getRandomDelay(interval[0], interval[1]);
                     startCountdown(randomDelay / 60000);
                     await delay(randomDelay);
@@ -228,17 +236,6 @@ export default function AchievementUnlocker({ setActivePage }) {
             console.error('Error in (delay):', error);
             logEvent(`[Error] in (delay) ${error}`);
         }
-    };
-
-    const formatTime = (ms) => {
-        const hours = Math.floor(ms / 3600000);
-        const minutes = Math.floor((ms % 3600000) / 60000);
-        const seconds = Math.floor((ms % 60000) / 1000);
-        return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-    };
-
-    const getRandomDelay = (min, max) => {
-        return Math.floor(Math.random() * ((max - min) * 60 * 1000 + 1)) + min * 60 * 1000;
     };
 
     const handleCancel = () => {
