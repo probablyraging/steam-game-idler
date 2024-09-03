@@ -60,27 +60,27 @@ export default function CardFarming({ setActivePage }) {
             if (settings.cardFarming.allGames) {
                 const gamesWithDrops = await getAllGamesWithDrops(userSummary.steamId, steamCookies.sid, steamCookies.sls);
                 for (const gameData of gamesWithDrops) {
-                    if (gamesSet.size < 30) {
-                        gamesSet.add({ appId: gameData.game.id, name: gameData.game.name });
-                        totalDrops += gameData.game.remaining;
-                        logEvent(`[Card Farming] ${gameData.game.remaining} drops remaining for ${gameData.game.name} - starting`);
+                    if (gamesSet.size < 32) {
+                        gamesSet.add({ appId: gameData.id, name: gameData.name });
+                        totalDrops += gameData.remaining;
+                        logEvent(`[Card Farming] ${gameData.remaining} drops remaining for ${gameData.name} - starting`);
                     } else {
                         break;
                     }
                 }
             } else {
                 const dropCheckPromises = gameDataArr.map(async (gameData) => {
-                    if (gamesSet.size >= 30) return Promise.resolve();
-                    const dropsRemaining = await checkDrops(userSummary.steamId, gameData.game.id, steamCookies.sid, steamCookies.sls);
+                    if (gamesSet.size >= 32) return Promise.resolve();
+                    const dropsRemaining = await checkDrops(userSummary.steamId, gameData.appid, steamCookies.sid, steamCookies.sls);
                     if (dropsRemaining > 0) {
-                        if (gamesSet.size < 30) {
-                            gamesSet.add({ appId: gameData.game.id, name: gameData.game.name });
+                        if (gamesSet.size < 32) {
+                            gamesSet.add({ appId: gameData.appid, name: gameData.name });
                             totalDrops += dropsRemaining;
-                            logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - starting`);
+                            logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.name} - starting`);
                         }
                     } else {
-                        logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.game.name} - removed from list`);
-                        removeGameFromFarmingList(gameData.game.id);
+                        logEvent(`[Card Farming] ${dropsRemaining} drops remaining for ${gameData.name} - removed from list`);
+                        removeGameFromFarmingList(gameData.appid);
                     }
                 });
                 await Promise.all(dropCheckPromises);
@@ -155,7 +155,7 @@ export default function CardFarming({ setActivePage }) {
     const removeGameFromFarmingList = (gameId) => {
         try {
             const cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
-            const updatedCardFarming = cardFarming.filter(game => JSON.parse(game).game.id !== gameId);
+            const updatedCardFarming = cardFarming.filter(game => JSON.parse(game).id !== gameId);
             localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
         } catch (error) {
             console.error('Error in (removeGameFromFarmingList) :', error);
@@ -245,7 +245,7 @@ export default function CardFarming({ setActivePage }) {
                 )}
 
                 <p className='text-xs text-[#797979] dark:text-[#4f4f4f]'>
-                    A max of 30 games can be idled at once
+                    A max of 32 games can be idled at once
                 </p>
             </div>
         </React.Fragment >

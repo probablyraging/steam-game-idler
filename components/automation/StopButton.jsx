@@ -19,7 +19,7 @@ export default function StopButton({ setActivePage, isMountedRef, abortControlle
                 await stopIdler(currentGame.appId, currentGame.name);
             }
         } catch (error) {
-            console.log('Error in (handleStop) :', error);
+            console.error('Error in (handleStop) :', error);
             logEvent(`[Error] in (handleStop) ${error}`);
         } finally {
             isMountedRef.current = false;

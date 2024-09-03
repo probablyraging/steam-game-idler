@@ -106,9 +106,9 @@ export async function updateStat(appId, statName, newValue) {
 
 export async function checkDrops(steamId, appId, sid, sls) {
     try {
-        const res = await invoke('get_drops_remaining', { sid: sid, sls: sls, steamId: steamId, appId: appId });
+        const res = await invoke('get_drops_remaining', { sid: sid, sls: sls, steamId: steamId, appId: appId.toString() });
         if (res && res.remaining) {
-            return data.remaining;
+            return res.remaining;
         } else {
             return 0;
         }
