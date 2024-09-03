@@ -1,5 +1,6 @@
 import moment from "moment";
 import { invoke } from '@tauri-apps/api/tauri';
+import { getVersion } from '@tauri-apps/api/app';
 import { Time } from "@internationalized/date";
 
 export function minutesToHoursCompact(number) {
@@ -131,7 +132,8 @@ export async function getAllGamesWithDrops(steamId, sid, sls) {
 
 export async function logEvent(message) {
     try {
-        await invoke('log_event', { message });
+        const version = await getVersion();
+        await invoke('log_event', { message: `[v${version}] ${message}` });
     } catch (error) {
         console.error('Error in logEvent util: ', error);
     }

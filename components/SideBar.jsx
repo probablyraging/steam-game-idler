@@ -1,12 +1,20 @@
 import React from 'react';
+import { Modal, ModalContent, ModalBody, Button, useDisclosure, ModalFooter } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { IoGameController, IoSettings } from 'react-icons/io5';
 import { logEvent } from '@/utils/utils';
 
 export default function SideBar({ setUserSummary, activePage, setActivePage }) {
-    const handleLogout = () => {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+    const openConfirmation = () => {
+        onOpen();
+    };
+
+    const handleLogout = (onClose) => {
         try {
+            onClose();
             const settings = JSON.parse(localStorage.getItem('settings'));
             const { clearData } = settings?.general || {};
             setUserSummary(null);
@@ -62,11 +70,45 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                         )}
                         <IoSettings className='text-offwhite' fontSize={24} />
                     </div>
-                    <div className='flex justify-center items-center w-full h-[62px] hover:bg-red-500 cursor-pointer duration-200' onClick={handleLogout}>
+                    <div className='flex justify-center items-center w-full h-[62px] hover:bg-red-500 cursor-pointer duration-200' onClick={openConfirmation}>
                         <FaSignOutAlt className='text-offwhite rotate-180' fontSize={24} />
                     </div>
                 </div>
             </div>
+
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange} className='bg-container border border-border rounded-md w-[350px]'>
+                <ModalContent>
+                    {(onClose) => (
+                        <React.Fragment>
+                            <ModalBody className='flex gap-5 p-4'>
+                                <p className='text-sm font-semibold uppercase'>
+                                    Confirm
+                                </p>
+                                <p className='text-xs mb-2'>
+                                    Are you sure you want to log out?
+                                </p>
+                            </ModalBody>
+                            <ModalFooter className='border-t border-border bg-footer px-4 py-3'>
+                                <Button
+                                    size='sm'
+                                    variant='light'
+                                    className='max-h-[25px] font-semibold rounded-sm'
+                                    onClick={onClose}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    size='sm'
+                                    className='bg-sgi max-h-[25px] font-semibold text-offwhite rounded-sm'
+                                    onClick={() => handleLogout(onClose)}
+                                >
+                                    Confirm
+                                </Button>
+                            </ModalFooter>
+                        </React.Fragment>
+                    )}
+                </ModalContent>
+            </Modal>
         </React.Fragment>
     );
 }

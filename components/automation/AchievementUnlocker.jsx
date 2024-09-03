@@ -86,7 +86,7 @@ export default function AchievementUnlocker({ setActivePage }) {
             const achievements = userAchievements.achievements
                 .filter(achievement => {
                     const schemaAchievement = gameSchema.availableGameStats.achievements.find(
-                        a => a.name === achievement.name
+                        a => a.name === achievement.apiname
                     );
                     if (settings.achievementUnlocker.hidden) {
                         return !achievement.achieved && schemaAchievement.hidden === 0;
