@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
+import { logEvent } from '@/utils/utils';
 
 export default function Logs() {
     const [logs, setLogs] = useState([]);
@@ -18,7 +19,8 @@ export default function Logs() {
                     setLogs(logEntries);
                     setLogPath(`${fullLogPath}\\log.txt`);
                 } catch (error) {
-                    console.error('Error fetching logs:', error);
+                    console.error('Error in (fetchLogs):', error);
+                    logEvent(`[Error] in (fetchLogs): ${error}`);
                 }
             }
         };

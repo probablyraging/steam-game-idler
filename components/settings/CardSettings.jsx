@@ -45,7 +45,8 @@ export default function CardSettings({ settings, setSettings }) {
                     setIsLoading(false);
                 }
             } catch (error) {
-                console.error('Failed to check for updates:', error);
+                console.error('Error in (validateSession):', error);
+                logEvent(`[Error] in (validateSession): ${error}`);
             }
         };
         validateSession();
@@ -60,61 +61,76 @@ export default function CardSettings({ settings, setSettings }) {
     };
 
     const handleSave = async () => {
-        if (sidValue.length > 0 && slsValue.length > 0) {
-            setIsLoading(true);
+        try {
+            if (sidValue.length > 0 && slsValue.length > 0) {
+                setIsLoading(true);
 
-            const res = await invoke('validate_session', { sid: sidValue, sls: slsValue });
-            if (res.user) {
-                setSteamUser(res.user);
-                setLoginState(true);
-                localStorage.setItem('steamCookies', JSON.stringify({ sid: sidValue, sls: slsValue }));
-                setHasCookies(true);
-                logEvent(`[Settings - Card Farming] Logged in as ${res.user}`);
-            } else {
-                setValidationError(true);
-                logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
-                setTimeout(() => {
-                    setValidationError(false);
-                }, 4000);
+                const res = await invoke('validate_session', { sid: sidValue, sls: slsValue });
+                if (res.user) {
+                    setSteamUser(res.user);
+                    setLoginState(true);
+                    localStorage.setItem('steamCookies', JSON.stringify({ sid: sidValue, sls: slsValue }));
+                    setHasCookies(true);
+                    logEvent(`[Settings - Card Farming] Logged in as ${res.user}`);
+                } else {
+                    setValidationError(true);
+                    logEvent('[Error] [Settings - Card Farming] Incorrect \'Card Farming\' credentials');
+                    setTimeout(() => {
+                        setValidationError(false);
+                    }, 4000);
+                }
+                setIsLoading(false);
             }
-            setIsLoading(false);
+        } catch (error) {
+            console.error('Error in (handleSave):', error);
+            logEvent(`[Error] in (handleSave): ${error}`);
         }
     };
 
     const handleClear = async () => {
-        localStorage.removeItem('steamCookies');
-        setSidValue('');
-        setSlsValue('');
-        setLoginState(false);
-        setHasCookies(false);
-        logEvent('[Settings - Card Farming] Logged out');
+        try {
+            localStorage.removeItem('steamCookies');
+            setSidValue('');
+            setSlsValue('');
+            setLoginState(false);
+            setHasCookies(false);
+            logEvent('[Settings - Card Farming] Logged out');
+        } catch (error) {
+            console.error('Error in (handleClear):', error);
+            logEvent(`[Error] in (handleClear): ${error}`);
+        }
     };
 
     const handleCheckboxChange = (e) => {
-        const { name, checked } = e.target;
-        const updatedSettings = {
-            ...localSettings,
-            achievementUnlocker: {
-                ...localSettings.achievementUnlocker
-            },
-            cardFarming: {
-                ...localSettings.cardFarming,
-                [name]: checked
+        try {
+            const { name, checked } = e.target;
+            const updatedSettings = {
+                ...localSettings,
+                achievementUnlocker: {
+                    ...localSettings.achievementUnlocker
+                },
+                cardFarming: {
+                    ...localSettings.cardFarming,
+                    [name]: checked
+                }
+            };
+            const checkboxNames = Object.keys(updatedSettings.cardFarming);
+            if (checked) {
+                const otherCheckboxName = checkboxNames.find(checkbox => checkbox !== name);
+                updatedSettings.cardFarming[otherCheckboxName] = false;
+            } else {
+                const otherCheckboxName = checkboxNames.find(checkbox => checkbox !== name);
+                if (!updatedSettings.cardFarming[otherCheckboxName]) {
+                    updatedSettings.cardFarming[name] = true;
+                }
             }
-        };
-        const checkboxNames = Object.keys(updatedSettings.cardFarming);
-        if (checked) {
-            const otherCheckboxName = checkboxNames.find(checkbox => checkbox !== name);
-            updatedSettings.cardFarming[otherCheckboxName] = false;
-        } else {
-            const otherCheckboxName = checkboxNames.find(checkbox => checkbox !== name);
-            if (!updatedSettings.cardFarming[otherCheckboxName]) {
-                updatedSettings.cardFarming[name] = true;
-            }
+            localStorage.setItem('settings', JSON.stringify(updatedSettings));
+            updateSettings(updatedSettings);
+            logEvent(`[Settings - Card Farming] Changed '${name}' to '${updatedSettings.cardFarming[name]}'`);
+        } catch (error) {
+            console.error('Error in (handleCheckboxChange):', error);
+            logEvent(`[Error] in (handleCheckboxChange): ${error}`);
         }
-        localStorage.setItem('settings', JSON.stringify(updatedSettings));
-        updateSettings(updatedSettings);
-        logEvent(`[Settings - Card Farming] Changed '${name}' to '${updatedSettings.cardFarming[name]}'`);
     };
 
     const updateSettings = (newSettings) => {
@@ -123,7 +139,8 @@ export default function CardSettings({ settings, setSettings }) {
         try {
             localStorage.setItem('settings', JSON.stringify(newSettings));
         } catch (error) {
-            console.error('Failed to save settings to localStorage:', error);
+            console.error('Error in (updateSettings):', error);
+            logEvent(`[Error] in (updateSettings): ${error}`);
         }
     };
 

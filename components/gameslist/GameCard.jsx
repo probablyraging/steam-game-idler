@@ -16,11 +16,16 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
     }, 100);
 
     const handleIdle = async (item) => {
-        const idleStatus = await startIdler(item.appid, item.name);
-        if (idleStatus) {
-            toast.success(`Started idling ${item.name}`);
-        } else {
-            toast.error('Steam is not running');
+        try {
+            const idleStatus = await startIdler(item.appid, item.name);
+            if (idleStatus) {
+                toast.success(`Started idling ${item.name}`);
+            } else {
+                toast.error('Steam is not running');
+            }
+        } catch (error) {
+            console.error('Error in (handleIdle):', error);
+            logEvent(`[Error] in (handleIdle): ${error}`);
         }
     };
 
@@ -30,75 +35,115 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
         setShowAchievements(!showAchievements);
     };
 
+    const viewStorePage = async (item) => {
+        if (typeof window !== 'undefined' && window.__TAURI__) {
+            try {
+                await window.__TAURI__.shell.open(`https://store.steampowered.com/app/${item.appid}`);
+            } catch (error) {
+                console.error('Failed to open link:', error);
+            }
+        }
+    };
+
     const addToFavorites = (e, item) => {
         e.stopPropagation();
         setTimeout(() => {
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            favorites.push(JSON.stringify(item));
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
-            setFavorites(newFavorites.map(JSON.parse));
-            logEvent(`[Favorites] Added ${item.name} (${item.appid})`);
+            try {
+                let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+                favorites.push(JSON.stringify(item));
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
+                setFavorites(newFavorites.map(JSON.parse));
+                logEvent(`[Favorites] Added ${item.name} (${item.appid})`);
+            } catch (error) {
+                console.error('Error in (addToFavorites):', error);
+                logEvent(`[Error] in (addToFavorites): ${error}`);
+            }
         }, 500);
     };
 
     const removeFromFavorites = (e, item) => {
         e.stopPropagation();
         setTimeout(() => {
-            const favorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
-            const updatedFavorites = favorites.filter(arr => JSON.parse(arr).appid !== item.appid);
-            localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
-            const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
-            setCardFarming(newFavorites.map(JSON.parse));
-            logEvent(`[Favorites] Removed ${item.name} (${item.appid})`);
+            try {
+                const favorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
+                const updatedFavorites = favorites.filter(arr => JSON.parse(arr).appid !== item.appid);
+                localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+                const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
+                setCardFarming(newFavorites.map(JSON.parse));
+                logEvent(`[Favorites] Removed ${item.name} (${item.appid})`);
+            } catch (error) {
+                console.error('Error in (removeFromFavorites):', error);
+                logEvent(`[Error] in (removeFromFavorites): ${error}`);
+            }
         }, 500);
     };
 
     const addToCardFarming = (e, item) => {
         e.stopPropagation();
         setTimeout(() => {
-            let cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
-            cardFarming.push(JSON.stringify(item));
-            localStorage.setItem('cardFarming', JSON.stringify(cardFarming));
-            const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
-            setCardFarming(newCardFarming.map(JSON.parse));
-            logEvent(`[Card Farming] Added ${item.name} (${item.appid})`);
+            try {
+                let cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
+                cardFarming.push(JSON.stringify(item));
+                localStorage.setItem('cardFarming', JSON.stringify(cardFarming));
+                const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
+                setCardFarming(newCardFarming.map(JSON.parse));
+                logEvent(`[Card Farming] Added ${item.name} (${item.appid})`);
+            } catch (error) {
+                console.error('Error in (addToCardFarming):', error);
+                logEvent(`[Error] in (addToCardFarming): ${error}`);
+            }
         }, 500);
     };
 
     const removeFromCardFarming = (e, item) => {
         e.stopPropagation();
         setTimeout(() => {
-            const cardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
-            const updatedCardFarming = cardFarming.filter(arr => JSON.parse(arr).appid !== item.appid);
-            localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
-            const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
-            setCardFarming(newCardFarming.map(JSON.parse));
-            logEvent(`[Card Farming] Removed ${item.name} (${item.appid})`);
+            try {
+                const cardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
+                const updatedCardFarming = cardFarming.filter(arr => JSON.parse(arr).appid !== item.appid);
+                localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
+                const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
+                setCardFarming(newCardFarming.map(JSON.parse));
+                logEvent(`[Card Farming] Removed ${item.name} (${item.appid})`);
+            } catch (error) {
+                console.error('Error in (removeFromCardFarming):', error);
+                logEvent(`[Error] in (removeFromCardFarming): ${error}`);
+            }
         }, 500);
     };
 
     const addToAchievementUnlocker = (e, item) => {
         e.stopPropagation();
         setTimeout(() => {
-            let achievementUnlocker = JSON.parse(localStorage.getItem('achievementUnlocker')) || [];
-            achievementUnlocker.push(JSON.stringify(item));
-            localStorage.setItem('achievementUnlocker', JSON.stringify(achievementUnlocker));
-            const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
-            setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
-            logEvent(`[Achievement Unlocker] Added ${item.name} (${item.appid})`);
+            try {
+                let achievementUnlocker = JSON.parse(localStorage.getItem('achievementUnlocker')) || [];
+                achievementUnlocker.push(JSON.stringify(item));
+                localStorage.setItem('achievementUnlocker', JSON.stringify(achievementUnlocker));
+                const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
+                setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
+                logEvent(`[Achievement Unlocker] Added ${item.name} (${item.appid})`);
+            } catch (error) {
+                console.error('Error in (addToAchievementUnlocker):', error);
+                logEvent(`[Error] in (addToAchievementUnlocker): ${error}`);
+            }
         }, 500);
     };
 
     const removeFromAchievementUnlocker = (e, item) => {
         e.stopPropagation();
         setTimeout(() => {
-            const achievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
-            const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== item.appid);
-            localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
-            const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
-            setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
-            logEvent(`[Achievement Unlocker] Removed ${item.name} (${item.appid})`);
+            try {
+                const achievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
+                const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== item.appid);
+                localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
+                const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
+                setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
+                logEvent(`[Achievement Unlocker] Removed ${item.name} (${item.appid})`);
+            } catch (error) {
+                console.error('Error in (removeFromAchievementUnlocker):', error);
+                logEvent(`[Error] in (removeFromAchievementUnlocker): ${error}`);
+            }
         }, 500);
     };
 
@@ -118,6 +163,11 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                                 priority={true}
                             />
                             <div className='absolute flex items-center justify-evenly inset-0 bg-black bg-opacity-0 dark:bg-opacity-20 group-hover:bg-opacity-40 dark:group-hover:bg-opacity-50 transition-opacity duration-200'>
+                                <div className='absolute flex justify-center w-full bottom-0 left-0 px-2 pb-0.5 opacity-0 group-hover:opacity-100 duration-200'>
+                                    <p className='text-xs text-offwhite bg-black bg-opacity-50 rounded-sm px-1 truncate'>
+                                        {item.name}
+                                    </p>
+                                </div>
                                 <div className='flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 hover:scale-105 duration-200' onClick={() => handleIdle(item)}>
                                     <div className='p-2 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 cursor-pointer rounded duration-200'>
                                         <IoPlay className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={36} />
@@ -140,6 +190,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                                 achievementUnlocker={achievementUnlocker}
                                 handleIdle={handleIdle}
                                 viewAchievments={viewAchievments}
+                                viewStorePage={viewStorePage}
                                 addToFavorites={addToFavorites}
                                 removeFromFavorites={removeFromFavorites}
                                 addToCardFarming={addToCardFarming}

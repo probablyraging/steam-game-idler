@@ -25,15 +25,21 @@ export default function ManualAdd({ setFavorites }) {
             setIsLoading(false);
             onClose();
         } catch (error) {
-            console.error('Failed to check for updates:', error);
             setIsLoading(false);
+            console.error('Error in (handleAdd):', error);
+            logEvent(`[Error] in (handleAdd): ${error}`);
         }
     };
 
     const handleChange = (e) => {
-        const value = e.target.value;
-        const numericValue = value.replace(/[^0-9]/g, '');
-        setInputValue(numericValue);
+        try {
+            const value = e.target.value;
+            const numericValue = value.replace(/[^0-9]/g, '');
+            setInputValue(numericValue);
+        } catch (error) {
+            console.error('Error in (handleChange):', error);
+            logEvent(`[Error] in (handleChange): ${error}`);
+        }
     };
 
     return (

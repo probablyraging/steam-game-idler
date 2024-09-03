@@ -31,8 +31,8 @@ export default function CardFarming({ setActivePage }) {
                     setIsComplete(true);
                 }
             } catch (error) {
-                console.log('Error in card farming:', error);
-                logEvent(`[Error] [Card Farming] (startCardFarming) ${error}`);
+                console.error('Error in (startCardFarming) :', error);
+                logEvent(`[Error] in (startCardFarming) ${error}`);
             }
         };
 
@@ -86,7 +86,8 @@ export default function CardFarming({ setActivePage }) {
                 await Promise.all(dropCheckPromises);
             }
         } catch (error) {
-            logEvent(`[Error] [Card Farming] (checkGamesForDrops) ${error}`);
+            console.error('Error in (checkGamesForDrops) :', error);
+            logEvent(`[Error] in (checkGamesForDrops) ${error}`);
         }
 
         return { totalDrops, gamesSet };
@@ -107,43 +108,59 @@ export default function CardFarming({ setActivePage }) {
             await delay(mediumDelay);
             await startAndStopIdler(game.appId, game.name, shortDelay);
         } catch (error) {
-            logEvent(`[Error] [Card Farming] (farmGame) ${error}`);
+            console.error('Error in (farmGame) :', error);
+            logEvent(`[Error] in (farmGame) ${error}`);
         }
     };
 
     const startAndStopIdler = async (appId, name, duration) => {
-        startIdler(appId, name, true);
-        await delay(duration);
-        stopIdler(appId, name);
+        try {
+            startIdler(appId, name, true);
+            await delay(duration);
+            stopIdler(appId, name);
+        } catch (error) {
+            console.error('Error in (startAndStopIdler) :', error);
+            logEvent(`[Error] in (startAndStopIdler) ${error}`);
+        }
     };
 
     const delay = (ms) => {
-        return new Promise((resolve, reject) => {
-            const checkInterval = 1000;
-            let elapsedTime = 0;
+        try {
+            return new Promise((resolve, reject) => {
+                const checkInterval = 1000;
+                let elapsedTime = 0;
 
-            const intervalId = setInterval(() => {
-                if (!isMountedRef.current) {
+                const intervalId = setInterval(() => {
+                    if (!isMountedRef.current) {
+                        clearInterval(intervalId);
+                        reject(new DOMException('Card farming stopped early', 'Stop'));
+                    } else if (elapsedTime >= ms) {
+                        clearInterval(intervalId);
+                        resolve();
+                    }
+                    elapsedTime += checkInterval;
+                }, checkInterval);
+
+                abortControllerRef.current.signal.addEventListener('abort', () => {
                     clearInterval(intervalId);
                     reject(new DOMException('Card farming stopped early', 'Stop'));
-                } else if (elapsedTime >= ms) {
-                    clearInterval(intervalId);
-                    resolve();
-                }
-                elapsedTime += checkInterval;
-            }, checkInterval);
-
-            abortControllerRef.current.signal.addEventListener('abort', () => {
-                clearInterval(intervalId);
-                reject(new DOMException('Card farming stopped early', 'Stop'));
+                });
             });
-        });
+        } catch (error) {
+            console.error('Error in (delay) :', error);
+            logEvent(`[Error] in (delay) ${error}`);
+        }
     };
 
     const removeGameFromFarmingList = (gameId) => {
-        const cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
-        const updatedCardFarming = cardFarming.filter(game => JSON.parse(game).game.id !== gameId);
-        localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
+        try {
+            const cardFarming = JSON.parse(localStorage.getItem('cardFarming')) || [];
+            const updatedCardFarming = cardFarming.filter(game => JSON.parse(game).game.id !== gameId);
+            localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
+        } catch (error) {
+            console.error('Error in (removeGameFromFarmingList) :', error);
+            logEvent(`[Error] in (removeGameFromFarmingList) ${error}`);
+        }
     };
 
     const handleCancel = async () => {
@@ -152,7 +169,8 @@ export default function CardFarming({ setActivePage }) {
             const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId, game.name));
             await Promise.all(stopPromises);
         } catch (error) {
-            console.error('Error stopping games:', error);
+            console.error('Error in (handleCancel) :', error);
+            logEvent(`[Error] in (handleCancel) ${error}`);
         } finally {
             isMountedRef.current = false;
             abortControllerRef.current.abort();

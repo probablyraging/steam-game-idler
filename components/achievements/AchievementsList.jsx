@@ -1,16 +1,22 @@
 import React from 'react';
 import Image from 'next/image';
-import { unlockAchievement } from '@/utils/utils';
+import { logEvent, unlockAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
 import { Tooltip } from '@nextui-org/react';
 
 export default function AchievementsList({ appId, appName, achievementsUnavailable, achievementList, userGameAchievementsMap, percentageMap }) {
     const handleUnlock = async (achievementName, type) => {
-        const status = await unlockAchievement(appId, achievementName, false);
-        if (!status.error) {
-            toast.success(`${type} ${achievementName} for ${appName}`, { autoClose: 1500 });
-        } else {
-            toast.error(`Error: ${status.error}`);
+        try {
+            const status = await unlockAchievement(appId, achievementName, false);
+            if (!status.error) {
+                toast.success(`${type} ${achievementName} for ${appName}`, { autoClose: 1500 });
+            } else {
+                toast.error(`Error: ${status.error}`);
+                logEvent(`[Error] in handleUnlock: ${status.error}`);
+            }
+        } catch (error) {
+            console.error('Error in (handleUnlock):', error);
+            logEvent(`[Error] in (handleUnlock): ${error}`);
         }
     };
 

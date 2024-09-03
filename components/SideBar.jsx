@@ -6,18 +6,23 @@ import { logEvent } from '@/utils/utils';
 
 export default function SideBar({ setUserSummary, activePage, setActivePage }) {
     const handleLogout = () => {
-        const settings = JSON.parse(localStorage.getItem('settings'));
-        const { clearData } = settings?.general || {};
-        setUserSummary(null);
-        sessionStorage.removeItem('gamesListCache');
-        localStorage.removeItem('userSummary');
-        if (clearData) {
-            localStorage.removeItem('steamCookies');
-            localStorage.removeItem('favorites');
-            localStorage.removeItem('cardFarming');
-            localStorage.removeItem('achievementUnlocker');
+        try {
+            const settings = JSON.parse(localStorage.getItem('settings'));
+            const { clearData } = settings?.general || {};
+            setUserSummary(null);
+            sessionStorage.removeItem('gamesListCache');
+            localStorage.removeItem('userSummary');
+            if (clearData) {
+                localStorage.removeItem('steamCookies');
+                localStorage.removeItem('favorites');
+                localStorage.removeItem('cardFarming');
+                localStorage.removeItem('achievementUnlocker');
+            }
+            logEvent('[System] Logged out');
+        } catch (error) {
+            console.error('Error in (handleLogout):', error);
+            logEvent(`[Error] in (handleLogout): ${error}`);
         }
-        logEvent('[System] Logged out');
     };
 
     return (

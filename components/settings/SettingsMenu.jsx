@@ -4,6 +4,7 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 import ExtLink from '../ExtLink';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import { toast } from 'react-toastify';
+import { logEvent } from '@/utils/utils';
 
 export default function SettingsMenu({ setHasUpdate }) {
     const checkForUpdates = async () => {
@@ -15,7 +16,8 @@ export default function SettingsMenu({ setHasUpdate }) {
                 toast.info('Steam Game Idler is up to date', { autoClose: 2000 });
             }
         } catch (error) {
-            console.error('Failed to check for updates:', error);
+            console.error('Error in (checkForUpdates):', error);
+            logEvent(`[Error] in (checkForUpdates): ${error}`);
         }
     };
 

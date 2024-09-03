@@ -10,12 +10,17 @@ export default function ResetSettings({ setSettings, setRefreshKey }) {
     };
 
     const handleResetSettings = (onClose) => {
-        localStorage.removeItem('settings');
-        localStorage.removeItem('steamCookies');
-        setSettings(null);
-        setRefreshKey(prevKey => prevKey + 1);
-        logEvent('[Settings] Reset to default');
-        onClose();
+        try {
+            localStorage.removeItem('settings');
+            localStorage.removeItem('steamCookies');
+            setSettings(null);
+            setRefreshKey(prevKey => prevKey + 1);
+            logEvent('[Settings] Reset to default');
+            onClose();
+        } catch (error) {
+            console.error('Error in (handleResetSettings):', error);
+            logEvent(`[Error] in (handleResetSettings): ${error}`);
+        }
     };
 
     return (

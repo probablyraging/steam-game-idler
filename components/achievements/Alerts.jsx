@@ -4,11 +4,9 @@ import { TiWarning } from 'react-icons/ti';
 import { IoIosClose } from 'react-icons/io';
 
 export default function Alerts({ achievementsUnavailable, showAlertOne, setShowAlertOne }) {
-    const handleAlert = (val) => {
-        if (val === 1) {
-            localStorage.setItem('alertOne', false);
-            setShowAlertOne('false');
-        }
+    const handleAlert = () => {
+        localStorage.setItem('alertOne', false);
+        setShowAlertOne('false');
     };
 
     return (
@@ -25,7 +23,7 @@ export default function Alerts({ achievementsUnavailable, showAlertOne, setShowA
                             size='sm'
                             className='bg-transparent text-red-400 hover:text-red-500'
                             startContent={<IoIosClose fontSize={24} />}
-                            onClick={() => { handleAlert(1); }}
+                            onClick={handleAlert}
                         />
                     </div>
                 </div>

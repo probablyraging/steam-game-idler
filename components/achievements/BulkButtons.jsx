@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, ModalContent, ModalBody, Button, useDisclosure, ModalFooter } from '@nextui-org/react';
-import { lockAchievement, unlockAchievement } from '@/utils/utils';
+import { lockAchievement, logEvent, unlockAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
 import { invoke } from '@tauri-apps/api/tauri';
 
@@ -14,52 +14,62 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
     };
 
     const handleUnlockAll = async (onClose) => {
-        const steamRunning = await invoke('check_status');
-        if (steamRunning) {
-            setBtnLoading(true);
-            onClose();
-            let unlocked = 0;
-            const total = achievementList.length;
-            for (const ach of achievementList) {
-                try {
-                    await unlockAchievement(appId, ach.name, true);
-                    unlocked++;
-                    toast.info(`Unlocked ${unlocked} of ${total} achievements`, { autoClose: 1000 });
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                } catch (error) {
-                    console.error(`Failed to unlock achievement ${ach.name}:`, error);
+        try {
+            const steamRunning = await invoke('check_status');
+            if (steamRunning) {
+                setBtnLoading(true);
+                onClose();
+                let unlocked = 0;
+                const total = achievementList.length;
+                for (const ach of achievementList) {
+                    try {
+                        await unlockAchievement(appId, ach.name, true);
+                        unlocked++;
+                        toast.info(`Unlocked ${unlocked} of ${total} achievements`, { autoClose: 1000 });
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                    } catch (error) {
+                        console.error(`Failed to unlock achievement ${ach.name}:`, error);
+                    }
                 }
+                setBtnLoading(false);
+                toast.success(`Successfully unlocked ${unlocked} of ${total} achievements.`);
+            } else {
+                onClose();
+                toast.error('Steam is not running');
             }
-            setBtnLoading(false);
-            toast.success(`Successfully unlocked ${unlocked} of ${total} achievements.`);
-        } else {
-            onClose();
-            toast.error('Steam is not running');
+        } catch (error) {
+            console.error('Error in handleUnlockAll:', error);
+            logEvent(`[Error] in (handleUnlockAll): ${error}`);
         }
     };
 
     const handleLockAll = async (onClose) => {
-        const steamRunning = await invoke('check_status');
-        if (steamRunning) {
-            setBtnLoading(true);
-            onClose();
-            let locked = 0;
-            const total = achievementList.length;
-            for (const ach of achievementList) {
-                try {
-                    await lockAchievement(appId, ach.name);
-                    locked++;
-                    toast.info(`Locked ${locked} of ${total} achievements`, { autoClose: 1000 });
-                    await new Promise(resolve => setTimeout(resolve, 200));
-                } catch (error) {
-                    console.error(`Failed to unlock achievement ${ach.name}:`, error);
+        try {
+            const steamRunning = await invoke('check_status');
+            if (steamRunning) {
+                setBtnLoading(true);
+                onClose();
+                let locked = 0;
+                const total = achievementList.length;
+                for (const ach of achievementList) {
+                    try {
+                        await lockAchievement(appId, ach.name);
+                        locked++;
+                        toast.info(`Locked ${locked} of ${total} achievements`, { autoClose: 1000 });
+                        await new Promise(resolve => setTimeout(resolve, 200));
+                    } catch (error) {
+                        console.error(`Failed to unlock achievement ${ach.name}:`, error);
+                    }
                 }
+                setBtnLoading(false);
+                toast.success(`Successfully locked ${locked} of ${total} achievements.`);
+            } else {
+                onClose();
+                toast.error('Steam is not running');
             }
-            setBtnLoading(false);
-            toast.success(`Successfully locked ${locked} of ${total} achievements.`);
-        } else {
-            onClose();
-            toast.error('Steam is not running');
+        } catch (error) {
+            console.error('Error in handleLockAll:', error);
+            logEvent(`[Error] in handleLockAll: ${error}`);
         }
     };
 

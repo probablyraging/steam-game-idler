@@ -12,17 +12,22 @@ export default function GeneralSettings({ settings, setSettings }) {
     }, [settings]);
 
     const handleCheckboxChange = (e) => {
-        const { name, checked } = e.target;
-        if (localSettings && localSettings.general) {
-            const updatedSettings = {
-                ...localSettings,
-                general: {
-                    ...localSettings.general,
-                    [name]: checked
-                }
-            };
-            updateSettings(updatedSettings);
-            logEvent(`[Settings - General] Changed '${name}' to '${checked}'`);
+        try {
+            const { name, checked } = e.target;
+            if (localSettings && localSettings.general) {
+                const updatedSettings = {
+                    ...localSettings,
+                    general: {
+                        ...localSettings.general,
+                        [name]: checked
+                    }
+                };
+                updateSettings(updatedSettings);
+                logEvent(`[Settings - General] Changed '${name}' to '${checked}'`);
+            }
+        } catch (error) {
+            console.error('Error in (handleCheckboxChange):', error);
+            logEvent(`[Error] in (handleCheckboxChange): ${error}`);
         }
     };
 
@@ -32,7 +37,8 @@ export default function GeneralSettings({ settings, setSettings }) {
         try {
             localStorage.setItem('settings', JSON.stringify(newSettings));
         } catch (error) {
-            console.error('Failed to save settings to localStorage:', error);
+            console.error('Error in (updateSettings):', error);
+            logEvent(`[Error] in (updateSettings): ${error}`);
         }
     };
 

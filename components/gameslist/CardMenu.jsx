@@ -3,9 +3,9 @@ import { TiHeartFullOutline, TiMinus, TiPlus } from 'react-icons/ti';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoPlay } from 'react-icons/io5';
-import { FaAward } from 'react-icons/fa';
+import { FaAward, FaSteam } from 'react-icons/fa';
 
-export default function CardMenu({ item, favorites, cardFarming, achievementUnlocker, handleIdle, viewAchievments, addToFavorites, removeFromFavorites, addToCardFarming, removeFromCardFarming, addToAchievementUnlocker, removeFromAchievementUnlocker }) {
+export default function CardMenu({ item, favorites, cardFarming, achievementUnlocker, handleIdle, viewAchievments, viewStorePage, addToFavorites, removeFromFavorites, addToCardFarming, removeFromCardFarming, addToAchievementUnlocker, removeFromAchievementUnlocker }) {
     return (
         <React.Fragment>
             <Dropdown classNames={{ content: ['rounded p-0 bg-base border border-border'] }}>
@@ -32,6 +32,15 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                         textValue='View achievements'
                     >
                         <p className='text-xs'>View achievements</p>
+                    </DropdownItem>
+                    <DropdownItem
+                        className='rounded'
+                        key='store'
+                        startContent={<FaSteam fontSize={13} />}
+                        onClick={() => viewStorePage(item)}
+                        textValue='View store page'
+                    >
+                        <p className='text-xs'>View store page</p>
                     </DropdownItem>
                     {favorites.some(arr => arr.appid === item.appid) ? (
                         <DropdownItem

@@ -21,7 +21,8 @@ export default function Window() {
                     setHasUpdate(true);
                 }
             } catch (error) {
-                console.error('Failed to check for updates:', error);
+                console.error('Error in (checkForUpdates):', error);
+                logEvent(`[Error] in (checkForUpdates): ${error}`);
             }
         };
         checkForUpdates();

@@ -44,8 +44,8 @@ export default function AchievementUnlocker({ setActivePage }) {
                     startAchievementUnlocker();
                 }
             } catch (error) {
-                console.log('Error in achievement unlocker:', error);
-                logEvent(`[Error] [Achievement Unlocker - Auto] (startAchievementUnlocker) ${error}`);
+                console.error('Error in (startAchievementUnlocker):', error);
+                logEvent(`[Error] in (startAchievementUnlocker) ${error}`);
             }
         };
 
@@ -83,9 +83,9 @@ export default function AchievementUnlocker({ setActivePage }) {
                         a => a.name === achievement.name
                     );
                     if (settings.achievementUnlocker.hidden) {
-                        return !achievement.unlocked && schemaAchievement.hidden === 0;
+                        return !achievement.achieved && schemaAchievement.hidden === 0;
                     } else {
-                        return !achievement.unlocked;
+                        return !achievement.achieved;
                     }
                 })
                 .map(achievement => {
@@ -104,98 +104,124 @@ export default function AchievementUnlocker({ setActivePage }) {
 
             return { achievements, game };
         } catch (error) {
-            logEvent(`[Error] [Achievement Unlocker - Auto] (fetchAchievements) ${error}`);
+            console.error('Error in (fetchAchievements):', error);
+            logEvent(`[Error] in (fetchAchievements) ${error}`);
         }
     };
 
     const waitUntilInSchedule = async (scheduleFrom, scheduleTo) => {
-        setIsWaitingForSchedule(true);
-        while (isOutsideSchedule(scheduleFrom, scheduleTo)) {
-            if (!isMountedRef.current) {
-                setIsWaitingForSchedule(false);
-                throw new DOMException('Achievement unlocking stopped due to being outside of the scheduled time', 'Stop');
+        try {
+            setIsWaitingForSchedule(true);
+            while (isOutsideSchedule(scheduleFrom, scheduleTo)) {
+                if (!isMountedRef.current) {
+                    setIsWaitingForSchedule(false);
+                    throw new DOMException('Achievement unlocking stopped due to being outside of the scheduled time', 'Stop');
+                }
+                await new Promise(resolve => setTimeout(resolve, 60000));
             }
-            await new Promise(resolve => setTimeout(resolve, 60000));
+            setIsWaitingForSchedule(false);
+        } catch (error) {
+            console.error('Error in (waitUntilInSchedule):', error);
+            logEvent(`[Error] in (waitUntilInSchedule) ${error}`);
         }
-        setIsWaitingForSchedule(false);
     };
 
     const unlockAchievements = async (achievements, settings, game) => {
-        const { interval, idle, schedule, scheduleFrom, scheduleTo } = settings.achievementUnlocker;
+        try {
+            const { interval, idle, schedule, scheduleFrom, scheduleTo } = settings.achievementUnlocker;
 
-        let isGameIdling = false;
+            let isGameIdling = false;
 
-        if (idle && (schedule && !isOutsideSchedule(scheduleFrom, scheduleTo))) {
-            await startIdler(achievements[0].appId, achievements[0].gameName, false);
-            isGameIdling = true;
-        }
-
-        for (const achievement of achievements) {
-            if (isMountedRef.current) {
-                if (schedule && isOutsideSchedule(scheduleFrom, scheduleTo)) {
-                    if (game) {
-                        await stopIdler(game.appid, game.name);
-                        isGameIdling = false;
-                    }
-                    await waitUntilInSchedule(scheduleFrom, scheduleTo);
-                } else {
-                    if (!isGameIdling && idle) {
-                        await startIdler(achievements[0].appId, achievements[0].gameName, false);
-                        isGameIdling = true;
-                    }
-                }
-                unlockAchievement(achievement.appId, achievement.name, true);
-                logEvent(`[Achievement Unlocker - Auto] Unlocked ${achievement.name} for ${achievement.gameName}`);
-                setAchievementCount(prevCount => Math.max(prevCount - 1, 0));
-                const randomDelay = getRandomDelay(interval[0], interval[1]);
-                startCountdown(randomDelay / 60000);
-                await delay(randomDelay);
+            if (idle && (schedule && !isOutsideSchedule(scheduleFrom, scheduleTo))) {
+                await startIdler(achievements[0].appId, achievements[0].gameName, false);
+                isGameIdling = true;
             }
+
+            for (const achievement of achievements) {
+                if (isMountedRef.current) {
+                    if (schedule && isOutsideSchedule(scheduleFrom, scheduleTo)) {
+                        if (game) {
+                            await stopIdler(game.appid, game.name);
+                            isGameIdling = false;
+                        }
+                        await waitUntilInSchedule(scheduleFrom, scheduleTo);
+                    } else {
+                        if (!isGameIdling && idle) {
+                            await startIdler(achievements[0].appId, achievements[0].gameName, false);
+                            isGameIdling = true;
+                        }
+                    }
+                    unlockAchievement(achievement.appId, achievement.name, true);
+                    logEvent(`[Achievement Unlocker - Auto] Unlocked ${achievement.name} for ${achievement.gameName}`);
+                    setAchievementCount(prevCount => Math.max(prevCount - 1, 0));
+                    const randomDelay = getRandomDelay(interval[0], interval[1]);
+                    startCountdown(randomDelay / 60000);
+                    await delay(randomDelay);
+                }
+            }
+        } catch (error) {
+            console.error('Error in (unlockAchievements):', error);
+            logEvent(`[Error] in (unlockAchievements) ${error}`);
         }
     };
 
     const removeGameFromUnlockerList = (gameId) => {
-        const achievementUnlocker = JSON.parse(localStorage.getItem('achievementUnlocker')) || [];
-        const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== gameId);
-        localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
+        try {
+            const achievementUnlocker = JSON.parse(localStorage.getItem('achievementUnlocker')) || [];
+            const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== gameId);
+            localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
+        } catch (error) {
+            console.error('Error in (removeGameFromUnlockerList):', error);
+            logEvent(`[Error] in (removeGameFromUnlockerList) ${error}`);
+        }
     };
 
     const startCountdown = (durationInMinutes) => {
-        const durationInMilliseconds = durationInMinutes * 60000;
-        let remainingTime = durationInMilliseconds;
+        try {
+            const durationInMilliseconds = durationInMinutes * 60000;
+            let remainingTime = durationInMilliseconds;
 
-        const intervalId = setInterval(() => {
-            if (remainingTime <= 0) {
-                clearInterval(intervalId);
-                return;
-            }
+            const intervalId = setInterval(() => {
+                if (remainingTime <= 0) {
+                    clearInterval(intervalId);
+                    return;
+                }
 
-            setCountdownTimer(formatTime(remainingTime));
-            remainingTime -= 1000;
-        }, 1000);
+                setCountdownTimer(formatTime(remainingTime));
+                remainingTime -= 1000;
+            }, 1000);
+        } catch (error) {
+            console.error('Error in (startCountdown):', error);
+            logEvent(`[Error] in (startCountdown) ${error}`);
+        }
     };
 
     const delay = (ms) => {
-        return new Promise((resolve, reject) => {
-            const checkInterval = 1000;
-            let elapsedTime = 0;
+        try {
+            return new Promise((resolve, reject) => {
+                const checkInterval = 1000;
+                let elapsedTime = 0;
 
-            const intervalId = setInterval(() => {
-                if (!isMountedRef.current) {
+                const intervalId = setInterval(() => {
+                    if (!isMountedRef.current) {
+                        clearInterval(intervalId);
+                        reject(new DOMException('Achievement unlocking stopped early', 'Stop'));
+                    } else if (elapsedTime >= ms) {
+                        clearInterval(intervalId);
+                        resolve();
+                    }
+                    elapsedTime += checkInterval;
+                }, checkInterval);
+
+                abortControllerRef.current.signal.addEventListener('abort', () => {
                     clearInterval(intervalId);
                     reject(new DOMException('Achievement unlocking stopped early', 'Stop'));
-                } else if (elapsedTime >= ms) {
-                    clearInterval(intervalId);
-                    resolve();
-                }
-                elapsedTime += checkInterval;
-            }, checkInterval);
-
-            abortControllerRef.current.signal.addEventListener('abort', () => {
-                clearInterval(intervalId);
-                reject(new DOMException('Achievement unlocking stopped early', 'Stop'));
+                });
             });
-        });
+        } catch (error) {
+            console.error('Error in (delay):', error);
+            logEvent(`[Error] in (delay) ${error}`);
+        }
     };
 
     const formatTime = (ms) => {

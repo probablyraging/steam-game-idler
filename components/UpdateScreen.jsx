@@ -5,6 +5,7 @@ import { Progress, Spinner } from '@nextui-org/react';
 import { HiMiniMinus } from 'react-icons/hi2';
 import { BiSolidLeaf, BiWindows } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
+import { logEvent } from '@/utils/utils';
 
 export default function UpdateScreen() {
     const [progress, setProgress] = useState(0);
@@ -15,8 +16,13 @@ export default function UpdateScreen() {
         const performUpdate = async () => {
             setTimeout(async () => {
                 setCheckUpdate(false);
-                await installUpdate();
-                await relaunch();
+                try {
+                    await installUpdate();
+                    await relaunch();
+                } catch (error) {
+                    console.error('Error in (performUpdate):', error);
+                    logEvent(`[Error] in (performUpdate): ${error}`);
+                }
             }, 2000);
         };
         performUpdate();

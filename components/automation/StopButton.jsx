@@ -1,7 +1,7 @@
 import React from 'react';
 import { IoStop } from 'react-icons/io5';
 import { motion } from 'framer-motion';
-import { stopIdler } from '@/utils/utils';
+import { logEvent, stopIdler } from '@/utils/utils';
 
 export default function StopButton({ setActivePage, isMountedRef, abortControllerRef, gamesWithDrops, screen, currentGame }) {
     const borderWidths = [
@@ -19,7 +19,8 @@ export default function StopButton({ setActivePage, isMountedRef, abortControlle
                 await stopIdler(currentGame.appId, currentGame.name);
             }
         } catch (error) {
-            console.error('Error stopping games:', error);
+            console.log('Error in (handleStop) :', error);
+            logEvent(`[Error] in (handleStop) ${error}`);
         } finally {
             isMountedRef.current = false;
             abortControllerRef.current.abort();

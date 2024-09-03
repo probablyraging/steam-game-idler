@@ -8,6 +8,7 @@ import { getVersion } from '@tauri-apps/api/app';
 import SettingsMenu from './SettingsMenu';
 import ResetSettings from './ResetSettings';
 import { Time } from '@internationalized/date';
+import { logEvent } from '@/utils/utils';
 
 export default function Settings({ setHasUpdate }) {
     const [settings, setSettings] = useState(null);
@@ -16,8 +17,13 @@ export default function Settings({ setHasUpdate }) {
 
     useEffect(() => {
         const getAppVersion = async () => {
-            const appVersion = await getVersion();
-            setVersion(appVersion);
+            try {
+                const appVersion = await getVersion();
+                setVersion(appVersion);
+            } catch (error) {
+                console.error('Error in (getAppVersion):', error);
+                logEvent(`[Error] in (getAppVersion): ${error}`);
+            }
         };
         getAppVersion();
     }, []);

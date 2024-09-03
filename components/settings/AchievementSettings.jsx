@@ -14,45 +14,60 @@ export default function AchievementSettings({ settings, setSettings }) {
     }, [settings]);
 
     const handleCheckboxChange = (e) => {
-        const { name, checked } = e.target;
-        if (localSettings && localSettings.achievementUnlocker) {
-            const updatedSettings = {
-                ...localSettings,
-                achievementUnlocker: {
-                    ...localSettings.achievementUnlocker,
-                    [name]: checked
-                }
-            };
-            updateSettings(updatedSettings);
-            logEvent(`[Settings - Achievement Unlocker] Changed '${name}' to '${checked}'`);
+        try {
+            const { name, checked } = e.target;
+            if (localSettings && localSettings.achievementUnlocker) {
+                const updatedSettings = {
+                    ...localSettings,
+                    achievementUnlocker: {
+                        ...localSettings.achievementUnlocker,
+                        [name]: checked
+                    }
+                };
+                updateSettings(updatedSettings);
+                logEvent(`[Settings - Achievement Unlocker] Changed '${name}' to '${checked}'`);
+            }
+        } catch (error) {
+            console.error('Error in (handleCheckboxChange):', error);
+            logEvent(`[Error] in (handleCheckboxChange): ${error}`);
         }
     };
 
     const handleSliderChange = (e) => {
-        if (localSettings && localSettings.achievementUnlocker) {
-            const updatedSettings = {
-                ...localSettings,
-                achievementUnlocker: {
-                    ...localSettings.achievementUnlocker,
-                    interval: e
-                }
-            };
-            updateSettings(updatedSettings);
-            logEvent(`[Settings - Achievement Unlocker] Changed 'interval' to '${e}'`);
+        try {
+            if (localSettings && localSettings.achievementUnlocker) {
+                const updatedSettings = {
+                    ...localSettings,
+                    achievementUnlocker: {
+                        ...localSettings.achievementUnlocker,
+                        interval: e
+                    }
+                };
+                updateSettings(updatedSettings);
+                logEvent(`[Settings - Achievement Unlocker] Changed 'interval' to '${e}'`);
+            }
+        } catch (error) {
+            console.error('Error in (handleSliderChange):', error);
+            logEvent(`[Error] in (handleSliderChange): ${error}`);
         }
     };
 
     const handleScheduleChange = (value, type) => {
-        if (localSettings && localSettings.achievementUnlocker) {
-            const updatedSettings = {
-                ...localSettings,
-                achievementUnlocker: {
-                    ...localSettings.achievementUnlocker,
-                    [type]: value
-                }
-            };
-            updateSettings(updatedSettings);
-            logEvent(`[Settings - Achievement Unlocker] Changed '${type}' to '${value.toString()}'`);
+        try {
+            if (localSettings && localSettings.achievementUnlocker) {
+                const updatedSettings = {
+                    ...localSettings,
+                    achievementUnlocker: {
+                        ...localSettings.achievementUnlocker,
+                        [type]: value
+                    }
+                };
+                updateSettings(updatedSettings);
+                logEvent(`[Settings - Achievement Unlocker] Changed '${type}' to '${value.toString()}'`);
+            }
+        } catch (error) {
+            console.error('Error in (handleScheduleChange):', error);
+            logEvent(`[Error] in (handleScheduleChange): ${error}`);
         }
     };
 
@@ -62,7 +77,8 @@ export default function AchievementSettings({ settings, setSettings }) {
         try {
             localStorage.setItem('settings', JSON.stringify(newSettings));
         } catch (error) {
-            console.error('Failed to save settings to localStorage:', error);
+            console.error('Error in (updateSettings):', error);
+            logEvent(`[Error] in (updateSettings): ${error}`);
         }
     };
 

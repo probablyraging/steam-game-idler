@@ -26,7 +26,8 @@ export default function Setup({ setUserSummary }) {
                 setUserSummary(userSummary);
                 setIsLoading(false);
             } catch (error) {
-                console.error('Error in getUserSummary:', error);
+                console.error('Error in (getUserSummary):', error);
+                logEvent(`[Error] in (getUserSummary): ${error}`);
             }
         };
         if (steamId) {
@@ -35,16 +36,21 @@ export default function Setup({ setUserSummary }) {
     }, [steamId]);
 
     const handleClick = async () => {
-        setIsLoading(true);
-        const path = await invoke('get_file_path');
-        const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
-        const result = await invoke('check_steam_status', { filePath: fullPath });
-        if (result === 'not_running') {
-            setIsLoading(false);
-            return toast.error('The Steam desktop app is not running, or you are not signed in');
-        } else {
-            setSteamId(result);
-            logEvent('[System] Logged in');
+        try {
+            setIsLoading(true);
+            const path = await invoke('get_file_path');
+            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
+            const result = await invoke('check_steam_status', { filePath: fullPath });
+            if (result === 'not_running') {
+                setIsLoading(false);
+                return toast.error('The Steam desktop app is not running, or you are not signed in');
+            } else {
+                setSteamId(result);
+                logEvent('[System] Logged in');
+            }
+        } catch (error) {
+            console.error('Error in (handleClick):', error);
+            logEvent(`[Error] in (handleClick): ${error}`);
         }
     };
 

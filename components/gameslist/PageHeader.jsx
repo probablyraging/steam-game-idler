@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import { IoRefresh } from 'react-icons/io5';
 import ManualAdd from './ManualAdd';
+import { logEvent } from '@/utils/utils';
 
 export default function PageHeader({ steamId, setActivePage, sortStyle, setSortStyle, filteredGames, visibleGames, setFavorites, setRefreshKey }) {
     const sortOptions = [
@@ -20,20 +21,30 @@ export default function PageHeader({ steamId, setActivePage, sortStyle, setSortS
     ];
 
     const handleSorting = (e) => {
-        localStorage.setItem('sortStyle', e.currentKey);
-        setSortStyle(e.currentKey);
+        try {
+            localStorage.setItem('sortStyle', e.currentKey);
+            setSortStyle(e.currentKey);
+        } catch (error) {
+            console.error('Error in (handleSorting):', error);
+            logEvent(`[Error] in (handleSorting): ${error}`);
+        }
     };
 
     const handleRefetch = () => {
-        if (steamId !== '76561198158912649' && steamId !== '76561198999797359') {
-            const cooldown = sessionStorage.getItem('cooldown');
-            if (cooldown && moment().unix() < cooldown) {
-                return toast.error(`Games can be refreshed again at ${moment.unix(cooldown).format('h:mm A')}`);
+        try {
+            if (steamId !== '76561198158912649' && steamId !== '76561198999797359') {
+                const cooldown = sessionStorage.getItem('cooldown');
+                if (cooldown && moment().unix() < cooldown) {
+                    return toast.error(`Games can be refreshed again at ${moment.unix(cooldown).format('h:mm A')}`);
+                }
             }
+            sessionStorage.removeItem('gamesListCache');
+            sessionStorage.setItem('cooldown', moment().add(3, 'minutes').unix());
+            setRefreshKey(prevKey => prevKey + 1);
+        } catch (error) {
+            console.error('Error in (handleRefetch):', error);
+            logEvent(`[Error] in (handleRefetch): ${error}`);
         }
-        sessionStorage.removeItem('gamesListCache');
-        sessionStorage.setItem('cooldown', moment().add(3, 'minutes').unix());
-        setRefreshKey(prevKey => prevKey + 1);
     };
 
     return (

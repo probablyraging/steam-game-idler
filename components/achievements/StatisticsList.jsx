@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Input } from '@nextui-org/react';
-import { updateStat } from '@/utils/utils';
+import { logEvent, updateStat } from '@/utils/utils';
 import { toast } from 'react-toastify';
 
 export default function StatisticsList({ appId, appName, statisticsUnavailable, statisticsList, userGameStatsMap }) {
@@ -24,11 +24,16 @@ export default function StatisticsList({ appId, appName, statisticsUnavailable, 
     };
 
     const handleUpdate = async (statName) => {
-        const status = await updateStat(appId, statName, inputValues[statName].toString());
-        if (!status.error) {
-            toast.success(`Updated ${statName} to ${inputValues[statName]} for ${appName}`, { autoClose: 1500 });
-        } else {
-            toast.error(`Error: ${status.error}`);
+        try {
+            const status = await updateStat(appId, statName, inputValues[statName].toString());
+            if (!status.error) {
+                toast.success(`Updated ${statName} to ${inputValues[statName]} for ${appName}`, { autoClose: 1500 });
+            } else {
+                toast.error(`Error: ${status.error}`);
+            }
+        } catch (error) {
+            console.error('Error in (handleUpdate):', error);
+            logEvent(`[Error] in (handleUpdate): ${error}`);
         }
     };
 
