@@ -32,9 +32,11 @@ export default function AchievementUnlocker({ setActivePage }) {
                     return;
                 }
 
-                const { achievements, game } = await fetchAchievements(achievementUnlocker[0], settings);
+                const achievementData = await fetchAchievements(achievementUnlocker[0], settings);
+                const achievements = achievementData?.achievements;
+                const game = achievementData?.game;
 
-                if (achievements.length > 0) {
+                if (achievements?.length > 0) {
                     await unlockAchievements(achievements, settings, game);
                 } else {
                     removeGameFromUnlockerList(game.appid);
@@ -68,8 +70,12 @@ export default function AchievementUnlocker({ setActivePage }) {
 
             const res = await invoke('get_achievement_unlocker_data', { steamId: userSummary.steamId, appId: game.appid.toString() });
 
-            if (!res.userAchievements || !res.percentages) {
+            if (!res.userAchievements) {
                 setHasPrivateGames(true);
+                return { achievements: [], game };
+            }
+
+            if (!res.gameAchievements || !res.percentages) {
                 return { achievements: [], game };
             }
 
