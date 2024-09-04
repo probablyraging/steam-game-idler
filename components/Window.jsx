@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
 import UpdateScreen from './UpdateScreen';
-import { logEvent } from '@/utils/utils';
+import { logEvent, updateMongoStats } from '@/utils/utils';
 import { Time } from '@internationalized/date';
 import Setup from './Setup';
 
@@ -63,6 +63,7 @@ export default function Window() {
                 interval: [30, 130],
             }
         };
+        updateMongoStats('launched');
         const userSummaryData = localStorage.getItem('userSummary');
         setUserSummary(JSON.parse(userSummaryData));
         let currentSettings = JSON.parse(localStorage.getItem('settings'));

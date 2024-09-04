@@ -1,6 +1,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 pub mod requests;
+pub mod mongodb;
 
 use std::env;
 use chrono::Local;
@@ -11,6 +12,7 @@ use std::fs::{OpenOptions, create_dir_all};
 use std::io::{BufRead, BufReader, Write, Seek, SeekFrom};
 use serde_json::Value;
 use requests::*;
+use mongodb::*;
 
 fn main() {
     if cfg!(debug_assertions) {
@@ -22,7 +24,7 @@ fn main() {
     }
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
-            get_file_path,
+            get_file_path, 
             check_status,
             start_idle,
             stop_idle,
@@ -40,7 +42,8 @@ fn main() {
             get_drops_remaining,
             get_games_with_drops,
             get_game_details,
-            open_file_explorer
+            open_file_explorer,
+            db_update_stats
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -87,6 +90,11 @@ async fn get_game_details(app_id: String) -> Result<Value, String> {
 }
 
 #[tauri::command]
+async fn db_update_stats(stat: String, count: i32) -> Result<Value, String> {
+    update_stats(stat, count).await
+}
+
+#[tauri::command]
 fn get_file_path() -> Result<PathBuf, String> {
     match std::env::current_exe() {
         Ok(path) => return Ok(path),
@@ -100,7 +108,7 @@ fn check_status() -> bool {
         .args(&["/FI", "IMAGENAME eq steam.exe"])
         .stdout(Stdio::piped())
         .stderr(Stdio::null())
-        .creation_flags(0x08000000)
+        .creation_flags(0x08000000) 
         .output()
         .expect("Failed to execute tasklist command");
     let output_str = String::from_utf8_lossy(&output.stdout);

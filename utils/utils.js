@@ -3,12 +3,8 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { getVersion } from '@tauri-apps/api/app';
 import { Time } from "@internationalized/date";
 
-export function minutesToHoursCompact(number) {
-    const durationInMinutes = number;
-    const duration = moment.duration(durationInMinutes, 'minutes');
-    const hours = Math.floor(duration.asHours());
-    return hours;
-}
+let idleCounter = 0;
+let achievementCounter = 0;
 
 export async function startIdler(appId, appName, quiet = false) {
     try {
@@ -19,22 +15,26 @@ export async function startIdler(appId, appName, quiet = false) {
             const path = await invoke('get_file_path');
             const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
             await invoke('start_idle', { filePath: fullPath, appId: appId.toString(), quiet: stealthIdle ? stealthIdle.toString() : quiet.toString() });
-            logEvent(`[Idle] Started ${appName}`);
+            idleCounter++;
+            updateMongoStats('idle');
+            logEvent(`[Idle] Started ${appName} (${appId})`);
             return true;
         } else {
             return false;
         }
     } catch (error) {
         console.error('Error in startIdler util', error);
+        logEvent(`[Error] in (startIdler) util: ${error}`);
     }
 };
 
 export async function stopIdler(appId, appName) {
     try {
         await invoke('stop_idle', { appId: appId.toString() });
-        logEvent(`[Idling] Stopped ${appName}`);
+        logEvent(`[Idling] Stopped ${appName} (${appId})`);
     } catch (error) {
         console.error('Error in stopIdler util: ', error);
+        logEvent(`[Error] in (stopIdler) util: ${error}`);
     }
 };
 
@@ -50,6 +50,8 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
                 achievementId: achievementId,
                 unlockAll: unlockAll
             });
+            achievementCounter++;
+            updateMongoStats('achievement');
             logEvent(`[Achievement Unlocker] Unlocked/locked ${achievementId} (${appId})`);
             return true;
         } else {
@@ -58,6 +60,7 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
         }
     } catch (error) {
         console.error('Error in unlockAchievement util: ', error);
+        logEvent(`[Error] in (unlockAchievement) util: ${error}`);
         return { error: error };
     }
 }
@@ -73,12 +76,15 @@ export async function lockAchievement(appId, achievementId) {
                 appId: appId.toString(),
                 achievementId: achievementId
             });
+            achievementCounter++;
+            updateMongoStats('achievement');
             logEvent(`[Achievement Unlocker] Locked ${achievementId} (${appId})`);
         } else {
             logEvent(`[Error] [Achievement Unlocker] Steam is not running`);
         }
     } catch (error) {
         console.error('Error in lockAchievement util: ', error);
+        logEvent(`[Error] in (lockAchievement) util: ${error}`);
     }
 }
 
@@ -102,6 +108,7 @@ export async function updateStat(appId, statName, newValue) {
         }
     } catch (error) {
         console.error('Error in updateStat util: ', error);
+        logEvent(`[Error] in (updateStat) util: ${error}`);
         return { error: error };
     }
 }
@@ -116,6 +123,7 @@ export async function checkDrops(steamId, appId, sid, sls) {
         }
     } catch (error) {
         console.error('Error in checkDrops util: ', error);
+        logEvent(`[Error] in (checkDrops) util: ${error}`);
     }
 }
 
@@ -129,6 +137,7 @@ export async function getAllGamesWithDrops(steamId, sid, sls) {
         }
     } catch (error) {
         console.error('Error in getAllGamesWithDrops util: ', error);
+        logEvent(`[Error] in (getAllGamesWithDrops) util: ${error}`);
     }
 }
 
@@ -140,6 +149,35 @@ export async function logEvent(message) {
         console.error('Error in logEvent util: ', error);
     }
 };
+
+export const updateMongoStats = debounce(async (stat) => {
+    try {
+        if (stat === 'launched') {
+            await invoke('db_update_stats', { stat: 'launched', count: 1 });
+        } else if (stat === 'idle') {
+            await invoke('db_update_stats', { stat: 'idle', count: idleCounter });
+            idleCounter = 0;
+        } else if (stat === 'achievement') {
+            await invoke('db_update_stats', { stat: 'achievement', count: achievementCounter });
+            achievementCounter = 0;
+        }
+    } catch (error) {
+        console.error('Error in updateMongoStats util: ', error);
+        logEvent(`[Error] in (updateMongoStats) util: ${error}`);
+    }
+}, 5000);
+
+export function isOutsideSchedule(scheduleFrom, scheduleTo) {
+    const now = new Date();
+    const currentTime = new Time(now.getHours(), now.getMinutes());
+    const scheduleFromTime = new Time(scheduleFrom.hour, scheduleFrom.minute);
+    const scheduleToTime = new Time(scheduleTo.hour, scheduleTo.minute);
+    if (scheduleToTime.compare(scheduleFromTime) < 0) {
+        return currentTime.compare(scheduleFromTime) >= 0 || currentTime.compare(scheduleToTime) < 0;
+    } else {
+        return currentTime.compare(scheduleFromTime) >= 0 && currentTime.compare(scheduleToTime) < 0;
+    }
+}
 
 export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -157,16 +195,11 @@ export function debounce(func, wait) {
     };
 }
 
-export function isOutsideSchedule(scheduleFrom, scheduleTo) {
-    const now = new Date();
-    const currentTime = new Time(now.getHours(), now.getMinutes());
-    const scheduleFromTime = new Time(scheduleFrom.hour, scheduleFrom.minute);
-    const scheduleToTime = new Time(scheduleTo.hour, scheduleTo.minute);
-    if (scheduleToTime.compare(scheduleFromTime) < 0) {
-        return currentTime.compare(scheduleFromTime) >= 0 || currentTime.compare(scheduleToTime) < 0;
-    } else {
-        return currentTime.compare(scheduleFromTime) >= 0 && currentTime.compare(scheduleToTime) < 0;
-    }
+export function minutesToHoursCompact(number) {
+    const durationInMinutes = number;
+    const duration = moment.duration(durationInMinutes, 'minutes');
+    const hours = Math.floor(duration.asHours());
+    return hours;
 }
 
 export function formatTime(ms) {
