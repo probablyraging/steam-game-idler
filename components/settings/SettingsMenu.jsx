@@ -6,11 +6,12 @@ import { checkUpdate } from '@tauri-apps/api/updater';
 import { toast } from 'react-toastify';
 import { logEvent } from '@/utils/utils';
 
-export default function SettingsMenu({ setHasUpdate }) {
+export default function SettingsMenu({ setHasUpdate, setUpdateManifest }) {
     const checkForUpdates = async () => {
         try {
-            const { shouldUpdate } = await checkUpdate();
+            const { shouldUpdate, manifest } = await checkUpdate();
             if (shouldUpdate) {
+                setUpdateManifest(manifest);
                 setHasUpdate(true);
             } else {
                 toast.info('Steam Game Idler is up to date');
