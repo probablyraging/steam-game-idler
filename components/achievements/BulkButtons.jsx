@@ -21,11 +21,11 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                 onClose();
                 let unlocked = 0;
                 const total = achievementList.length;
+                toast.info(`Unlocking ${total} achievements`);
                 for (const ach of achievementList) {
                     try {
                         await unlockAchievement(appId, ach.name, true);
                         unlocked++;
-                        toast.info(`Unlocked ${unlocked} of ${total} achievements`, { autoClose: 1000 });
                         await new Promise(resolve => setTimeout(resolve, 200));
                     } catch (error) {
                         console.error(`Failed to unlock achievement ${ach.name}:`, error);
@@ -51,11 +51,11 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                 onClose();
                 let locked = 0;
                 const total = achievementList.length;
+                toast.info(`Locking ${total} achievements`);
                 for (const ach of achievementList) {
                     try {
                         await lockAchievement(appId, ach.name);
                         locked++;
-                        toast.info(`Locked ${locked} of ${total} achievements`, { autoClose: 1000 });
                         await new Promise(resolve => setTimeout(resolve, 200));
                     } catch (error) {
                         console.error(`Failed to unlock achievement ${ach.name}:`, error);

@@ -17,7 +17,17 @@ export default function Layout({ children }) {
             <main className={`${GeistSans.className} h-full min-h-screen bg-base rounded-tr-[10px] rounded-tl-xl`}>
                 {children}
             </main>
-            <ToastContainer toastStyle={{ fontSize: 12 }} position='bottom-center' theme={theme} transition={Slide} pauseOnFocusLoss={false} pauseOnHover={false} autoClose={5000} />
+            <ToastContainer
+                toastStyle={{ fontSize: 12 }}
+                position='top-center'
+                theme={theme}
+                transition={Slide}
+                pauseOnFocusLoss={false}
+                limit={1}
+                pauseOnHover={false}
+                newestOnTop
+                autoClose={1500}
+            />
         </React.Fragment>
     );
 }

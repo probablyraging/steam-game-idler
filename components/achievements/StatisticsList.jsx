@@ -27,7 +27,7 @@ export default function StatisticsList({ appId, appName, statisticsUnavailable, 
         try {
             const status = await updateStat(appId, statName, inputValues[statName].toString());
             if (!status.error) {
-                toast.success(`Updated ${statName} to ${inputValues[statName]} for ${appName}`, { autoClose: 1500 });
+                toast.success(`Updated ${statName} to ${inputValues[statName]} for ${appName}`);
             } else {
                 toast.error(`Error: ${status.error}`);
             }

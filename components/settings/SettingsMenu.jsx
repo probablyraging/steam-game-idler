@@ -13,7 +13,7 @@ export default function SettingsMenu({ setHasUpdate }) {
             if (shouldUpdate) {
                 setHasUpdate(true);
             } else {
-                toast.info('Steam Game Idler is up to date', { autoClose: 2000 });
+                toast.info('Steam Game Idler is up to date');
             }
         } catch (error) {
             console.error('Error in (checkForUpdates):', error);

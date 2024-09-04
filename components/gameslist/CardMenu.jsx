@@ -1,5 +1,5 @@
 import React from 'react';
-import { TiHeartFullOutline, TiMinus, TiPlus } from 'react-icons/ti';
+import { TiMinus, TiPlus } from 'react-icons/ti';
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoPlay } from 'react-icons/io5';
@@ -46,7 +46,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                         <DropdownItem
                             className='rounded'
                             key='fav-rem'
-                            startContent={<TiHeartFullOutline />}
+                            startContent={<TiMinus />}
                             onClick={(e) => removeFromFavorites(e, item)}
                             textValue='Remove from favorites'
                         >
@@ -56,7 +56,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                         <DropdownItem
                             className='rounded'
                             key='fav-add'
-                            startContent={<TiHeartFullOutline />}
+                            startContent={<TiPlus />}
                             onClick={(e) => addToFavorites(e, item)}
                             textValue='Add to favorites'
                         >

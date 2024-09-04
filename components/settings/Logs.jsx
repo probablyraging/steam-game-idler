@@ -29,16 +29,24 @@ export default function Logs() {
         return () => clearInterval(intervalId);
     }, []);
 
+    const handleOpenLogFile = async () => {
+        try {
+            await invoke('open_file_explorer', { path: logPath });
+        } catch (error) {
+            console.error('Error in (handleOpenLogFile):', error);
+            logEvent(`[Error] in (handleOpenLogFile): ${error}`);
+        }
+    };
+
     return (
         <React.Fragment>
             <div className='p-2'>
-                <div className='mb-6'>
-                    <p className='text-xs'>
-                        Log file location: <span className='font-mono bg-containerhover px-1 py-0.5'>{logPath}</span>
+                <div className='mb-2'>
+                    <p className='text-xs font-mono text-blue-400 cursor-pointer' onClick={handleOpenLogFile}>
+                        Open in File Explorer
                     </p>
                 </div>
-
-                <div className='bg-container border border-border font-mono text-xs rounded min-h-[200px] max-h-[calc(100vh-280px)] overflow-y-auto'>
+                <div className='bg-container border border-border font-mono text-xs rounded min-h-[200px] max-h-[calc(100vh-260px)] overflow-y-auto'>
                     <table className='w-full border-collapse'>
                         <thead className='sticky top-0 z-10'>
                             <tr className='border-b border-border bg-[#dedede] dark:bg-base'>

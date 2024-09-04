@@ -182,7 +182,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
         <React.Fragment key={refreshKey}>
             <div className='w-calc min-h-calc max-h-calc overflow-y-auto overflow-x-hidden' onScroll={handleScroll}>
                 {!showAchievements && (
-                    <div className='fixed w-[calc(100vw-72px)] z-[50] bg-opacity-90 backdrop-blur-md bg-base px-2 pt-2'>
+                    <div className={`fixed w-[calc(100vw-72px)] z-[50] bg-opacity-90 backdrop-blur-md bg-base pl-4 pt-2 ${filteredGames?.length > 25 ? 'pr-4' : 'pr-2'}`}>
                         <PageHeader
                             steamId={steamId}
                             setActivePage={setActivePage}

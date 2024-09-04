@@ -9,7 +9,7 @@ export default function AchievementsList({ appId, appName, achievementsUnavailab
         try {
             const status = await unlockAchievement(appId, achievementName, false);
             if (!status.error) {
-                toast.success(`${type} ${achievementName} for ${appName}`, { autoClose: 1500 });
+                toast.success(`${type} ${achievementName} for ${appName}`);
             } else {
                 toast.error(`Error: ${status.error}`);
                 logEvent(`[Error] in handleUnlock: ${status.error}`);

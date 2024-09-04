@@ -39,7 +39,8 @@ fn main() {
             validate_session,
             get_drops_remaining,
             get_games_with_drops,
-            get_game_details
+            get_game_details,
+            open_file_explorer
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -231,4 +232,14 @@ fn get_app_log_dir(app_handle: tauri::AppHandle) -> Result<String, String> {
     app_specific_dir.to_str()
         .ok_or("Failed to convert path to string".to_string())
         .map(|s| s.to_string())
+}
+
+#[tauri::command]
+fn open_file_explorer(path: String) -> Result<(), String> {
+        std::process::Command::new("explorer")
+            .args(["/select,", &path])
+            .creation_flags(0x08000000)
+            .spawn()
+            .map_err(|e| e.to_string())?;
+    Ok(())
 }
