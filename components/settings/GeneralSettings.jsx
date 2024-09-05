@@ -58,18 +58,6 @@ export default function GeneralSettings({ settings, setSettings }) {
                 </Checkbox>
 
                 <Checkbox
-                    name='disableUpdates'
-                    isSelected={localSettings?.general?.disableUpdates}
-                    onChange={handleCheckboxChange}
-                >
-                    <div className='flex items-center gap-1'>
-                        <p className='text-xs'>
-                            Disable automatic updates
-                        </p>
-                    </div>
-                </Checkbox>
-
-                <Checkbox
                     name='clearData'
                     isSelected={localSettings?.general?.clearData}
                     onChange={handleCheckboxChange}

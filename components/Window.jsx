@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
-import UpdateScreen from './UpdateScreen';
-import { logEvent, updateMongoStats } from '@/utils/utils';
+import { fetchLatest, logEvent, updateMongoStats } from '@/utils/utils';
 import { Time } from '@internationalized/date';
 import Setup from './Setup';
+import UpdateModal from './UpdateModal';
+import UpdateScreen from './UpdateScreen';
 
 export default function Window() {
-    const [hasUpdate, setHasUpdate] = useState(false);
     const [userSummary, setUserSummary] = useState(null);
+    const [updateAvailable, setUpdateAvailable] = useState(false);
     const [updateManifest, setUpdateManifest] = useState(null);
+    const [initUpdate, setInitUpdate] = useState(false);
 
     useEffect(() => {
         const checkForUpdates = async () => {
             try {
-                const settings = JSON.parse(localStorage.getItem('settings')) || {};
-                const { disableUpdates } = settings?.general || {};
                 const { shouldUpdate, manifest } = await checkUpdate();
                 const latest = await fetchLatest();
-                if (disableUpdates && !latest?.major) return;
                 if (shouldUpdate) {
+                    if (latest?.major) {
+                        return setInitUpdate(true);
+                    }
                     setUpdateManifest(manifest);
-                    setHasUpdate(true);
+                    setUpdateAvailable(true);
                 }
             } catch (error) {
                 console.error('Error in (checkForUpdates):', error);
@@ -31,23 +33,10 @@ export default function Window() {
         checkForUpdates();
     }, []);
 
-    const fetchLatest = async () => {
-        try {
-            const res = await fetch('https://raw.githubusercontent.com/probablyraging/steam-game-idler/main/latest.json');
-            const data = await res.json();
-            return data;
-        } catch (error) {
-            console.error('Error in (fetchLatest):', error);
-            logEvent(`[Error] in (fetchLatest): ${error}`);
-            return null;
-        }
-    };
-
     useEffect(() => {
         const defaultSettings = {
             general: {
                 stealthIdle: false,
-                disableUpdates: false,
                 clearData: true
             },
             cardFarming: {
@@ -74,7 +63,7 @@ export default function Window() {
         logEvent('[System] Launched Steam Game Idler');
     }, []);
 
-    if (hasUpdate) return (
+    if (initUpdate) return (
         <UpdateScreen updateManifest={updateManifest} />
     );
 
@@ -83,8 +72,11 @@ export default function Window() {
     );
 
     return (
-        <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-[10px] rounded-tl-xl'>
-            <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} setHasUpdate={setHasUpdate} setUpdateManifest={setUpdateManifest} />
-        </div>
+        <React.Fragment>
+            <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-[10px] rounded-tl-xl'>
+                <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} setUpdateManifest={setUpdateManifest} />
+            </div>
+            <UpdateModal updateAvailable={updateAvailable} updateManifest={updateManifest} setInitUpdate={setInitUpdate} />
+        </React.Fragment>
     );
 }

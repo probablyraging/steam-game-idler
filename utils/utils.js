@@ -179,6 +179,18 @@ export function isOutsideSchedule(scheduleFrom, scheduleTo) {
     }
 }
 
+export async function fetchLatest() {
+    try {
+        const res = await fetch('https://raw.githubusercontent.com/probablyraging/steam-game-idler/main/latest.json');
+        const data = await res.json();
+        return data;
+    } catch (error) {
+        console.error('Error in (fetchLatest):', error);
+        logEvent(`[Error] in (fetchLatest): ${error}`);
+        return null;
+    }
+};
+
 export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

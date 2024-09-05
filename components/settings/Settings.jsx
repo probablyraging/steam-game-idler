@@ -32,7 +32,6 @@ export default function Settings({ setHasUpdate, setUpdateManifest }) {
         const defaultSettings = {
             general: {
                 stealthIdle: false,
-                disableUpdates: false,
                 clearData: true
             },
             cardFarming: {
