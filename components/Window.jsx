@@ -4,12 +4,12 @@ import Dashboard from './Dashboard';
 import { fetchLatest, logEvent, updateMongoStats } from '@/utils/utils';
 import { Time } from '@internationalized/date';
 import Setup from './Setup';
-import UpdateModal from './UpdateModal';
 import UpdateScreen from './UpdateScreen';
+import { toast } from 'react-toastify';
+import UpdateToast from './UpdateToast';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
-    const [updateAvailable, setUpdateAvailable] = useState(false);
     const [updateManifest, setUpdateManifest] = useState(null);
     const [initUpdate, setInitUpdate] = useState(false);
 
@@ -22,8 +22,10 @@ export default function Window() {
                     if (latest?.major) {
                         return setInitUpdate(true);
                     }
-                    setUpdateManifest(manifest);
-                    setUpdateAvailable(true);
+                    toast.info(
+                        <UpdateToast updateManifest={manifest} setInitUpdate={setInitUpdate} />,
+                        { autoClose: false }
+                    );
                 }
             } catch (error) {
                 console.error('Error in (checkForUpdates):', error);
@@ -52,15 +54,20 @@ export default function Window() {
                 interval: [30, 130],
             }
         };
-        updateMongoStats('launched');
-        const userSummaryData = localStorage.getItem('userSummary');
-        setUserSummary(JSON.parse(userSummaryData));
-        let currentSettings = JSON.parse(localStorage.getItem('settings'));
-        if (!currentSettings) {
-            localStorage.setItem('settings', JSON.stringify(defaultSettings));
-            currentSettings = JSON.parse(localStorage.getItem('settings'));
+        try {
+            updateMongoStats('launched');
+            const userSummaryData = localStorage.getItem('userSummary');
+            setUserSummary(JSON.parse(userSummaryData));
+            let currentSettings = JSON.parse(localStorage.getItem('settings'));
+            if (!currentSettings) {
+                localStorage.setItem('settings', JSON.stringify(defaultSettings));
+                currentSettings = JSON.parse(localStorage.getItem('settings'));
+            }
+            logEvent('[System] Launched Steam Game Idler');
+        } catch (error) {
+            console.error('Error creating default settings:', error);
+            logEvent(`[Error] creating default settings: ${error}`);
         }
-        logEvent('[System] Launched Steam Game Idler');
     }, []);
 
     if (initUpdate) return (
@@ -76,7 +83,6 @@ export default function Window() {
             <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-[10px] rounded-tl-xl'>
                 <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} setInitUpdate={setInitUpdate} setUpdateManifest={setUpdateManifest} />
             </div>
-            <UpdateModal updateAvailable={updateAvailable} updateManifest={updateManifest} setInitUpdate={setInitUpdate} />
         </React.Fragment>
     );
 }

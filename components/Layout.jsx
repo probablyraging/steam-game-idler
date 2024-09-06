@@ -19,11 +19,12 @@ export default function Layout({ children }) {
             </main>
             <ToastContainer
                 toastStyle={{ fontSize: 12 }}
-                position='top-center'
+                toastClassName={() => 'relative flex min-h-10 justify-between overflow-hidden p-2 bg-container text-black dark:text-offwhite border border-border rounded mt-2'}
+                position='bottom-right'
                 theme={theme}
                 transition={Slide}
                 pauseOnFocusLoss={false}
-                limit={1}
+                limit={2}
                 pauseOnHover={false}
                 newestOnTop
                 autoClose={1500}

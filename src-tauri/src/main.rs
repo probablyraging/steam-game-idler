@@ -215,8 +215,9 @@ fn log_event(message: String, app_handle: tauri::AppHandle) -> Result<(), String
         .map(|line| line.unwrap_or_default())
         .collect();
     let timestamp = Local::now().format("%b %d %H:%M:%S%.3f").to_string();
-    let masked_message = message.replace("A7F2711B8063A32", "******");
-    let new_log = format!("{} + {}", timestamp, masked_message);
+    let mask_one = mask_sensitive_data(&message, "711B8063");
+    let mask_two = mask_sensitive_data(&mask_one, "3DnyBUX");
+    let new_log = format!("{} + {}", timestamp, mask_two);
     lines.insert(0, new_log);
     if lines.len() > MAX_LINES {
         lines.truncate(MAX_LINES);
@@ -250,4 +251,19 @@ fn open_file_explorer(path: String) -> Result<(), String> {
             .spawn()
             .map_err(|e| e.to_string())?;
     Ok(())
+}
+
+fn mask_sensitive_data(message: &str, sensitive_data: &str) -> String {
+    if let Some(start_index) = message.find(sensitive_data) {
+        let end_index = start_index + sensitive_data.len();
+        let mask_start = start_index.saturating_sub(5);
+        let mask_end = (end_index + 5).min(message.len());
+        let mask_length = mask_end - mask_start;
+        
+        let mut masked_message = message.to_string();
+        masked_message.replace_range(mask_start..mask_end, &"*".repeat(mask_length));
+        masked_message
+    } else {
+        message.to_string()
+    }
 }

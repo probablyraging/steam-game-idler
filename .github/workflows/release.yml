@@ -102,16 +102,16 @@ jobs:
             $updatedChangelog = $changelog -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
             $updatedChangelog | Set-Content changelog.md
 
-        - name: Build library files
-          run: MSBuild.exe .\libs\steam-utility\SteamUtility.csproj
-          shell: pwsh
-
         - name: Create environment file
           run: |
             echo "KEY=${{ secrets.KEY }}" > .env.prod
             echo "MONGO_SRV=${{ secrets.MONGO_SRV }}" >> .env.prod
           shell: pwsh
           working-directory: ${{ github.workspace }}
+
+        - name: Build library files
+          run: MSBuild.exe .\libs\steam-utility\SteamUtility.csproj
+          shell: pwsh
 
         - name: Build Tauri release bundle
           if: steps.update-versions.outcome == 'success'
@@ -151,8 +151,8 @@ jobs:
 
         - name: Commit changes
           run: |
-            git config --local user.name "sgi-release"
-            git config --local user.email "sgi-release@sgi.com"
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
             git add src-tauri/tauri.conf.json latest.json changelog.md
             git commit -m "Update version to ${{ github.event.inputs.version }}"
             git push
