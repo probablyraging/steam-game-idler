@@ -10,7 +10,7 @@ import ResetSettings from './ResetSettings';
 import { Time } from '@internationalized/date';
 import { logEvent } from '@/utils/utils';
 
-export default function Settings({ setHasUpdate, setUpdateManifest }) {
+export default function Settings({ setInitUpdate, setUpdateManifest }) {
     const [settings, setSettings] = useState(null);
     const [version, setVersion] = useState('v0.0.0');
     const [refreshKey, setRefreshKey] = useState(0);
@@ -85,7 +85,7 @@ export default function Settings({ setHasUpdate, setUpdateManifest }) {
                         <div className='flex items-center gap-2'>
                             <ResetSettings setSettings={setSettings} setRefreshKey={setRefreshKey} />
 
-                            <SettingsMenu setHasUpdate={setHasUpdate} setUpdateManifest={setUpdateManifest} />
+                            <SettingsMenu setInitUpdate={setInitUpdate} setUpdateManifest={setUpdateManifest} />
                         </div>
                     </div>
 

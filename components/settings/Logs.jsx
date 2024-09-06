@@ -42,7 +42,7 @@ export default function Logs() {
         <React.Fragment>
             <div className='p-2'>
                 <div className='mb-2'>
-                    <p className='text-xs font-mono text-blue-400 cursor-pointer' onClick={handleOpenLogFile}>
+                    <p className='text-xs font-mono text-blue-400 cursor-pointer w-fit' onClick={handleOpenLogFile}>
                         Open in File Explorer
                     </p>
                 </div>

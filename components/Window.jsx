@@ -74,7 +74,7 @@ export default function Window() {
     return (
         <React.Fragment>
             <div className='bg-base min-h-screen max-h-[calc(100vh-62px)] rounded-tr-[10px] rounded-tl-xl'>
-                <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} setUpdateManifest={setUpdateManifest} />
+                <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} setInitUpdate={setInitUpdate} setUpdateManifest={setUpdateManifest} />
             </div>
             <UpdateModal updateAvailable={updateAvailable} updateManifest={updateManifest} setInitUpdate={setInitUpdate} />
         </React.Fragment>

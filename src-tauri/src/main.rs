@@ -194,7 +194,7 @@ fn update_stat(file_path: String, app_id: String, stat_name: String, new_value: 
 }
 
 const APP_FOLDER_NAME: &str = "steam-game-idler";
-const MAX_LINES: usize = 150;
+const MAX_LINES: usize = 500;
 
 #[tauri::command]
 fn log_event(message: String, app_handle: tauri::AppHandle) -> Result<(), String> {

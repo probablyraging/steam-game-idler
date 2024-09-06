@@ -7,7 +7,7 @@ import CardFarming from './automation/CardFarming';
 import Achievements from './achievements/Achievements';
 import AchievementUnlocker from './automation/AchievementUnlocker';
 
-export default function Dashboard({ userSummary, setUserSummary, setHasUpdate, setUpdateManifest }) {
+export default function Dashboard({ userSummary, setUserSummary, setInitUpdate, setUpdateManifest }) {
     const [activePage, setActivePage] = useState('games');
     const [appId, setAppId] = useState(null);
     const [appName, setAppName] = useState(null);
@@ -39,7 +39,7 @@ export default function Dashboard({ userSummary, setUserSummary, setHasUpdate, s
                 ) : activePage === 'settings' ? (
                     <React.Fragment>
                         <SideBar setUserSummary={setUserSummary} activePage={activePage} setActivePage={setActivePage} />
-                        <Settings setHasUpdate={setHasUpdate} setUpdateManifest={setUpdateManifest} />
+                        <Settings setInitUpdate={setInitUpdate} setUpdateManifest={setUpdateManifest} />
                     </React.Fragment>
                 ) : activePage === 'card-farming' ? (
                     <CardFarming setActivePage={setActivePage} />

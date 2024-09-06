@@ -1,0 +1,181 @@
+name: Build release bundle
+
+on:
+  workflow_dispatch:
+    inputs:
+        version:
+          description: 'New Version'
+          required: true
+        previous_version:
+          description: 'Previous Version'
+          required: true
+        is_major:
+          description: 'Major update'
+          required: false
+          type: boolean
+          default: false
+        force_npm_install:
+          description: 'Force fresh npm install'
+          required: false
+          type: boolean
+          default: false
+
+permissions:
+  contents: write
+  
+jobs:        
+  build_release_bundle:
+    runs-on: windows-latest
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Set up Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '18'
+
+        - name: Set up Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: '3.x'
+  
+        - name: Set up Rust
+          uses: actions-rs/toolchain@v1
+          with:
+            toolchain: stable
+            profile: minimal
+            override: true
+
+        - name: Set up MSBuild
+          uses: microsoft/setup-msbuild@v2
+
+        - name: Cache npm dependencies
+          id: cache-npm
+          uses: actions/cache@v4
+          with:
+            path: |
+              ~\.npm
+              node_modules
+            key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}-
+
+        - name: Install dependencies (npm)
+          if: steps.cache-npm.outputs.cache-hit != 'true' || inputs.force_npm_install == 'true'
+          run: npm ci
+
+        - name: Cache nextjs build
+          uses: actions/cache@v4
+          with:
+            path: |
+              .next/cache
+            key: ${{ runner.OS }}-nextjs-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+            restore-keys: |
+              ${{ runner.OS }}-nextjs-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+
+        - name: Cache Cargo dependencies
+          uses: actions/cache@v4
+          with:
+            path: |
+              ~\.cargo\registry
+              ~\.cargo\git
+            key: ${{ runner.OS }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+        
+        - name: Cache Cargo target directory (Tauri)
+          uses: actions/cache@v4
+          with:
+            path: |
+              src-tauri\target
+            key: ${{ runner.OS }}-cargo-build-tauri-target-${{ hashFiles('**/Cargo.lock') }}
+
+        - name: Update versions
+          id: update-versions
+          run: |
+            $tauriConf = Get-Content src-tauri/tauri.conf.json
+            $updatedTauriConf = $tauriConf -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
+            $updatedTauriConf | Set-Content src-tauri/tauri.conf.json
+            $latest = Get-Content latest.json
+            $updatedLatest = $latest -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
+            $updatedLatest | Set-Content latest.json
+            $changelog = Get-Content changelog.md
+            $updatedChangelog = $changelog -replace "${{ github.event.inputs.previous_version }}", "${{ github.event.inputs.version }}"
+            $updatedChangelog | Set-Content changelog.md
+
+        - name: Build library files
+          run: MSBuild.exe .\libs\steam-utility\SteamUtility.csproj
+          shell: pwsh
+
+        - name: Create environment file
+          run: |
+            echo "KEY=${{ secrets.KEY }}" > .env.prod
+            echo "MONGO_SRV=${{ secrets.MONGO_SRV }}" >> .env.prod
+          shell: pwsh
+          working-directory: ${{ github.workspace }}
+
+        - name: Build Tauri release bundle
+          if: steps.update-versions.outcome == 'success'
+          run: |
+            npm run tauri build
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
+            TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
+          shell: pwsh
+
+        - name: Update latest.json with new signature
+          run: |
+            python -c "
+            import base64
+            import json
+            
+            msi_signature_path = './src-tauri/target/release/bundle/msi/Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi.zip.sig'
+            latest_json_path = './latest.json'
+            
+            with open(msi_signature_path, 'r') as sig_file:
+                new_signature = sig_file.read().strip()
+            
+            with open(latest_json_path, 'r') as json_file:
+                latest_json = json.load(json_file)
+            
+            latest_json['platforms']['windows-x86_64']['signature'] = new_signature
+            
+            is_major = True if '${{ github.event.inputs.is_major }}' == 'true' else False
+            latest_json['major'] = is_major
+            
+            with open(latest_json_path, 'w') as json_file:
+                json.dump(latest_json, json_file, indent=2)
+            
+            print('Updated latest.json with new signature')
+            "
+
+        - name: Commit changes
+          run: |
+            git config --local user.name "sgi-release"
+            git config --local user.email "sgi-release@sgi.com"
+            git add src-tauri/tauri.conf.json latest.json changelog.md
+            git commit -m "Update version to ${{ github.event.inputs.version }}"
+            git push
+            
+        - name: Create release
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            gh release create "${{ github.event.inputs.version }}" `
+              --title "Steam Game Idler v${{ github.event.inputs.version }}" `
+              --notes-file "./changelog.md"
+
+        - name: Upload release assets
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            $assets = @(
+              ".\src-tauri\target\release\bundle\msi\Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi"
+              ".\src-tauri\target\release\bundle\msi\Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi.zip"
+              ".\src-tauri\target\release\bundle\msi\Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi.zip.sig"
+            )
+            
+            foreach ($asset in $assets) {
+              gh release upload "${{ github.event.inputs.version }}" $asset
+            }
+          shell: pwsh
