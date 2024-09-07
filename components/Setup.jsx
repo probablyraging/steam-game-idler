@@ -46,7 +46,7 @@ export default function Setup({ setUserSummary }) {
                 return toast.error('The Steam desktop app is not running, or you are not signed in');
             } else {
                 setSteamId(result);
-                logEvent('[System] Logged in');
+                logEvent('[System] Logged in to Steam Game Idler');
             }
         } catch (error) {
             console.error('Error in (handleClick):', error);

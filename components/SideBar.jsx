@@ -25,8 +25,9 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                 localStorage.removeItem('favorites');
                 localStorage.removeItem('cardFarming');
                 localStorage.removeItem('achievementUnlocker');
+                logEvent('[System] Locally saved data cleared');
             }
-            logEvent('[System] Logged out');
+            logEvent('[System] Logged out of Steam Game Idler');
         } catch (error) {
             console.error('Error in (handleLogout):', error);
             logEvent(`[Error] in (handleLogout): ${error}`);

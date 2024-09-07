@@ -167,7 +167,7 @@ export const updateMongoStats = debounce(async (stat) => {
     }
 }, 5000);
 
-export function isOutsideSchedule(scheduleFrom, scheduleTo) {
+export function isWithinSchedule(scheduleFrom, scheduleTo) {
     const now = new Date();
     const currentTime = new Time(now.getHours(), now.getMinutes());
     const scheduleFromTime = new Time(scheduleFrom.hour, scheduleFrom.minute);
