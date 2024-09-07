@@ -47,9 +47,9 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
 
     return (
         <React.Fragment>
-            <div className='relative w-full h-[62px] bg-titlebar rounded-tr-[10px] rounded-tl-xl select-none'>
+            <div className='relative w-full h-[62px] bg-titlebar select-none'>
                 <div className='flex justify-between items-center h-full text-titletext'>
-                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi dark:bg-[#181818] h-full w-[62px] rounded-tl-[10px]'>
+                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi dark:bg-[#181818] h-full w-[62px]'>
                         <BiSolidLeaf className='text-offwhite' fontSize={40} />
                     </div>
 
@@ -95,7 +95,7 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
                             <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                                 <BiWindows fontSize={12} />
                             </div>
-                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-[8px] cursor-pointer' onClick={windowClose}>
+                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full cursor-pointer' onClick={windowClose}>
                                 <IoClose />
                             </div>
                         </div>

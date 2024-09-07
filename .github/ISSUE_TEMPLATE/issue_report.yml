@@ -10,7 +10,11 @@ body:
     attributes:
       label: Describe the issue
       description: A clear and concise description of your issue or bug
-      placeholder: Include any steps that might help reproduced the issue, screenshots of the issue, a dev tools log (ctrl+shift+I)
+      placeholder: |
+        Please include the following in your issue report;
+        - Any steps that might help reproduced the issue
+        - Screenshots/videos of the issue
+        - Your log.txt file found in C:\Users\<user>\AppData\Roaming\steam-game-idler
     validations:
       required: true
   - type: dropdown
@@ -31,3 +35,13 @@ body:
         - Older version
     validations:
       required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Additional Information
+      description: Please select all that apply
+      options:
+        - label: I have included steps to reproduce the issue
+        - label: I have included screenshots/videos
+        - label: I have included a log.txt file
+        - label: I have checked for similar issues before reporting

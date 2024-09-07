@@ -13,6 +13,8 @@ use std::io::{BufRead, BufReader, Write, Seek, SeekFrom};
 use serde_json::Value;
 use requests::*;
 use mongodb::*;
+use window_shadows::set_shadow;
+use tauri::Manager;
 
 fn main() {
     if cfg!(debug_assertions) {
@@ -23,6 +25,11 @@ fn main() {
         result.load();
     }
     tauri::Builder::default()
+        .setup(|app| {
+            let window = app.get_window("main").unwrap();
+            set_shadow(&window, true).unwrap();
+            Ok(())
+        })
         .invoke_handler(tauri::generate_handler![
             get_file_path, 
             check_status,

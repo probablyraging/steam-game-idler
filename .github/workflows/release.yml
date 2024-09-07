@@ -27,13 +27,10 @@ jobs:
   build_release_bundle:
     runs-on: windows-latest
     steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-
         - name: Set up Node.js
           uses: actions/setup-node@v4
           with:
-            node-version: '18'
+            node-version: '20'
 
         - name: Set up Python
           uses: actions/setup-python@v5
@@ -41,14 +38,13 @@ jobs:
             python-version: '3.x'
   
         - name: Set up Rust
-          uses: actions-rs/toolchain@v1
-          with:
-            toolchain: stable
-            profile: minimal
-            override: true
+          uses: dtolnay/rust-toolchain@stable
 
         - name: Set up MSBuild
           uses: microsoft/setup-msbuild@v2
+
+        - name: Checkout repository
+          uses: actions/checkout@v4
 
         - name: Cache npm dependencies
           id: cache-npm
@@ -82,7 +78,7 @@ jobs:
               ~\.cargo\git
             key: ${{ runner.OS }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
         
-        - name: Cache Cargo target directory (Tauri)
+        - name: Cache Cargo target directory
           uses: actions/cache@v4
           with:
             path: |
@@ -123,7 +119,7 @@ jobs:
             TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
           shell: pwsh
 
-        - name: Update latest.json with new signature
+        - name: Update latest.json
           run: |
             python -c "
             import base64
@@ -149,33 +145,15 @@ jobs:
             print('Updated latest.json with new signature')
             "
 
-        - name: Commit changes
-          run: |
-            git config --local user.name "github-actions[bot]"
-            git config --local user.email "github-actions[bot]@users.noreply.github.com"
-            git add src-tauri/tauri.conf.json latest.json changelog.md
-            git commit -m "Update version to ${{ github.event.inputs.version }}"
-            git push
-            
         - name: Create release
+          uses: softprops/action-gh-release@v1
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            gh release create "${{ github.event.inputs.version }}" `
-              --title "Steam Game Idler v${{ github.event.inputs.version }}" `
-              --notes-file "./changelog.md"
-
-        - name: Upload release assets
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            $assets = @(
-              ".\src-tauri\target\release\bundle\msi\Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi"
-              ".\src-tauri\target\release\bundle\msi\Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi.zip"
-              ".\src-tauri\target\release\bundle\msi\Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi.zip.sig"
-            )
-            
-            foreach ($asset in $assets) {
-              gh release upload "${{ github.event.inputs.version }}" $asset
-            }
-          shell: pwsh
+          with:
+            tag_name: ${{ github.event.inputs.version }}
+            name: Steam Game Idler v${{ github.event.inputs.version }}
+            body_path: ./changelog.md
+            files: |
+              ./src-tauri/target/release/bundle/msi/Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi
+              ./src-tauri/target/release/bundle/msi/Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi.zip
+              ./src-tauri/target/release/bundle/msi/Steam Game Idler_${{ github.event.inputs.version }}_x64_en-US.msi.zip.sig

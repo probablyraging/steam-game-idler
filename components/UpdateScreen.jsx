@@ -68,8 +68,8 @@ export default function UpdateScreen({ updateManifest }) {
 
     return (
         <React.Fragment>
-            <div className='flex justify-between items-center w-screen h-[62px] bg-titlebar rounded-tr-[8px] rounded-tl-xl' data-tauri-drag-region>
-                <div className='flex items-center gap-1 px-2 bg-sgi dark:bg-[#181818] h-full w-[62px] rounded-tl-[10px]'>
+            <div className='flex justify-between items-center w-screen h-[62px] bg-titlebar' data-tauri-drag-region>
+                <div className='flex items-center gap-1 px-2 bg-sgi dark:bg-[#181818] h-full w-[62px]'>
                     <BiSolidLeaf className='text-offwhite' fontSize={40} />
                 </div>
                 <div className='flex justify-center items-center h-full ml-2'>
@@ -79,7 +79,7 @@ export default function UpdateScreen({ updateManifest }) {
                     <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                         <BiWindows fontSize={12} />
                     </div>
-                    <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-[8px] cursor-pointer' onClick={windowClose}>
+                    <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full cursor-pointer' onClick={windowClose}>
                         <IoClose />
                     </div>
                 </div>

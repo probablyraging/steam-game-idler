@@ -31,9 +31,9 @@ export default function TitleBar() {
 
     return (
         <React.Fragment>
-            <div className='h-[62px] bg-titlebar border-b border-titleborder rounded-tr-[10px] rounded-tl-xl select-none'>
+            <div className='h-[62px] bg-titlebar border-b border-titleborder select-none'>
                 <div className='flex justify-between items-center h-full text-titletext' data-tauri-drag-region>
-                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px] rounded-tl-[10px]'>
+                    <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px]'>
                         <BiSolidLeaf className='text-offwhite' fontSize={40} />
                     </div>
 
@@ -49,7 +49,7 @@ export default function TitleBar() {
                             <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowToggleMaximize}>
                                 <BiWindows fontSize={12} />
                             </div>
-                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full rounded-tr-[8px] cursor-pointer' onClick={windowClose}>
+                            <div className='flex justify-center items-center hover:bg-red-500 w-[28px] h-full cursor-pointer' onClick={windowClose}>
                                 <IoClose />
                             </div>
                         </div>

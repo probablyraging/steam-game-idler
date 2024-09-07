@@ -14,7 +14,7 @@ export default function Layout({ children }) {
                 <title>Steam Game Idler</title>
             </Head>
 
-            <main className={`${GeistSans.className} h-full min-h-screen bg-base rounded-tr-[10px] rounded-tl-xl`}>
+            <main className={`${GeistSans.className} h-full min-h-screen bg-base`}>
                 {children}
             </main>
             <ToastContainer
