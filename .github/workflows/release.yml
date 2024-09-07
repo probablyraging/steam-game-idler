@@ -145,6 +145,14 @@ jobs:
             print('Updated latest.json with new signature')
             "
 
+        - name: Commit changes
+          run: |
+            git config --local user.name "github-actions[bot]"
+            git config --local user.email "github-actions[bot]@users.noreply.github.com"
+            git add src-tauri/tauri.conf.json latest.json changelog.md
+            git commit -m "Update version to ${{ github.event.inputs.version }}"
+            git push
+
         - name: Create release
           uses: softprops/action-gh-release@v1
           env:
