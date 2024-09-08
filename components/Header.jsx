@@ -8,6 +8,7 @@ import { BiWindows } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 import { RiSearchLine } from 'react-icons/ri';
 import ExtLink from './ExtLink';
+import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
 
 export default function Header({ userSummary, inputValue, setInputValue, setIsQuery }) {
     const [appWindow, setAppWindow] = useState();
@@ -29,8 +30,29 @@ export default function Header({ userSummary, inputValue, setInputValue, setIsQu
         appWindow?.toggleMaximize();
     };
 
-    const windowClose = () => {
-        appWindow?.close();
+    const windowClose = async () => {
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+        const minToTrayNotified = localStorage.getItem('minToTrayNotified') || 'false';
+        const { minimizeToTray } = settings?.general || {};
+        if (minimizeToTray) {
+            appWindow?.hide();
+            let permissionGranted = await isPermissionGranted();
+            if (minToTrayNotified !== 'true') {
+                if (!permissionGranted) {
+                    const permission = await requestPermission();
+                    permissionGranted = permission === 'granted';
+                }
+                if (permissionGranted) {
+                    sendNotification({
+                        title: 'Steam Game Idler will continue to run in the background',
+                        icon: 'icons/32x32.png'
+                    });
+                }
+            }
+            localStorage.setItem('minToTrayNotified', 'true');
+        } else {
+            appWindow?.close();
+        }
     };
 
     const handleQuery = () => {

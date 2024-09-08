@@ -5,6 +5,7 @@ import { Time } from "@internationalized/date";
 
 let idleCounter = 0;
 let achievementCounter = 0;
+let antiAwayInterval = null;
 
 export async function startIdler(appId, appName, quiet = false) {
     try {
@@ -192,19 +193,49 @@ export async function fetchLatest() {
 };
 
 export async function fetchFreeGames() {
-    const currentTime = moment().unix();
-    const fetchAgainAt = localStorage.getItem('freeGamesCooldown');
-    if (!fetchAgainAt || currentTime > fetchAgainAt) {
-        const res = await invoke('get_free_games');
-        if (res && res?.list?.length > 0) {
-            for (const game of res.list) {
-                if (game?.deal?.price?.amount === 0) {
-                    return true;
+    try {
+        const currentTime = moment().unix();
+        const fetchAgainAt = localStorage.getItem('freeGamesCooldown');
+        if (!fetchAgainAt || currentTime > fetchAgainAt) {
+            const res = await invoke('get_free_games');
+            if (res && res?.list?.length > 0) {
+                for (const game of res.list) {
+                    if (game?.deal?.price?.amount === 0) {
+                        return true;
+                    }
                 }
             }
+            localStorage.setItem('freeGamesCooldown', moment().add(6, 'hours').unix());
+            return false;
         }
-        localStorage.setItem('freeGamesCooldown', moment().add(6, 'hours').unix());
+    } catch (error) {
+        console.error('Error in (fetchFreeGames):', error);
+        logEvent(`[Error] in (fetchFreeGames): ${error}`);
         return false;
+    }
+}
+
+export async function antiAwayStatus(active = null) {
+    try {
+        const settings = JSON.parse(localStorage.getItem('settings')) || {};
+        const { antiAway } = settings?.general || {};
+        const shouldRun = active !== null ? active : antiAway;
+        if (shouldRun) {
+            await invoke('anti_away');
+            if (!antiAwayInterval) {
+                antiAwayInterval = setInterval(async () => {
+                    await invoke('anti_away');
+                }, 60000 * 3);
+            }
+        } else {
+            if (antiAwayInterval) {
+                clearInterval(antiAwayInterval);
+                antiAwayInterval = null;
+            }
+        }
+    } catch (error) {
+        console.error('Error in (antiAwayStatus):', error);
+        logEvent(`[Error] in (antiAwayStatus): ${error}`);
     }
 }
 

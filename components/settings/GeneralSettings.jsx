@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox } from '@nextui-org/react';
-import { logEvent } from '@/utils/utils';
+import { antiAwayStatus, logEvent } from '@/utils/utils';
 
 export default function GeneralSettings({ settings, setSettings }) {
     const [localSettings, setLocalSettings] = useState(null);
@@ -42,6 +42,10 @@ export default function GeneralSettings({ settings, setSettings }) {
         }
     };
 
+    const handleAntiAway = (active) => {
+        antiAwayStatus(active);
+    };
+
     return (
         <React.Fragment>
             <div className='flex flex-col gap-4 p-2'>
@@ -53,6 +57,21 @@ export default function GeneralSettings({ settings, setSettings }) {
                     <div className='flex items-center gap-1'>
                         <p className='text-xs'>
                             Stealth idle windows
+                        </p>
+                    </div>
+                </Checkbox>
+
+                <Checkbox
+                    name='antiAway'
+                    isSelected={localSettings?.general?.antiAway}
+                    onChange={(e) => {
+                        handleCheckboxChange(e);
+                        handleAntiAway(!localSettings?.general?.antiAway);
+                    }}
+                >
+                    <div className='flex items-center gap-1'>
+                        <p className='text-xs'>
+                            Anti-away status
                         </p>
                     </div>
                 </Checkbox>
@@ -77,6 +96,18 @@ export default function GeneralSettings({ settings, setSettings }) {
                     <div className='flex items-center gap-1'>
                         <p className='text-xs'>
                             Delete locally saved data on logout
+                        </p>
+                    </div>
+                </Checkbox>
+
+                <Checkbox
+                    name='minimizeToTray'
+                    isSelected={localSettings?.general?.minimizeToTray}
+                    onChange={handleCheckboxChange}
+                >
+                    <div className='flex items-center gap-1'>
+                        <p className='text-xs'>
+                            Minimize to tray
                         </p>
                     </div>
                 </Checkbox>

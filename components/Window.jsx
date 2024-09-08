@@ -40,8 +40,10 @@ export default function Window() {
         const defaultSettings = {
             general: {
                 stealthIdle: false,
+                antiAway: true,
                 freeGames: false,
-                clearData: true
+                clearData: true,
+                minimizeToTray: true,
             },
             cardFarming: {
                 listGames: true,

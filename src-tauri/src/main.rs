@@ -14,7 +14,7 @@ use serde_json::Value;
 use requests::*;
 use mongodb::*;
 use window_shadows::set_shadow;
-use tauri::Manager;
+use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, Manager};
 
 fn main() {
     if cfg!(debug_assertions) {
@@ -24,11 +24,43 @@ fn main() {
         let result = dotenv::from_read(prod_env.as_bytes()).unwrap();
         result.load();
     }
+    let show = CustomMenuItem::new("show".to_string(), "Show");
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit Steam Game Idler");
+    let tray_menu = SystemTrayMenu::new()
+        .add_item(show)
+        .add_item(quit);
+    let system_tray = SystemTray::new().with_menu(tray_menu);
     tauri::Builder::default()
         .setup(|app| {
             let window = app.get_window("main").unwrap();
             set_shadow(&window, true).unwrap();
             Ok(())
+        })
+        .system_tray(system_tray)
+        .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::LeftClick {
+                position: _,
+                size: _,
+                ..
+            } => {
+                let window = app.get_window("main").unwrap();
+                window.show().unwrap();
+                window.set_focus().unwrap();
+            }
+            SystemTrayEvent::MenuItemClick { id, .. } => {
+                match id.as_str() {
+                    "quit" => {
+                        std::process::exit(0);
+                    }
+                    "show" => {
+                        let window = app.get_window("main").unwrap();
+                        window.show().unwrap();
+                        window.set_focus().unwrap();
+                    }
+                    _ => {}
+                }
+            }
+            _ => {}
         })
         .invoke_handler(tauri::generate_handler![
             get_file_path, 
@@ -52,7 +84,8 @@ fn main() {
             get_game_details,
             open_file_explorer,
             db_update_stats,
-            get_free_games
+            get_free_games,
+            anti_away
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -265,11 +298,21 @@ fn get_app_log_dir(app_handle: tauri::AppHandle) -> Result<String, String> {
 
 #[tauri::command]
 fn open_file_explorer(path: String) -> Result<(), String> {
-        std::process::Command::new("explorer")
-            .args(["/select,", &path])
-            .creation_flags(0x08000000)
-            .spawn()
-            .map_err(|e| e.to_string())?;
+    std::process::Command::new("explorer")
+        .args(["/select,", &path])
+        .creation_flags(0x08000000)
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    Ok(())
+}
+
+#[tauri::command]
+fn anti_away() -> Result<(), String> {
+    std::process::Command::new("cmd")
+        .args(&["/C", "start steam://friends/status/online"])
+        .creation_flags(0x08000000)
+        .spawn()
+        .map_err(|e| e.to_string())?;
     Ok(())
 }
 

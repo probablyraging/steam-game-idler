@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from './Header';
 import GamesList from './gameslist/GamesList';
 import SideBar from './SideBar';
@@ -6,6 +6,7 @@ import Settings from './settings/Settings';
 import CardFarming from './automation/CardFarming';
 import Achievements from './achievements/Achievements';
 import AchievementUnlocker from './automation/AchievementUnlocker';
+import { antiAwayStatus } from '@/utils/utils';
 
 export default function Dashboard({ userSummary, setUserSummary, setInitUpdate, setUpdateManifest }) {
     const [activePage, setActivePage] = useState('games');
@@ -14,6 +15,10 @@ export default function Dashboard({ userSummary, setUserSummary, setInitUpdate, 
     const [showAchievements, setShowAchievements] = useState(false);
     const [isQuery, setIsQuery] = useState(false);
     const [inputValue, setInputValue] = useState('');
+
+    useEffect(() => {
+        antiAwayStatus();
+    }, []);
 
     return (
         <React.Fragment>
