@@ -1,10 +1,10 @@
 {
-  "version": "1.5.14",
+  "version": "1.5.15",
   "major": false,
   "platforms": {
     "windows-x86_64": {
-      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMHRpY1lXWU9mMnBwQmdYRlpLcmpYd0RTQzZEd0w1MGFrOWVKRVdNMzNMamJYSWVnK0o3bmtxazV5Z1BSU1R0NmlHdlJ1WGxQcGhNZ0g0UElpWUFnMXc4PQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI1NzgxNTE2CWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjUuMTRfeDY0X2VuLVVTLm1zaS56aXAKOHBuQk1OQW1ERTdyalRPbFo0cUZjVkNJQkJSNFZNMnVvOGo5YXJCNEZzM3ZYQkJ1SUtSQ1R3QjNZdE40TXhlRkVSb2w1R1FhMVlXMklidnU5T0E1QlE9PQo=",
-      "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.5.14/Steam.Game.Idler_1.5.14_x64_en-US.msi.zip"
+      "signature": "dW50cnVzdGVkIGNvbW1lbnQ6IHNpZ25hdHVyZSBmcm9tIHRhdXJpIHNlY3JldCBrZXkKUlVUSDh2NGF3cDBSMGlmdjFxMVhvSDZPbjVpZVJnN0pZdmJGL3FXdEVEVVgxQmxna0tMOHpSR1hRMnNtK2cwSUFtMjNCbXhUQnlCdG16THl4aUs4Y2pGRnBGaG1ubWdadVFjPQp0cnVzdGVkIGNvbW1lbnQ6IHRpbWVzdGFtcDoxNzI1Nzk3MjkxCWZpbGU6U3RlYW0gR2FtZSBJZGxlcl8xLjUuMTVfeDY0X2VuLVVTLm1zaS56aXAKTnFERWxUam1pY0tleWZYZWhVdmJHUWtqVDR4VXJUbGc5ZG52RjkrSUdrT2FLa205ZUh6Q3E5NytETndLWm5OL1p1dzFIRnNuZVQweHJha2IxQ3duRFE9PQo=",
+      "url": "https://github.com/ProbablyRaging/steam-game-idler/releases/download/1.5.15/Steam.Game.Idler_1.5.15_x64_en-US.msi.zip"
     }
   }
 }
