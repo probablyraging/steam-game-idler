@@ -133,7 +133,7 @@ export async function getAllGamesWithDrops(steamId, sid, sls) {
         if (res.gamesWithDrops && res.gamesWithDrops.length > 0) {
             return res.gamesWithDrops;
         } else {
-            return 0;
+            return false;
         }
     } catch (error) {
         console.error('Error in getAllGamesWithDrops util: ', error);
