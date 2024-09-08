@@ -10,6 +10,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
     const scrollContainerRef = useRef(null);
     let [isLoading, setIsLoading] = useState(true);
     let [gameList, setGameList] = useState(null);
+    let [recentGames, setRecentGames] = useState(null);
     const [sortStyle, setSortStyle] = useState('a-z');
     const [favorites, setFavorites] = useState(null);
     const [cardFarming, setCardFarming] = useState(null);
@@ -27,19 +28,26 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 const sortStyle = localStorage.getItem('sortStyle');
                 if (sortStyle) setSortStyle(sortStyle);
                 const cachedGameList = sessionStorage.getItem('gamesListCache');
+                const cachedRecentGames = sessionStorage.getItem('recentGamesCache');
                 if (cachedGameList && cachedGameList !== null) {
                     const parsedGameList = JSON.parse(cachedGameList);
+                    const parsedRecentGames = JSON.parse(cachedRecentGames);
                     setGameList(parsedGameList);
+                    setRecentGames(parsedRecentGames);
                     setVisibleGames(parsedGameList.slice(0, gamesPerPage));
                     setTimeout(() => {
                         setIsLoading(false);
                     }, 100);
                 } else {
                     const res = await invoke('get_games_list', { steamId: steamId });
+                    const resTwo = await invoke('get_recent_games', { steamId: steamId });
                     const gameList = res.response.games;
+                    const recentGames = resTwo.response.games;
                     setGameList(gameList);
+                    setRecentGames(recentGames);
                     setVisibleGames(gameList.slice(0, gamesPerPage));
                     sessionStorage.setItem('gamesListCache', JSON.stringify(gameList));
+                    sessionStorage.setItem('recentGamesCache', JSON.stringify(recentGames));
                     setIsLoading(false);
                 }
             } catch (error) {
@@ -63,7 +71,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 } else if (sortStyle === '0-1') {
                     sortedAndFilteredGames.sort((a, b) => a.playtime_forever - b.playtime_forever);
                 } else if (sortStyle === 'recent') {
-                    sortedAndFilteredGames.sort((a, b) => b.rtime_last_played - a.rtime_last_played);
+                    sortedAndFilteredGames = recentGames.filter(a => a.name !== 'Spacewar');
                 } else if (sortStyle === 'favorite') {
                     const favorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
                     sortedAndFilteredGames = favorites.map(JSON.parse);
@@ -87,7 +95,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
             console.error('Error in useeffect:', error);
             logEvent(`[Error] in useeffect: ${error}`);
         }
-    }, [gameList, favorites, cardFarming, achievementUnlocker, sortStyle, isQuery, inputValue]);
+    }, [gameList, recentGames, favorites, cardFarming, achievementUnlocker, sortStyle, isQuery, inputValue]);
 
     useEffect(() => {
         try {

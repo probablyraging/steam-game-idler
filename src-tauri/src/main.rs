@@ -43,6 +43,7 @@ fn main() {
             check_steam_status,
             get_user_summary,
             get_games_list,
+            get_recent_games,
             get_achievement_data,
             get_achievement_unlocker_data,
             validate_session,
@@ -50,7 +51,8 @@ fn main() {
             get_games_with_drops,
             get_game_details,
             open_file_explorer,
-            db_update_stats
+            db_update_stats,
+            get_free_games
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
@@ -64,6 +66,11 @@ async fn get_user_summary(steam_id: String) -> Result<Value, String> {
 #[tauri::command]
 async fn get_games_list(steam_id: String) -> Result<Value, String> {
     games_list(steam_id).await
+}
+
+#[tauri::command]
+async fn get_recent_games(steam_id: String) -> Result<Value, String> {
+    recent_games(steam_id).await
 }
 
 #[tauri::command]
@@ -99,6 +106,11 @@ async fn get_game_details(app_id: String) -> Result<Value, String> {
 #[tauri::command]
 async fn db_update_stats(stat: String, count: i32) -> Result<Value, String> {
     update_stats(stat, count).await
+}
+
+#[tauri::command]
+async fn get_free_games() -> Result<Value, String> {
+    free_games().await
 }
 
 #[tauri::command]
@@ -224,7 +236,8 @@ fn log_event(message: String, app_handle: tauri::AppHandle) -> Result<(), String
     let timestamp = Local::now().format("%b %d %H:%M:%S%.3f").to_string();
     let mask_one = mask_sensitive_data(&message, "711B8063");
     let mask_two = mask_sensitive_data(&mask_one, "3DnyBUX");
-    let new_log = format!("{} + {}", timestamp, mask_two);
+    let mask_three = mask_sensitive_data(&mask_two, "5e2699aef2301b283");
+    let new_log = format!("{} + {}", timestamp, mask_three);
     lines.insert(0, new_log);
     if lines.len() > MAX_LINES {
         lines.truncate(MAX_LINES);

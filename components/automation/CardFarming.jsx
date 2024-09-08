@@ -60,13 +60,15 @@ export default function CardFarming({ setActivePage }) {
         try {
             if (settings.cardFarming.allGames) {
                 const gamesWithDrops = await getAllGamesWithDrops(userSummary.steamId, steamCookies.sid, steamCookies.sls);
-                for (const gameData of gamesWithDrops) {
-                    if (gamesSet.size < 32) {
-                        gamesSet.add({ appId: gameData.id, name: gameData.name });
-                        totalDrops += gameData.remaining;
-                        logEvent(`[Card Farming] ${gameData.remaining} drops remaining for ${gameData.name} - starting`);
-                    } else {
-                        break;
+                if (gamesWithDrops) {
+                    for (const gameData of gamesWithDrops) {
+                        if (gamesSet.size < 32) {
+                            gamesSet.add({ appId: gameData.id, name: gameData.name });
+                            totalDrops += gameData.remaining;
+                            logEvent(`[Card Farming] ${gameData.remaining} drops remaining for ${gameData.name} - starting`);
+                        } else {
+                            break;
+                        }
                     }
                 }
             } else {

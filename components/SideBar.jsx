@@ -19,6 +19,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
             const { clearData } = settings?.general || {};
             setUserSummary(null);
             sessionStorage.removeItem('gamesListCache');
+            sessionStorage.removeItem('recentGamesCache');
             localStorage.removeItem('userSummary');
             if (clearData) {
                 localStorage.removeItem('steamCookies');

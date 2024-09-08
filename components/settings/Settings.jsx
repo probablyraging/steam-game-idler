@@ -32,6 +32,7 @@ export default function Settings({ setInitUpdate, setUpdateManifest }) {
         const defaultSettings = {
             general: {
                 stealthIdle: false,
+                freeGames: false,
                 clearData: true
             },
             cardFarming: {

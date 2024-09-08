@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import StopButton from './StopButton';
 import { Button, Spinner } from '@nextui-org/react';
-import { formatTime, getRandomDelay, isOutsideSchedule, logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
+import { formatTime, getRandomDelay, isWithinSchedule, logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
 import { IoCheckmark } from 'react-icons/io5';
 import { invoke } from '@tauri-apps/api/tauri';
 
@@ -118,7 +118,7 @@ export default function AchievementUnlocker({ setActivePage }) {
     const waitUntilInSchedule = async (scheduleFrom, scheduleTo) => {
         try {
             setIsWaitingForSchedule(true);
-            while (isOutsideSchedule(scheduleFrom, scheduleTo)) {
+            while (!isWithinSchedule(scheduleFrom, scheduleTo)) {
                 if (!isMountedRef.current) {
                     setIsWaitingForSchedule(false);
                     throw new DOMException('Achievement unlocking stopped due to being outside of the scheduled time', 'Stop');
@@ -138,7 +138,7 @@ export default function AchievementUnlocker({ setActivePage }) {
 
             let isGameIdling = false;
 
-            if (idle && (schedule && !isOutsideSchedule(scheduleFrom, scheduleTo))) {
+            if (idle && (schedule && isWithinSchedule(scheduleFrom, scheduleTo))) {
                 await startIdler(achievements[0].appId, achievements[0].gameName, false);
                 isGameIdling = true;
             }
@@ -147,7 +147,7 @@ export default function AchievementUnlocker({ setActivePage }) {
 
             for (const achievement of achievements) {
                 if (isMountedRef.current) {
-                    if (schedule && isOutsideSchedule(scheduleFrom, scheduleTo)) {
+                    if (schedule && !isWithinSchedule(scheduleFrom, scheduleTo)) {
                         if (game) {
                             await stopIdler(game.appid, game.name);
                             isGameIdling = false;

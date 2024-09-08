@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
-import { fetchLatest, logEvent, updateMongoStats } from '@/utils/utils';
+import { fetchFreeGames, fetchLatest, logEvent, updateMongoStats } from '@/utils/utils';
 import { Time } from '@internationalized/date';
 import Setup from './Setup';
 import UpdateScreen from './UpdateScreen';
 import { toast } from 'react-toastify';
 import UpdateToast from './UpdateToast';
+import ExtLink from './ExtLink';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
@@ -39,6 +40,7 @@ export default function Window() {
         const defaultSettings = {
             general: {
                 stealthIdle: false,
+                freeGames: false,
                 clearData: true
             },
             cardFarming: {
@@ -63,11 +65,35 @@ export default function Window() {
                 localStorage.setItem('settings', JSON.stringify(defaultSettings));
                 currentSettings = JSON.parse(localStorage.getItem('settings'));
             }
-            logEvent('[System] Launched Steam Game Idler');
         } catch (error) {
             console.error('Error creating default settings:', error);
             logEvent(`[Error] creating default settings: ${error}`);
         }
+    }, []);
+
+    useEffect(() => {
+        const checkForFreeGames = async () => {
+            try {
+                const settings = JSON.parse(localStorage.getItem('settings')) || {};
+                const { freeGames } = settings?.general || {};
+                if (freeGames) {
+                    const freeGamesAvailable = await fetchFreeGames();
+                    if (freeGamesAvailable) {
+                        toast.info(
+                            <ExtLink href={'https://isthereanydeal.com/deals/#sort:price;filter:N4IgDgTglgxgpiAXKAtlAdk9BXANrgGhBQEMAPJABgDpKBGAXyIBcBPMBRAbToF0iAzgAsA9mAFIuANj4MgA'}>
+                                <p>Free Steam games are available</p>
+                                <p className='mt-1'>Click here to view</p>
+                            </ExtLink>,
+                            { autoClose: false }
+                        );
+                    }
+                }
+            } catch (error) {
+                console.error('Error in (checkForFreeGames):', error);
+                logEvent(`[Error] in (checkForFreeGames): ${error}`);
+            }
+        };
+        checkForFreeGames();
     }, []);
 
     if (initUpdate) return (

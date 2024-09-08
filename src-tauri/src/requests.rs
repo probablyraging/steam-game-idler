@@ -7,6 +7,13 @@ use scraper::{Html, Selector};
 use select::document::Document;
 use select::predicate::{Class};
 
+#[derive(Debug, Serialize, Deserialize)]
+struct Game {
+    name: String,
+    id: String,
+    remaining: u32,
+}
+
 pub async fn user_summary(steam_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url = format!(
@@ -29,6 +36,24 @@ pub async fn games_list(steam_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url = format!(
         "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={}&steamid={}&include_appinfo=true&include_played_free_games=true&include_free_sub=true&skip_unvetted_apps=false&include_extended_appinfo=true",
+        key, steam_id
+    );
+
+    let client = Client::new();
+
+    match client.get(&url).send().await {
+        Ok(response) => {
+            let body: Value = response.json().await.map_err(|e| e.to_string())?;
+            Ok(body)
+        },
+        Err(err) => Err(err.to_string()),
+    }
+}
+
+pub async fn recent_games(steam_id: String) -> Result<Value, String> {
+    let key = std::env::var("KEY").unwrap();
+    let url = format!(
+        "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key={}&steamid={}",
         key, steam_id
     );
 
@@ -189,13 +214,6 @@ pub async fn drops_remaining(sid: String, sls: String, steam_id: String, app_id:
     }
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-struct Game {
-    name: String,
-    id: String,
-    remaining: u32,
-}
-
 pub async fn games_with_drops(sid: String, sls: String, steam_id: String) -> Result<Value, String> {
     let client = Client::new();
     let mut page = 1;
@@ -255,4 +273,19 @@ pub async fn games_with_drops(sid: String, sls: String, steam_id: String) -> Res
     }
 
     Ok(serde_json::json!({ "gamesWithDrops": games_with_drops }))
+}
+
+pub async fn free_games() -> Result<Value, String> {
+    let itad_key = std::env::var("ITAD_KEY").unwrap();
+    let url = format!("https://api.isthereanydeal.com/deals/v2?key={}&shops=61&sort=price&limit=200&filter=N4IgLgngDgpiBcBtAjAXQL5A", itad_key);
+
+    let client = Client::new();
+
+    match client.get(&url).send().await {
+        Ok(response) => {
+            let body: Value = response.json().await.map_err(|e| e.to_string())?;
+            Ok(body)
+        },
+        Err(err) => Err(err.to_string()),
+    }
 }

@@ -58,6 +58,18 @@ export default function GeneralSettings({ settings, setSettings }) {
                 </Checkbox>
 
                 <Checkbox
+                    name='freeGames'
+                    isSelected={localSettings?.general?.freeGames}
+                    onChange={handleCheckboxChange}
+                >
+                    <div className='flex items-center gap-1'>
+                        <p className='text-xs'>
+                            Get notified about free games
+                        </p>
+                    </div>
+                </Checkbox>
+
+                <Checkbox
                     name='clearData'
                     isSelected={localSettings?.general?.clearData}
                     onChange={handleCheckboxChange}

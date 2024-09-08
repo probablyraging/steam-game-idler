@@ -133,7 +133,7 @@ export async function getAllGamesWithDrops(steamId, sid, sls) {
         if (res.gamesWithDrops && res.gamesWithDrops.length > 0) {
             return res.gamesWithDrops;
         } else {
-            return 0;
+            return false;
         }
     } catch (error) {
         console.error('Error in getAllGamesWithDrops util: ', error);
@@ -167,7 +167,7 @@ export const updateMongoStats = debounce(async (stat) => {
     }
 }, 5000);
 
-export function isOutsideSchedule(scheduleFrom, scheduleTo) {
+export function isWithinSchedule(scheduleFrom, scheduleTo) {
     const now = new Date();
     const currentTime = new Time(now.getHours(), now.getMinutes());
     const scheduleFromTime = new Time(scheduleFrom.hour, scheduleFrom.minute);
@@ -190,6 +190,23 @@ export async function fetchLatest() {
         return null;
     }
 };
+
+export async function fetchFreeGames() {
+    const currentTime = moment().unix();
+    const fetchAgainAt = localStorage.getItem('freeGamesCooldown');
+    if (!fetchAgainAt || currentTime > fetchAgainAt) {
+        const res = await invoke('get_free_games');
+        if (res && res?.list?.length > 0) {
+            for (const game of res.list) {
+                if (game?.deal?.price?.amount === 0) {
+                    return true;
+                }
+            }
+        }
+        localStorage.setItem('freeGamesCooldown', moment().add(6, 'hours').unix());
+        return false;
+    }
+}
 
 export function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));

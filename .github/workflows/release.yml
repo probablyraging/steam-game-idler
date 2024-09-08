@@ -101,6 +101,7 @@ jobs:
         - name: Create environment file
           run: |
             echo "KEY=${{ secrets.KEY }}" > .env.prod
+            echo "ITAD_KEY=${{ secrets.ITAD_KEY }}" >> .env.prod
             echo "MONGO_SRV=${{ secrets.MONGO_SRV }}" >> .env.prod
           shell: pwsh
           working-directory: ${{ github.workspace }}
