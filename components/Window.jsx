@@ -4,9 +4,9 @@ import Dashboard from './Dashboard';
 import { fetchFreeGames, fetchLatest, logEvent, updateMongoStats } from '@/utils/utils';
 import { Time } from '@internationalized/date';
 import Setup from './Setup';
+import UpdateToast from './UpdateToast';
 import UpdateScreen from './UpdateScreen';
 import { toast } from 'react-toastify';
-import UpdateToast from './UpdateToast';
 import ExtLink from './ExtLink';
 
 export default function Window() {
@@ -20,13 +20,11 @@ export default function Window() {
                 const { shouldUpdate, manifest } = await checkUpdate();
                 const latest = await fetchLatest();
                 if (shouldUpdate) {
+                    setUpdateManifest(manifest);
                     if (latest?.major) {
                         return setInitUpdate(true);
                     }
-                    toast.info(
-                        <UpdateToast updateManifest={manifest} setInitUpdate={setInitUpdate} />,
-                        { autoClose: false }
-                    );
+                    toast.info(<UpdateToast updateManifest={manifest} setInitUpdate={setInitUpdate} />, { autoClose: false });
                 }
             } catch (error) {
                 console.error('Error in (checkForUpdates):', error);

@@ -10,7 +10,7 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
         <React.Fragment>
             <Dropdown classNames={{ content: ['rounded p-0 bg-base border border-border'] }}>
                 <DropdownTrigger>
-                    <div className='p-1 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 hover:scale-105 cursor-pointer rounded duration-200'>
+                    <div className='p-1 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 hover:scale-105 cursor-pointer rounded duration-200 hover:text-sgi'>
                         <BsThreeDotsVertical />
                     </div>
                 </DropdownTrigger>

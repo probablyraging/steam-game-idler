@@ -9,6 +9,17 @@ lazy_static! {
     static ref MONGO_CLIENT: Arc<Mutex<Option<Client>>> = Arc::new(Mutex::new(None));
 }
 
+#[derive(Deserialize)]
+pub struct UpdateStatsInput {
+    pub stat: String,
+    pub count: i32,
+}
+
+#[derive(Serialize)]
+pub struct UpdateStatsOutput {
+    pub result: Document,
+}
+
 async fn get_client() -> Result<Client, String> {
     let mut client_option = MONGO_CLIENT.lock().await;
     if let Some(client) = client_option.as_ref() {
@@ -19,17 +30,6 @@ async fn get_client() -> Result<Client, String> {
         *client_option = Some(new_client.clone());
         Ok(new_client)
     }
-}
-
-#[derive(Deserialize)]
-pub struct UpdateStatsInput {
-    pub stat: String,
-    pub count: i32,
-}
-
-#[derive(Serialize)]
-pub struct UpdateStatsOutput {
-    pub result: Document,
 }
 
 pub async fn update_stats(stat: String, count: i32) -> Result<Value, String> {

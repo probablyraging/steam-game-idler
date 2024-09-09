@@ -92,6 +92,7 @@ dependencies = [
  "tauri",
  "tauri-build",
  "tokio",
+ "winapi",
  "window-shadows",
 ]
 

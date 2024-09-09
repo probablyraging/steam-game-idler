@@ -4,15 +4,20 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 import ExtLink from '../ExtLink';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import { toast } from 'react-toastify';
-import { logEvent } from '@/utils/utils';
+import { fetchLatest, logEvent } from '@/utils/utils';
+import UpdateToast from '../UpdateToast';
 
 export default function SettingsMenu({ setInitUpdate, setUpdateManifest }) {
     const checkForUpdates = async () => {
         try {
             const { shouldUpdate, manifest } = await checkUpdate();
+            const latest = await fetchLatest();
             if (shouldUpdate) {
                 setUpdateManifest(manifest);
-                setInitUpdate(true);
+                if (latest?.major) {
+                    return setInitUpdate(true);
+                }
+                toast.info(<UpdateToast updateManifest={manifest} setInitUpdate={setInitUpdate} />, { autoClose: false });
             } else {
                 toast.info('Steam Game Idler is up to date');
             }

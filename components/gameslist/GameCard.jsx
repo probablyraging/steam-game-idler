@@ -168,15 +168,15 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                                         {item.name}
                                     </p>
                                 </div>
-                                <div className='flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 hover:scale-105 duration-200' onClick={() => handleIdle(item)}>
+                                <div className='flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 hover:scale-105 duration-200 group/two' onClick={() => handleIdle(item)}>
                                     <div className='p-2 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 cursor-pointer rounded duration-200'>
-                                        <IoPlay className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={36} />
+                                        <IoPlay className='text-offwhite opacity-0 group-hover:opacity-100 duration-200 group-hover/two:text-sgi' fontSize={36} />
                                     </div>
                                 </div>
 
-                                <div className='flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 hover:scale-105 duration-200' onClick={() => viewAchievments(item)}>
+                                <div className='flex flex-col justify-center items-center opacity-0 group-hover:opacity-100 hover:scale-105 duration-200 group/three' onClick={() => viewAchievments(item)}>
                                     <div className='p-2 bg-black text-offwhite bg-opacity-50 hover:bg-black hover:bg-opacity-70 cursor-pointer rounded duration-200'>
-                                        <FaAward className='text-offwhite opacity-0 group-hover:opacity-100 transition-opacity duration-200' fontSize={36} />
+                                        <FaAward className='text-offwhite opacity-0 group-hover:opacity-100 duration-200 group-hover/three:text-sgi' fontSize={36} />
                                     </div>
                                 </div>
                             </div>

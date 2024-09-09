@@ -2,24 +2,38 @@
 
 pub mod requests;
 pub mod mongodb;
-
-use std::env;
-use chrono::Local;
-use std::path::PathBuf;
-use std::os::windows::process::CommandExt;
-use std::process::Stdio;
-use std::fs::{OpenOptions, create_dir_all};
-use std::io::{BufRead, BufReader, Write, Seek, SeekFrom};
-use serde_json::Value;
 use requests::*;
 use mongodb::*;
-use window_shadows::set_shadow;
+
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, Manager};
+use std::env;
+use std::path::PathBuf;
+use std::os::windows::process::CommandExt;
+use std::os::windows::io::AsRawHandle;
+use std::process::{Stdio, Child};
+use std::fs::{OpenOptions, create_dir_all};
+use std::io::{BufRead, BufReader, Write, Seek, SeekFrom};
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::Duration;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::mpsc;
+use winapi::um::processthreadsapi::TerminateProcess;
+use winapi::um::winnt::HANDLE;
+use window_shadows::set_shadow;
+use serde_json::Value;
+use chrono::Local;
+
+lazy_static::lazy_static! {
+    static ref SPAWNED_PROCESSES: Arc<Mutex<Vec<Child>>> = Arc::new(Mutex::new(Vec::new()));
+}
+
+static SHUTTING_DOWN: AtomicBool = AtomicBool::new(false);
 
 fn main() {
     if cfg!(debug_assertions) {
         dotenv::from_filename(".env.dev").unwrap().load();
-    }else{
+    } else {
         let prod_env = include_str!("../../.env.prod");
         let result = dotenv::from_read(prod_env.as_bytes()).unwrap();
         result.load();
@@ -29,20 +43,43 @@ fn main() {
     let tray_menu = SystemTrayMenu::new()
         .add_item(show)
         .add_item(quit);
-    let system_tray = SystemTray::new().with_menu(tray_menu);
+    let system_tray = SystemTray::new()
+    .with_tooltip("Steam Game Idler")
+    .with_menu(tray_menu);
+
+    let (tx, rx) = mpsc::channel();
+
     tauri::Builder::default()
-        .setup(|app| {
+        .setup(move |app| {
             let window = app.get_window("main").unwrap();
             set_shadow(&window, true).unwrap();
+            let spawned_processes = SPAWNED_PROCESSES.clone();
+            let tx_clone = tx.clone();
+            
+            std::thread::spawn(move || {
+                loop {
+                    if SHUTTING_DOWN.load(Ordering::SeqCst) {
+                        println!("Shutdown signal received. Killing processes.");
+                        kill_processes(&spawned_processes);
+                        tx_clone.send(()).unwrap();
+                        break;
+                    }
+                    thread::sleep(Duration::from_millis(100));
+                }
+            });
+
+            window.on_window_event(move |event| {
+                if let tauri::WindowEvent::CloseRequested { .. } = event {
+                    println!("Close event triggered.");
+                    SHUTTING_DOWN.store(true, Ordering::SeqCst);
+                }
+            });
+
             Ok(())
         })
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
-            SystemTrayEvent::LeftClick {
-                position: _,
-                size: _,
-                ..
-            } => {
+            SystemTrayEvent::LeftClick { .. } => {
                 let window = app.get_window("main").unwrap();
                 window.show().unwrap();
                 window.set_focus().unwrap();
@@ -50,7 +87,11 @@ fn main() {
             SystemTrayEvent::MenuItemClick { id, .. } => {
                 match id.as_str() {
                     "quit" => {
-                        std::process::exit(0);
+                        println!("Quit menu item clicked.");
+                        SHUTTING_DOWN.store(true, Ordering::SeqCst);
+                        let window = app.get_window("main").unwrap();
+                        window.close().unwrap();
+                        thread::sleep(Duration::from_millis(1000));
                     }
                     "show" => {
                         let window = app.get_window("main").unwrap();
@@ -87,8 +128,22 @@ fn main() {
             get_free_games,
             anti_away
         ])
-        .run(tauri::generate_context!())
-        .expect("error while running tauri application");
+        .build(tauri::generate_context!())
+        .expect("error while building tauri application")
+        .run(move |_app_handle, event| match event {
+            tauri::RunEvent::ExitRequested { api, .. } => {
+                api.prevent_exit();
+            }
+            tauri::RunEvent::Exit => {
+                println!("Application exit requested.");
+                SHUTTING_DOWN.store(true, Ordering::SeqCst);
+                rx.recv().unwrap();
+                println!("Shutdown process completed.");
+                thread::sleep(Duration::from_secs(2));
+                println!("Exiting application.");
+            }
+            _ => {}
+        });
 }
 
 #[tauri::command]
@@ -189,11 +244,16 @@ fn check_steam_status(file_path: String) -> Result<String, String> {
 
 #[tauri::command]
 fn start_idle(file_path: String, app_id: String, quiet: String) -> Result<(), String> {
-    std::process::Command::new(file_path)
+    let child = std::process::Command::new(&file_path)
         .args(&["idle", &app_id, &quiet])
         .creation_flags(0x08000000)
         .spawn()
         .map_err(|e| e.to_string())?;
+    
+    println!("Started process with ID: {:?}", child.id());
+    println!("Command: {} idle {} {}", file_path, app_id, quiet);
+    SPAWNED_PROCESSES.lock().unwrap().push(child);
+    println!("Process added to SPAWNED_PROCESSES. Total processes: {}", SPAWNED_PROCESSES.lock().unwrap().len());
     Ok(())
 }
 
@@ -329,4 +389,27 @@ fn mask_sensitive_data(message: &str, sensitive_data: &str) -> String {
     } else {
         message.to_string()
     }
+}
+
+fn kill_processes(spawned_processes: &Arc<Mutex<Vec<Child>>>) {
+    let mut processes = spawned_processes.lock().unwrap();
+    println!("Number of processes to kill: {}", processes.len());
+    for (index, child) in processes.iter_mut().enumerate() {
+        println!("Attempting to kill process {}", index);
+        unsafe {
+            let handle = child.as_raw_handle() as HANDLE;
+            if TerminateProcess(handle, 1) == 0 {
+                println!("Failed to terminate process {} using TerminateProcess", index);
+            } else {
+                println!("Successfully terminated process {}", index);
+            }
+        }
+        match child.wait() {
+            Ok(_) => println!("Process {} has exited", index),
+            Err(e) => println!("Error waiting for process {} to exit: {}", index, e),
+        }
+    }
+    processes.clear();
+    println!("All processes should be killed now.");
+    std::process::exit(0);
 }
