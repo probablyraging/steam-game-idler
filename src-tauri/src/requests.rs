@@ -14,7 +14,8 @@ struct Game {
     remaining: u32,
 }
 
-pub async fn user_summary(steam_id: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_user_summary(steam_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url = format!(
         "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={}&steamids={}",
@@ -32,7 +33,8 @@ pub async fn user_summary(steam_id: String) -> Result<Value, String> {
     }
 }
 
-pub async fn games_list(steam_id: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_games_list(steam_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url = format!(
         "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={}&steamid={}&include_appinfo=true&include_played_free_games=true&include_free_sub=true&skip_unvetted_apps=false&include_extended_appinfo=true",
@@ -50,7 +52,8 @@ pub async fn games_list(steam_id: String) -> Result<Value, String> {
     }
 }
 
-pub async fn recent_games(steam_id: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_recent_games(steam_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url = format!(
         "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key={}&steamid={}",
@@ -68,7 +71,8 @@ pub async fn recent_games(steam_id: String) -> Result<Value, String> {
     }
 }
 
-pub async fn game_details(app_id: String) -> Result<Value, String> { 
+#[tauri::command]
+pub async fn get_game_details(app_id: String) -> Result<Value, String> { 
     let url = format!(
         "https://store.steampowered.com/api/appdetails/?appids={}&l=english", app_id
     );
@@ -84,7 +88,8 @@ pub async fn game_details(app_id: String) -> Result<Value, String> {
     }
 }
 
-pub async fn achievement_data(steam_id: String, app_id: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_achievement_data(steam_id: String, app_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url_one = format!(
         "https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={}&appid={}",
@@ -120,7 +125,8 @@ pub async fn achievement_data(steam_id: String, app_id: String) -> Result<Value,
     Ok(combined_response)
 }
 
-pub async fn achievement_unlocker_data(steam_id: String, app_id: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_achievement_unlocker_data(steam_id: String, app_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
     let url_one = format!(
         "https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={}&appid={}",
@@ -156,7 +162,8 @@ pub async fn achievement_unlocker_data(steam_id: String, app_id: String) -> Resu
     Ok(combined_response)
 }
 
-pub async fn validate(sid: String, sls: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn validate_session(sid: String, sls: String) -> Result<Value, String> {
     let client = Client::new();
     let response = client
         .get("https://steamcommunity.com/")
@@ -182,7 +189,8 @@ pub async fn validate(sid: String, sls: String) -> Result<Value, String> {
     }
 }
 
-pub async fn drops_remaining(sid: String, sls: String, steam_id: String, app_id: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_drops_remaining(sid: String, sls: String, steam_id: String, app_id: String) -> Result<Value, String> {
     let client = Client::new();
     let response = client
         .get(&format!("https://steamcommunity.com/profiles/{}/gamecards/{}", steam_id, app_id))
@@ -214,7 +222,8 @@ pub async fn drops_remaining(sid: String, sls: String, steam_id: String, app_id:
     }
 }
 
-pub async fn games_with_drops(sid: String, sls: String, steam_id: String) -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_games_with_drops(sid: String, sls: String, steam_id: String) -> Result<Value, String> {
     let client = Client::new();
     let mut page = 1;
     let mut games_with_drops = Vec::new();
@@ -275,7 +284,8 @@ pub async fn games_with_drops(sid: String, sls: String, steam_id: String) -> Res
     Ok(serde_json::json!({ "gamesWithDrops": games_with_drops }))
 }
 
-pub async fn free_games() -> Result<Value, String> {
+#[tauri::command]
+pub async fn get_free_games() -> Result<Value, String> {
     let itad_key = std::env::var("ITAD_KEY").unwrap();
     let url = format!("https://api.isthereanydeal.com/deals/v2?key={}&shops=61&sort=price&limit=200&filter=N4IgLgngDgpiBcBtAjAXQL5A", itad_key);
 

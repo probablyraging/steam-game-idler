@@ -32,7 +32,8 @@ async fn get_client() -> Result<Client, String> {
     }
 }
 
-pub async fn update_stats(stat: String, count: i32) -> Result<Value, String> {
+#[tauri::command]
+pub async fn db_update_stats(stat: String, count: i32) -> Result<Value, String> {
     let client = get_client().await?;
     let db = client.database("chromeext");
     let collection: Collection<Document> = db.collection("sgistatistics");
