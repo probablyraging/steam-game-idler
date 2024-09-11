@@ -70,7 +70,7 @@ export default function UpdateScreen({ updateManifest }) {
         <React.Fragment>
             <div className='flex justify-between items-center w-screen h-[62px] bg-titlebar' data-tauri-drag-region>
                 <div className='flex items-center gap-1 px-2 bg-sgi dark:bg-[#181818] h-full w-[62px]'>
-                    <BiSolidLeaf className='text-offwhite' fontSize={40} />
+                    <BiSolidLeaf className='text-offwhite dark:text-sgi' fontSize={40} />
                 </div>
                 <div className='flex justify-center items-center h-full ml-2'>
                     <div className='flex justify-center items-center hover:bg-titlehover w-[28px] h-full cursor-pointer' onClick={windowMinimize}>

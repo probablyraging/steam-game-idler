@@ -198,14 +198,10 @@ export async function fetchFreeGames() {
         const fetchAgainAt = localStorage.getItem('freeGamesCooldown');
         if (!fetchAgainAt || currentTime > fetchAgainAt) {
             const res = await invoke('get_free_games');
-            if (res && res?.list?.length > 0) {
-                for (const game of res.list) {
-                    if (game?.deal?.price?.amount === 0) {
-                        return true;
-                    }
-                }
+            if (res) {
+                return true;
             }
-            localStorage.setItem('freeGamesCooldown', moment().add(6, 'hours').unix());
+            localStorage.setItem('freeGamesCooldown', moment().add(10, 'minutes').unix());
             return false;
         }
     } catch (error) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
 import { fetchFreeGames, fetchLatest, logEvent, updateMongoStats } from '@/utils/utils';
@@ -7,7 +7,8 @@ import Setup from './Setup';
 import UpdateToast from './UpdateToast';
 import UpdateScreen from './UpdateScreen';
 import { toast } from 'react-toastify';
-import ExtLink from './ExtLink';
+import FreeGamesToast from './FreeGamesToast';
+import moment from 'moment';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
@@ -71,30 +72,30 @@ export default function Window() {
         }
     }, []);
 
-    useEffect(() => {
-        const checkForFreeGames = async () => {
-            try {
-                const settings = JSON.parse(localStorage.getItem('settings')) || {};
-                const { freeGames } = settings?.general || {};
-                if (freeGames) {
-                    const freeGamesAvailable = await fetchFreeGames();
-                    if (freeGamesAvailable) {
-                        toast.info(
-                            <ExtLink href={'https://isthereanydeal.com/deals/#sort:price;filter:N4IgDgTglgxgpiAXKAtlAdk9BXANrgGhBQEMAPJABgDpKBGAXyIBcBPMBRAbToF0iAzgAsA9mAFIuANj4MgA'}>
-                                <p>Free Steam games are available</p>
-                                <p className='mt-1'>Click here to view</p>
-                            </ExtLink>,
-                            { autoClose: false }
-                        );
-                    }
+    const checkForFreeGames = useCallback(async () => {
+        try {
+            const settings = JSON.parse(localStorage.getItem('settings')) || {};
+            const { freeGames } = settings?.general || {};
+            const currentTime = moment().unix();
+            const showNotificationAgainAt = Number(localStorage.getItem('freeGamesNotificationCooldown') || 0);
+            if (freeGames) {
+                const freeGamesAvailable = await fetchFreeGames();
+                if (freeGamesAvailable && currentTime > showNotificationAgainAt) {
+                    toast.info(<FreeGamesToast />, { autoClose: false });
+                    localStorage.setItem('freeGamesNotificationCooldown', moment().add(24, 'hours').unix().toString());
                 }
-            } catch (error) {
-                console.error('Error in (checkForFreeGames):', error);
-                logEvent(`[Error] in (checkForFreeGames): ${error}`);
             }
-        };
-        checkForFreeGames();
+        } catch (error) {
+            console.error('Error in (checkForFreeGames):', error);
+            logEvent(`[Error] in (checkForFreeGames): ${error}`);
+        }
     }, []);
+
+    useEffect(() => {
+        const intervalId = setInterval(checkForFreeGames, 60000 * 60);
+        checkForFreeGames();
+        return () => clearInterval(intervalId);
+    }, [checkForFreeGames]);
 
     if (initUpdate) return (
         <UpdateScreen updateManifest={updateManifest} />

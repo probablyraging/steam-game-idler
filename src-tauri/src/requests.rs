@@ -285,17 +285,33 @@ pub async fn get_games_with_drops(sid: String, sls: String, steam_id: String) ->
 }
 
 #[tauri::command]
-pub async fn get_free_games() -> Result<Value, String> {
-    let itad_key = std::env::var("ITAD_KEY").unwrap();
-    let url = format!("https://api.isthereanydeal.com/deals/v2?key={}&shops=61&sort=price&limit=200&filter=N4IgLgngDgpiBcBtAjAXQL5A", itad_key);
-
+pub async fn get_free_games() -> Result<bool, String> {
     let client = Client::new();
+    let url = "https://store.steampowered.com/search/?maxprice=free&supportedlang=english&specials=1&ndl=1";
 
-    match client.get(&url).send().await {
-        Ok(response) => {
-            let body: Value = response.json().await.map_err(|e| e.to_string())?;
-            Ok(body)
-        },
-        Err(err) => Err(err.to_string()),
+    let response = client.get(url)
+        .send()
+        .await
+        .map_err(|e| e.to_string())?;
+
+    let html = response.text().await.map_err(|e| e.to_string())?;
+    let document = Document::from(html.as_str());
+
+    if let Some(search_results_count) = document.find(Class("search_results_count")).next() {
+        let count_text = search_results_count.text();
+        let re = Regex::new(r"(\d+)\s+result").unwrap();
+
+        if let Some(captures) = re.captures(&count_text) {
+            if let Some(count_match) = captures.get(1) {
+                let count: i32 = count_match.as_str().parse().unwrap_or(0);
+                Ok(count > 0)
+            } else {
+                Err("Failed to extract count from match".to_string())
+            }
+        } else {
+            Err("No match found in search results count".to_string())
+        }
+    } else {
+        Err("Could not find search results count".to_string())
     }
 }
