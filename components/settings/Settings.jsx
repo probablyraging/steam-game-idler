@@ -33,7 +33,6 @@ export default function Settings({ setInitUpdate, setUpdateManifest }) {
             general: {
                 stealthIdle: false,
                 antiAway: true,
-                freeGames: false,
                 clearData: true,
                 minimizeToTray: true,
             },

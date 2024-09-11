@@ -14,6 +14,12 @@ struct Game {
     remaining: u32,
 }
 
+#[derive(Serialize, Deserialize)]
+struct GameInfo {
+    appid: String,
+    name: String,
+}
+
 #[tauri::command]
 pub async fn get_user_summary(steam_id: String) -> Result<Value, String> {
     let key = std::env::var("KEY").unwrap();
@@ -285,7 +291,7 @@ pub async fn get_games_with_drops(sid: String, sls: String, steam_id: String) ->
 }
 
 #[tauri::command]
-pub async fn get_free_games() -> Result<bool, String> {
+pub async fn get_free_games() -> Result<serde_json::Value, String> {
     let client = Client::new();
     let url = "https://store.steampowered.com/search/?maxprice=free&supportedlang=english&specials=1&ndl=1";
 
@@ -295,23 +301,24 @@ pub async fn get_free_games() -> Result<bool, String> {
         .map_err(|e| e.to_string())?;
 
     let html = response.text().await.map_err(|e| e.to_string())?;
-    let document = Document::from(html.as_str());
+    let document = Html::parse_document(&html);
 
-    if let Some(search_results_count) = document.find(Class("search_results_count")).next() {
-        let count_text = search_results_count.text();
-        let re = Regex::new(r"(\d+)\s+result").unwrap();
+    let a_selector = Selector::parse("a.search_result_row").unwrap();
+    let title_selector = Selector::parse("span.title").unwrap();
 
-        if let Some(captures) = re.captures(&count_text) {
-            if let Some(count_match) = captures.get(1) {
-                let count: i32 = count_match.as_str().parse().unwrap_or(0);
-                Ok(count > 0)
-            } else {
-                Err("Failed to extract count from match".to_string())
+    let mut free_games = Vec::new();
+
+    for element in document.select(&a_selector) {
+        if let Some(app_id) = element.value().attr("data-ds-appid") {
+            if let Some(title_element) = element.select(&title_selector).next() {
+                let name = title_element.text().collect::<String>();
+                free_games.push(GameInfo {
+                    appid: app_id.to_string(),
+                    name: name.trim().to_string(),
+                });
             }
-        } else {
-            Err("No match found in search results count".to_string())
         }
-    } else {
-        Err("Could not find search results count".to_string())
     }
+
+    Ok(json!({ "games": free_games }))
 }

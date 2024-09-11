@@ -194,16 +194,11 @@ export async function fetchLatest() {
 
 export async function fetchFreeGames() {
     try {
-        const currentTime = moment().unix();
-        const fetchAgainAt = localStorage.getItem('freeGamesCooldown');
-        if (!fetchAgainAt || currentTime > fetchAgainAt) {
-            const res = await invoke('get_free_games');
-            if (res) {
-                return true;
-            }
-            localStorage.setItem('freeGamesCooldown', moment().add(10, 'minutes').unix());
-            return false;
+        const res = await invoke('get_free_games');
+        if (res) {
+            return res;
         }
+        return [];
     } catch (error) {
         console.error('Error in (fetchFreeGames):', error);
         logEvent(`[Error] in (fetchFreeGames): ${error}`);

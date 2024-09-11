@@ -2,10 +2,11 @@ import React from 'react';
 import { Modal, ModalContent, ModalBody, Button, useDisclosure, ModalFooter } from '@nextui-org/react';
 import { motion } from 'framer-motion';
 import { FaSignOutAlt } from 'react-icons/fa';
-import { IoGameController, IoSettings } from 'react-icons/io5';
+import { IoGameController, IoGift, IoSettings } from 'react-icons/io5';
 import { logEvent } from '@/utils/utils';
+import Sparkles from './Sparkles';
 
-export default function SideBar({ setUserSummary, activePage, setActivePage }) {
+export default function SideBar({ setUserSummary, activePage, setActivePage, showFreeGamesTab }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
     const openConfirmation = () => {
@@ -53,6 +54,25 @@ export default function SideBar({ setUserSummary, activePage, setActivePage }) {
                         )}
                         <IoGameController className='text-offwhite' fontSize={24} />
                     </div>
+                    {showFreeGamesTab && (
+                        <div className='relative flex justify-center items-center w-full h-[62px] hover:bg-sgi dark:hover:bg-titlehover cursor-pointer duration-200' onClick={() => setActivePage('freeGames')}>
+                            {activePage === 'freeGames' && (
+                                <motion.div
+                                    className='absolute w-full border-r-4 border-white'
+                                    initial={{ height: 0 }}
+                                    whileInView={{ height: 30 }}
+                                    transition={{
+                                        type: 'spring',
+                                        stiffness: 350,
+                                        damping: 18,
+                                    }}
+                                />
+                            )}
+                            <Sparkles>
+                                <IoGift className='text-offwhite' fontSize={24} />
+                            </Sparkles>
+                        </div>
+                    )}
                 </div>
 
                 <div className='flex flex-col justify-end items-center h-full'>

@@ -7,13 +7,13 @@ import Setup from './Setup';
 import UpdateToast from './UpdateToast';
 import UpdateScreen from './UpdateScreen';
 import { toast } from 'react-toastify';
-import FreeGamesToast from './FreeGamesToast';
-import moment from 'moment';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
     const [updateManifest, setUpdateManifest] = useState(null);
     const [initUpdate, setInitUpdate] = useState(false);
+    const [showFreeGamesTab, setShowFreeGamesTab] = useState(false);
+    const [freeGamesList, setFreeGamesList] = useState([]);
 
     useEffect(() => {
         const checkForUpdates = async () => {
@@ -40,7 +40,6 @@ export default function Window() {
             general: {
                 stealthIdle: false,
                 antiAway: true,
-                freeGames: false,
                 clearData: true,
                 minimizeToTray: true,
             },
@@ -74,16 +73,13 @@ export default function Window() {
 
     const checkForFreeGames = useCallback(async () => {
         try {
-            const settings = JSON.parse(localStorage.getItem('settings')) || {};
-            const { freeGames } = settings?.general || {};
-            const currentTime = moment().unix();
-            const showNotificationAgainAt = Number(localStorage.getItem('freeGamesNotificationCooldown') || 0);
-            if (freeGames) {
-                const freeGamesAvailable = await fetchFreeGames();
-                if (freeGamesAvailable && currentTime > showNotificationAgainAt) {
-                    toast.info(<FreeGamesToast />, { autoClose: false });
-                    localStorage.setItem('freeGamesNotificationCooldown', moment().add(24, 'hours').unix().toString());
-                }
+            const freeGamesList = await fetchFreeGames();
+            if (freeGamesList.games.length > 0) {
+                setFreeGamesList(freeGamesList.games);
+                setShowFreeGamesTab(true);
+            } else {
+                setFreeGamesList([]);
+                setShowFreeGamesTab(false);
             }
         } catch (error) {
             console.error('Error in (checkForFreeGames):', error);
@@ -108,7 +104,14 @@ export default function Window() {
     return (
         <React.Fragment>
             <div className='bg-base min-h-screen max-h-[calc(100vh-62px)]'>
-                <Dashboard userSummary={userSummary} setUserSummary={setUserSummary} setInitUpdate={setInitUpdate} setUpdateManifest={setUpdateManifest} />
+                <Dashboard
+                    userSummary={userSummary}
+                    setUserSummary={setUserSummary}
+                    setInitUpdate={setInitUpdate}
+                    setUpdateManifest={setUpdateManifest}
+                    showFreeGamesTab={showFreeGamesTab}
+                    freeGamesList={freeGamesList}
+                />
             </div>
         </React.Fragment>
     );
