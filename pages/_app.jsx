@@ -107,10 +107,6 @@ export default function MyApp({ Component, pageProps }) {
         setupAppWindow();
     }, []);
 
-    useEffect(() => {
-        setupAppWindow();
-    }, []);
-
     return (
         <ThemeProvider
             attribute='class'

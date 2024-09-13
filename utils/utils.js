@@ -208,6 +208,8 @@ export async function fetchFreeGames() {
 
 export async function antiAwayStatus(active = null) {
     try {
+        const steamRunning = await invoke('check_status');
+        if (!steamRunning) return;
         const settings = JSON.parse(localStorage.getItem('settings')) || {};
         const { antiAway } = settings?.general || {};
         const shouldRun = active !== null ? active : antiAway;

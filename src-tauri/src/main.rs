@@ -10,12 +10,13 @@ use tasks::*;
 use utils::*;
 
 use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, Manager};
+use tauri_plugin_autostart::MacosLauncher;
+use window_shadows::set_shadow;
 use std::env;
 use std::thread;
 use std::time::Duration;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::mpsc;
-use window_shadows::set_shadow;
 
 static SHUTTING_DOWN: AtomicBool = AtomicBool::new(false);
 
@@ -64,6 +65,8 @@ fn main() {
 
             Ok(())
         })
+
+        .plugin(tauri_plugin_autostart::init(MacosLauncher::LaunchAgent, None))
 
         .system_tray(system_tray)
 

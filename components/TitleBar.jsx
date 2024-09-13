@@ -34,7 +34,7 @@ export default function TitleBar() {
             <div className='h-[62px] bg-titlebar border-b border-titleborder select-none'>
                 <div className='flex justify-between items-center h-full text-titletext' data-tauri-drag-region>
                     <div className='flex justify-center items-center gap-1 px-2 bg-sgi h-full w-[62px]'>
-                        <BiSolidLeaf className='text-offwhite dark:text-sgi' fontSize={40} />
+                        <BiSolidLeaf className='text-offwhite' fontSize={40} />
                     </div>
 
                     <div className='flex justify-center items-center h-full'>
