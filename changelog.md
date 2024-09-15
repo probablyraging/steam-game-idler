@@ -1,5 +1,4 @@
 [![Downloads](https://img.shields.io/github/downloads/probablyraging/steam-game-idler/1.5.19/total?style=for-the-badge&logo=github&color=137eb5)](https://github.com/probablyraging/steam-game-idler/releases/download/1.5.19/Steam.Game.Idler_1.5.19_x64_en-US.msi)
 
 ## Changelog
-- Added a `run at startup` option to `settings > general`
-- Fixed an issue where the Steam desktop client would be forced to open if the `anti-away status` setting was enabled
+- Fixed an issue caused by the recent Steam client update, which prevented achievements from being unlocked

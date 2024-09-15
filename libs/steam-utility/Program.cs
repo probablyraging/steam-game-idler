@@ -143,9 +143,11 @@ namespace SteamUtility
 
             try
             {
+                CSteamID steamId = SteamUser.GetSteamID();
                 statsReceivedCallback = Callback<UserStatsReceived_t>.Create(OnUserStatsReceived);
+                SteamAPICall_t apiCall = SteamUserStats.RequestUserStats(steamId);
 
-                if (!SteamUserStats.RequestCurrentStats())
+                if (apiCall == SteamAPICall_t.Invalid)
                 {
                     Console.WriteLine("Failed to request stats from Steam.");
                     return;
