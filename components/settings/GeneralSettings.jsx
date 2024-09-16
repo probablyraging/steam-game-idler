@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Checkbox } from '@nextui-org/react';
 import { antiAwayStatus, logEvent } from '@/utils/utils';
-import { enable, isEnabled, disable } from "tauri-plugin-autostart-api";
+import { enable, isEnabled, disable } from 'tauri-plugin-autostart-api';
 
 export default function GeneralSettings({ settings, setSettings }) {
     const [localSettings, setLocalSettings] = useState(null);
@@ -17,7 +17,7 @@ export default function GeneralSettings({ settings, setSettings }) {
         const checkIfStartupEnabled = async () => {
             const isEnabledState = await isEnabled();
             setStartupState(isEnabledState);
-        }
+        };
         checkIfStartupEnabled();
     }, []);
 
