@@ -51,6 +51,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                     setIsLoading(false);
                 }
             } catch (error) {
+                setIsLoading(false);
                 console.error('Error in (getGamesList):', error);
                 logEvent(`[Error] in (getGamesList): ${error}`);
             }
