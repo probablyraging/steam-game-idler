@@ -16,7 +16,8 @@ export default function Setup({ setUserSummary }) {
     useEffect(() => {
         const getUserSummary = async () => {
             try {
-                const res = await invoke('get_user_summary', { steamId: steamId });
+                const apiKey = localStorage.getItem('apiKey');
+                const res = await invoke('get_user_summary', { steamId: steamId, apiKey: apiKey });
                 const userSummary = {
                     steamId: res.response.players[0].steamid,
                     personaName: res.response.players[0].personaname,

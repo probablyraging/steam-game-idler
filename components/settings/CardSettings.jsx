@@ -184,6 +184,7 @@ export default function CardSettings({ settings, setSettings }) {
                                 classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
                                 value={sidValue}
                                 onChange={handleSidChange}
+                                type={'password'}
                             />
                             <Input
                                 size='sm'
@@ -192,6 +193,7 @@ export default function CardSettings({ settings, setSettings }) {
                                 classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
                                 value={slsValue}
                                 onChange={handleSlsChange}
+                                type={'password'}
                             />
                             <Button
                                 isDisabled={hasCookies || !sidValue || !slsValue}

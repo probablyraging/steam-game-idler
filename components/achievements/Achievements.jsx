@@ -26,7 +26,8 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
     useEffect(() => {
         const getAchievementData = async () => {
             try {
-                const res = await invoke('get_achievement_data', { steamId: steamId, appId: appId.toString() });
+                const apiKey = localStorage.getItem('apiKey');
+                const res = await invoke('get_achievement_data', { steamId: steamId, appId: appId.toString(), apiKey: apiKey });
                 setAchievementList(res.schema.game?.availableGameStats?.achievements || []);
                 setStatisticsList(res.schema.game?.availableGameStats?.stats || []);
                 setUserGameStats(res.userStats?.playerstats);

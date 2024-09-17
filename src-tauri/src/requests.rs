@@ -21,8 +21,8 @@ struct GameInfo {
 }
 
 #[tauri::command]
-pub async fn get_user_summary(steam_id: String) -> Result<Value, String> {
-    let key = std::env::var("KEY").unwrap();
+pub async fn get_user_summary(steam_id: String, api_key: Option<String>) -> Result<Value, String> {
+    let key = api_key.unwrap_or_else(|| std::env::var("KEY").unwrap());
     let url = format!(
         "https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/?key={}&steamids={}",
         key, steam_id
@@ -40,8 +40,8 @@ pub async fn get_user_summary(steam_id: String) -> Result<Value, String> {
 }
 
 #[tauri::command]
-pub async fn get_games_list(steam_id: String) -> Result<Value, String> {
-    let key = std::env::var("KEY").unwrap();
+pub async fn get_games_list(steam_id: String, api_key: Option<String>) -> Result<Value, String> {
+    let key = api_key.unwrap_or_else(|| std::env::var("KEY").unwrap());
     let url = format!(
         "https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key={}&steamid={}&include_appinfo=true&include_played_free_games=true&include_free_sub=true&skip_unvetted_apps=false&include_extended_appinfo=true",
         key, steam_id
@@ -59,8 +59,8 @@ pub async fn get_games_list(steam_id: String) -> Result<Value, String> {
 }
 
 #[tauri::command]
-pub async fn get_recent_games(steam_id: String) -> Result<Value, String> {
-    let key = std::env::var("KEY").unwrap();
+pub async fn get_recent_games(steam_id: String, api_key: Option<String>) -> Result<Value, String> {
+    let key = api_key.unwrap_or_else(|| std::env::var("KEY").unwrap());
     let url = format!(
         "https://api.steampowered.com/IPlayerService/GetRecentlyPlayedGames/v1/?key={}&steamid={}",
         key, steam_id
@@ -95,8 +95,8 @@ pub async fn get_game_details(app_id: String) -> Result<Value, String> {
 }
 
 #[tauri::command]
-pub async fn get_achievement_data(steam_id: String, app_id: String) -> Result<Value, String> {
-    let key = std::env::var("KEY").unwrap();
+pub async fn get_achievement_data(steam_id: String, app_id: String, api_key: Option<String>) -> Result<Value, String> {
+    let key = api_key.unwrap_or_else(|| std::env::var("KEY").unwrap());
     let url_one = format!(
         "https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={}&appid={}",
         key, app_id
@@ -132,8 +132,8 @@ pub async fn get_achievement_data(steam_id: String, app_id: String) -> Result<Va
 }
 
 #[tauri::command]
-pub async fn get_achievement_unlocker_data(steam_id: String, app_id: String) -> Result<Value, String> {
-    let key = std::env::var("KEY").unwrap();
+pub async fn get_achievement_unlocker_data(steam_id: String, app_id: String, api_key: Option<String>) -> Result<Value, String> {
+    let key = api_key.unwrap_or_else(|| std::env::var("KEY").unwrap());
     let url_one = format!(
         "https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key={}&appid={}",
         key, app_id

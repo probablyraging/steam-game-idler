@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Checkbox } from '@nextui-org/react';
+import { Button, Checkbox, Input } from '@nextui-org/react';
 import { antiAwayStatus, logEvent } from '@/utils/utils';
 import { enable, isEnabled, disable } from 'tauri-plugin-autostart-api';
+import ExtLink from '../ExtLink';
 
 export default function GeneralSettings({ settings, setSettings }) {
     const [localSettings, setLocalSettings] = useState(null);
     const [startupState, setStartupState] = useState(null);
+    const [keyValue, setKeyValue] = useState('');
+    const [hasKey, setHasKey] = useState(false);
 
     useEffect(() => {
         if (settings && settings.general) {
@@ -19,6 +22,14 @@ export default function GeneralSettings({ settings, setSettings }) {
             setStartupState(isEnabledState);
         };
         checkIfStartupEnabled();
+    }, []);
+
+    useEffect(() => {
+        const apiKey = localStorage.getItem('apiKey');
+        if (apiKey && apiKey.length > 0) {
+            setHasKey(true);
+            setKeyValue(apiKey);
+        }
     }, []);
 
     const handleCheckboxChange = (e) => {
@@ -64,6 +75,34 @@ export default function GeneralSettings({ settings, setSettings }) {
             await enable();
         }
         setStartupState(!isEnabledState);
+    };
+
+    const handleKeyChange = (e) => {
+        setKeyValue(e.target.value);
+    };
+
+    const handleKeySave = async () => {
+        try {
+            if (keyValue.length > 0) {
+                localStorage.setItem('apiKey', keyValue);
+                setHasKey(true);
+            }
+        } catch (error) {
+            console.error('Error in (handleKeySave):', error);
+            logEvent(`[Error] in (handleKeySave): ${error}`);
+        }
+    };
+
+    const handleClear = async () => {
+        try {
+            localStorage.removeItem('apiKey');
+            setKeyValue('');
+            setHasKey(false);
+            logEvent('[Settings - General] Cleared Steam web API key');
+        } catch (error) {
+            console.error('Error in (handleClear):', error);
+            logEvent(`[Error] in (handleClear): ${error}`);
+        }
     };
 
     return (
@@ -130,6 +169,38 @@ export default function GeneralSettings({ settings, setSettings }) {
                         </p>
                     </div>
                 </Checkbox>
+
+                <div className='flex flex-col'>
+                    <p className='text-xs my-2' >
+                        Use your own
+                        <ExtLink href={'https://steamcommunity.com/dev/apikey'} className={'mx-1 text-blue-400'}>
+                            Steam web API key
+                        </ExtLink>
+                        instead of the default one <span className='italic'>(optional)</span>
+                    </p>
+                    <div className='flex gap-4'>
+                        <Input
+                            size='sm'
+                            placeholder='Steam web API key'
+                            className='max-w-[280px]'
+                            classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
+                            value={keyValue}
+                            onChange={handleKeyChange}
+                            type={'password'}
+                        />
+                        <Button
+                            isDisabled={hasKey || !keyValue}
+                            size='sm'
+                            className='bg-sgi font-semibold text-offwhite rounded-sm'
+                            onClick={handleKeySave}
+                        >
+                            Save
+                        </Button>
+                        <Button isDisabled={!hasKey} size='sm' className='font-semibold text-offwhite bg-red-400 rounded-sm' onClick={handleClear}>
+                            Clear
+                        </Button>
+                    </div>
+                </div>
             </div>
         </React.Fragment>
     );

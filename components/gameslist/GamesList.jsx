@@ -39,10 +39,11 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                         setIsLoading(false);
                     }, 100);
                 } else {
-                    const res = await invoke('get_games_list', { steamId: steamId });
+                    const apiKey = localStorage.getItem('apiKey');
+                    const res = await invoke('get_games_list', { steamId: steamId, apiKey: apiKey });
                     const resTwo = await invoke('get_recent_games', { steamId: steamId });
-                    const gameList = res.response.games;
-                    const recentGames = resTwo.response.games;
+                    const gameList = res.response.games || null;
+                    const recentGames = resTwo.response.games || [];
                     setGameList(gameList);
                     setRecentGames(recentGames);
                     setVisibleGames(gameList.slice(0, gamesPerPage));

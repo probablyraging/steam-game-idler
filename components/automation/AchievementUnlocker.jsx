@@ -68,7 +68,8 @@ export default function AchievementUnlocker({ setActivePage }) {
         try {
             setCurrentGame({ appId: game.appid, name: game.name });
 
-            const res = await invoke('get_achievement_unlocker_data', { steamId: userSummary.steamId, appId: game.appid.toString() });
+            const apiKey = localStorage.getItem('apiKey');
+            const res = await invoke('get_achievement_unlocker_data', { steamId: userSummary.steamId, appId: game.appid.toString(), apiKey: apiKey });
 
             const userAchievements = res?.userAchievements?.playerstats;
             const gameAchievements = res?.percentages?.achievementpercentages?.achievements;
