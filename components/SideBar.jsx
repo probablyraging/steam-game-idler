@@ -22,6 +22,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage, sho
             sessionStorage.removeItem('gamesListCache');
             sessionStorage.removeItem('recentGamesCache');
             localStorage.removeItem('userSummary');
+            localStorage.removeItem('apiKey');
             if (clearData) {
                 localStorage.removeItem('steamCookies');
                 localStorage.removeItem('favorites');

@@ -24,6 +24,9 @@ export default function Private({ steamId }) {
                                 <li>
                                     You have no games in your library
                                 </li>
+                                <li>
+                                    You are using an invalid Steam web API key
+                                </li>
                             </ul>
                         </div>
                         <ExtLink href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`} className={'text-xs text-blue-400 mt-4'}>
