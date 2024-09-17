@@ -39,13 +39,9 @@ pub async fn db_update_stats(stat: String, count: i32) -> Result<Value, String> 
     let collection: Collection<Document> = db.collection("sgistatistics");
     let filter = doc! {};
     let update = doc! { "$inc": { stat: count } }; 
-    let options = mongodb::options::FindOneAndUpdateOptions::builder()
-        .upsert(true)
-        .build();
     let result = collection
-        .find_one_and_update(filter, update)
-        .with_options(options)
+        .update_one(filter, update)
         .await
         .map_err(|e| e.to_string())?;
-    Ok(serde_json::json!({ "result": result.unwrap_or_default() }))
+    Ok(serde_json::json!({ "result": result }))
 }

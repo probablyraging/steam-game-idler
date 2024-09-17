@@ -39,7 +39,7 @@ export default function Window() {
         const defaultSettings = {
             general: {
                 stealthIdle: false,
-                antiAway: true,
+                antiAway: false,
                 clearData: true,
                 minimizeToTray: true,
             },
