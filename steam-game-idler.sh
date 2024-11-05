@@ -116,7 +116,7 @@ fi
 
 chk_cmd rm
 chk_cmd git
-if [ -d "$REPO_PATH" ]; then
+if [[ -d "$REPO_PATH" && -d "${REPO_PATH}/.git" ]]; then
   cat << EOF
 **************************************************************
 * Updating $APP_NAME within $REPO_PATH
@@ -132,7 +132,14 @@ else
 **************************************************************
 
 EOF
-  git clone -b "$REPO_BRANCH" "$REPO_URL" "$REPO_PATH"
+  if [ -d "$REPO_PATH/.git" ]; then
+    git clone -b "$REPO_BRANCH" "$REPO_URL" "$REPO_PATH"
+  else
+    git clone -b "$REPO_BRANCH" "$REPO_URL" .tmp
+    mv .tmp/.git .
+    rm -rf .tmp
+  fi
+  git checkout cli-webui -f
   cd "$REPO_PATH"
 fi
 
