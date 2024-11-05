@@ -2,6 +2,11 @@
 set -e
 
 # ENV VARS
+SCRIPT_NAME="${0##*/}"
+for (( i = 0; i <= ${#SCRIPT_NAME}; i++ )); do
+  SCRIPT_SPACE="${SCRIPT_SPACE} "
+done
+
 [ -z "$APP_NAME" ] && APP_NAME='steam-game-idler' 
 [ -z "$REPO_BRANCH" ] && REPO_BRANCH='cli-webui'
 [ -z "$REPO_PATH" ] && REPO_PATH="./"
@@ -37,7 +42,14 @@ npm_inst_fix() {
   fi
   if [ "$NPM_AUDIT" = 'true' ]; then
     # Use audit fix in the name of security
-    npm audit fix --force
+    if [ "$NPM_AUDIT_FORCE" = 'true' ]; then
+      npm audit fix --force
+    else
+      # Permit unfixed modules
+      set +e
+      npm audit fix
+      set -e
+    fi
   elif [ "$NPM_CLEAR" != 'true' ]; then
     npm install npm@latest
   fi
@@ -45,20 +57,23 @@ npm_inst_fix() {
 
 usage() {
   cat << EOF
-Usage: ${0##*/} [-h|--help] [-c|--clear-npm]
-                               Clear NPM package-lock.json
-                               and node_modules directory
-                            [-t|--tmux]
-                               Execute node with tmux
-                            [-f|--fix-audit]
-                               Run "npm audit fix --force"
-                               Otherwise use "npm install"
-
-                Examples:
-                         ${0##*/} -t -f
-                         ${0##*/} --tmux --fix-audit
-                         ${0##*/} --clear-npm --tmux --fix-audit
-                         REPO_PATH=~/$APP_NAME ${0##*/} --clear-npm --tmux --fix-audit
+Usage: $SCRIPT_NAME [-h|--help] [-a|--audit-fix]
+$SCRIPT_SPACE                     Run "npm audit fix"
+$SCRIPT_SPACE                     Otherwise use "npm install"
+$SCRIPT_SPACE                   [-c|--clear-npm]
+$SCRIPT_SPACE                     Clear NPM package-lock.json
+$SCRIPT_SPACE                     and node_modules directory
+$SCRIPT_SPACE                   [-f|--force-fix]
+$SCRIPT_SPACE                     This enables --audit-fix
+$SCRIPT_SPACE                     Run "npm audit fix --force"
+$SCRIPT_SPACE                   [-t|--tmux]
+$SCRIPT_SPACE                     Execute node with tmux
+$SCRIPT_SPACE
+$SCRIPT_SPACE       Examples:
+$SCRIPT_SPACE                $SCRIPT_NAME -t -f
+$SCRIPT_SPACE                $SCRIPT_NAME --tmux --audit-fix
+$SCRIPT_SPACE                         $SCRIPT_NAME --clear-npm --tmux --audit-fixx
+$SCRIPT_SPACE                         REPO_PATH=~/$APP_NAME $SCRIPT_NAME --clear-npm --tmux --force-fix
 EOF
   exit 0
 }
@@ -67,21 +82,25 @@ EOF
 
 for ARG in $@; do
   case "$ARG" in
-    -h|--help)
-      usage
+    -a|--audit-fix)
+      NPM_AUDIT='true'
       ;;
     -c|--clear-npm)
       NPM_CLEAR='true'
       ;;
-    -f|--fix-audit)
+    -f|--force-fix)
       NPM_AUDIT='true'
+      NPM_AUDIT_FORCE='true'
+      ;;
+    -h|--help)
+      usage
       ;;
     -t|--tmux)
       chk_cmd tmux
       TMUX_CMD='tmux new-session'
       ;;
     *)
-      echo "Invalid option: $1"
+      echo "Invalid option: $ARG"
       usage
       exit 1
       ;;
@@ -105,7 +124,7 @@ if [ -d "$REPO_PATH" ]; then
 
 EOF
   cd "$REPO_PATH"
-  #git pull
+  git pull
 else
   cat << EOF
 **************************************************************
@@ -127,16 +146,29 @@ cat << 'EOF'
 EOF
 npm_inst_fix
 
-echo
-cd ./src
-cat << 'EOF'
+if [ -d "./src" ]; then
+  echo
+  cd ./src
+  cat << 'EOF'
 **************************************************************
 * Updating webui node dependencies...
 **************************************************************
 
 EOF
-npm_inst_fix
-cd ../
+  npm_inst_fix
+  cd ../
+else
+  cat << EOF
+
+**************************************************************
+* Uneable to update webui node dependencies...
+* Path doesn't yet exist, it's strongly recommended
+* to exit, clear $REPO_PATH and re-run
+* the script with --clear-npm
+**************************************************************
+EOF
+  exit 1
+fi
 
 if [ "$NPM_AUDIT" = 'true' ]; then
   cat << 'EOF'
