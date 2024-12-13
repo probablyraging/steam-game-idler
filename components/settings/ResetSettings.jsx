@@ -13,6 +13,8 @@ export default function ResetSettings({ setSettings, setRefreshKey }) {
         try {
             localStorage.removeItem('settings');
             localStorage.removeItem('steamCookies');
+            localStorage.removeItem('apiKey');
+            localStorage.removeItem('customPort');
             setSettings(null);
             setRefreshKey(prevKey => prevKey + 1);
             logEvent('[Settings] Reset to default');

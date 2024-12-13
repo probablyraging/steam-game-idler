@@ -119,7 +119,9 @@ fn main() {
             open_file_explorer,
             db_update_stats,
             get_free_games,
-            anti_away
+            anti_away,
+            start_mobile_server,
+            is_mobile_server_running,
         ])
         .build(tauri::generate_context!())
         .expect("error while building tauri application")

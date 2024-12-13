@@ -54,6 +54,11 @@ export default function Window() {
                 scheduleFrom: new Time(8, 30),
                 scheduleTo: new Time(23, 0),
                 interval: [30, 130],
+            },
+            mobileServer: {
+                alwaysRun: false,
+                runLocal: false,
+                customPort: null
             }
         };
         try {

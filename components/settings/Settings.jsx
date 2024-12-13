@@ -9,6 +9,7 @@ import SettingsMenu from './SettingsMenu';
 import ResetSettings from './ResetSettings';
 import { Time } from '@internationalized/date';
 import { logEvent } from '@/utils/utils';
+import MobileServer from './MobileServer';
 
 export default function Settings({ setInitUpdate, setUpdateManifest }) {
     const [settings, setSettings] = useState(null);
@@ -47,6 +48,11 @@ export default function Settings({ setInitUpdate, setUpdateManifest }) {
                 scheduleFrom: new Time(8, 30),
                 scheduleTo: new Time(23, 0),
                 interval: [30, 130],
+            },
+            mobileServer: {
+                alwaysRun: false,
+                runLocal: false,
+                customPort: null
             }
         };
         let currentSettings = JSON.parse(localStorage.getItem('settings')) || {};
@@ -62,6 +68,10 @@ export default function Settings({ setInitUpdate, setUpdateManifest }) {
             achievementUnlocker: {
                 ...defaultSettings.achievementUnlocker,
                 ...currentSettings.achievementUnlocker
+            },
+            mobileServer: {
+                ...defaultSettings.mobileServer,
+                ...currentSettings.mobileServer
             }
         };
         if (JSON.stringify(currentSettings) !== JSON.stringify(updatedSettings)) {
@@ -114,6 +124,9 @@ export default function Settings({ setInitUpdate, setUpdateManifest }) {
                         </Tab>
                         <Tab key='achievement-unlocker' title='Achievement Unlocker'>
                             <AchievementSettings settings={settings} setSettings={setSettings} />
+                        </Tab>
+                        <Tab key='mobile' title='Mobile Server'>
+                            <MobileServer settings={settings} setSettings={setSettings} />
                         </Tab>
                         <Tab key='logs' title='Logs'>
                             <Logs />

@@ -29,6 +29,29 @@ export async function startIdler(appId, appName, quiet = false) {
     }
 };
 
+export async function startMobileServer(local, port) {
+    try {
+        const path = await invoke('get_file_path');
+        const fullPath = path.replace('Steam Game Idler.exe', 'libs\\server.exe');
+        const pid = await invoke('start_mobile_server', { filePath: fullPath, local: `--local=${local}`, port: `--port=${port}` });
+        if (pid) {
+            const int = setInterval(async () => {
+                const isRunning = await invoke('is_mobile_server_running', { pid: pid });
+                if (!isRunning) {
+                    clearInterval(int);
+                    return;
+                }
+            }, 1000);
+            return true;
+        } else {
+            return false;
+        }
+    } catch (error) {
+        console.error('Error in startMobileServer util', error);
+        logEvent(`[Error] in (startMobileServer) util: ${error}`);
+    }
+};
+
 export async function stopIdler(appId, appName) {
     try {
         await invoke('stop_idle', { appId: appId.toString() });

@@ -148,6 +148,7 @@ export default function GeneralSettings({ settings, setSettings }) {
                 </Checkbox>
 
                 <Checkbox
+                    name='startUp'
                     isSelected={startupState}
                     onChange={handleRunAtStartupChange}
                 >

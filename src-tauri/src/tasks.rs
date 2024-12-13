@@ -65,3 +65,35 @@ pub fn update_stat(file_path: String, app_id: String, stat_name: String, new_val
         .expect("failed to execute stat updater");
     Ok(())
 }
+
+#[tauri::command]
+pub fn start_mobile_server(file_path: String, local: String, port: String) -> Result<i32, String> {
+    let child = std::process::Command::new(&file_path)
+        .args(&[&local, &port])
+        // .creation_flags(0x08000000)
+        .creation_flags(0x00000010)
+        .spawn()
+        .map_err(|e| e.to_string())?;
+
+    let pid = child.id() as i32;
+    
+    SPAWNED_PROCESSES.lock().unwrap().push(child);
+
+    Ok(pid)
+}
+
+#[tauri::command]
+pub fn is_mobile_server_running(pid: i32) -> bool {
+    let output = std::process::Command::new("tasklist")
+        .arg("/FI")
+        .arg(format!("PID eq {}", pid))
+        .output();
+
+    match output {
+        Ok(output) => {
+            let stdout = String::from_utf8_lossy(&output.stdout);
+            stdout.contains(&pid.to_string())
+        }
+        Err(_) => false
+    }
+}

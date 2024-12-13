@@ -293,7 +293,7 @@ pub async fn get_games_with_drops(sid: String, sls: String, steam_id: String) ->
 #[tauri::command]
 pub async fn get_free_games() -> Result<serde_json::Value, String> {
     let client = Client::new();
-    let url = "https://store.steampowered.com/search/?maxprice=free&supportedlang=english&specials=1&ndl=1";
+    let url = "https://store.steampowered.com/search/?maxprice=free&specials=1&ndl=1";
 
     let response = client.get(url)
         .send()
