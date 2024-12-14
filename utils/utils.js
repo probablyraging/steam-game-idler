@@ -2,6 +2,7 @@ import moment from "moment";
 import { invoke } from '@tauri-apps/api/tauri';
 import { getVersion } from '@tauri-apps/api/app';
 import { Time } from "@internationalized/date";
+import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
 
 let idleCounter = 0;
 let achievementCounter = 0;
@@ -229,6 +230,27 @@ export async function antiAwayStatus(active = null) {
     } catch (error) {
         console.error('Error in (antiAwayStatus):', error);
         logEvent(`[Error] in (antiAwayStatus): ${error}`);
+    }
+}
+
+export async function sendNativeNotification(title, body) {
+    try {
+        let permissionGranted = await isPermissionGranted();
+
+        if (!permissionGranted) {
+            const permission = await requestPermission();
+            permissionGranted = permission === 'granted';
+        }
+
+        if (permissionGranted) {
+            sendNotification({
+                title: title,
+                body: body,
+            });
+        }
+    } catch (error) {
+        console.error('Error in (sendNativeNotification):', error);
+        logEvent(`[Error] in (sendNativeNotification): ${error}`);
     }
 }
 
