@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
-import { fetchFreeGames, fetchLatest, logEvent, updateMongoStats } from '@/utils/utils';
+import { fetchFreeGames, fetchLatest, logEvent, sendNativeNotification, updateMongoStats } from '@/utils/utils';
 import { Time } from '@internationalized/date';
 import Setup from './Setup';
 import UpdateToast from './UpdateToast';
@@ -42,6 +42,7 @@ export default function Window() {
                 antiAway: false,
                 clearData: true,
                 minimizeToTray: true,
+                freeGameNotifications: true,
             },
             cardFarming: {
                 listGames: true,
@@ -73,10 +74,22 @@ export default function Window() {
 
     const checkForFreeGames = useCallback(async () => {
         try {
+            const lastNotifiedTimestamp = localStorage.getItem('lastNotifiedTimestamp');
+            const settings = JSON.parse(localStorage.getItem('settings')) || {};
+            const { freeGameNotifications } = settings?.general || {};
             const freeGamesList = await fetchFreeGames();
+
+            const inOneDay = new Date();
+            inOneDay.setHours(inOneDay.getHours() + 24);
+
             if (freeGamesList.games.length > 0) {
                 setFreeGamesList(freeGamesList.games);
                 setShowFreeGamesTab(true);
+
+                if (freeGameNotifications && (!lastNotifiedTimestamp || Date.now() > parseInt(lastNotifiedTimestamp))) {
+                    sendNativeNotification('Free Games Available!', 'Check the sidebar for the 🎁 icon to get your free games');
+                    localStorage.setItem('lastNotifiedTimestamp', inOneDay.valueOf());
+                }
             } else {
                 setFreeGamesList([]);
                 setShowFreeGamesTab(false);

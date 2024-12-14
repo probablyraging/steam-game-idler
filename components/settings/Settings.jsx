@@ -35,6 +35,7 @@ export default function Settings({ setInitUpdate, setUpdateManifest }) {
                 antiAway: false,
                 clearData: true,
                 minimizeToTray: true,
+                freeGameNotifications: true,
             },
             cardFarming: {
                 listGames: true,

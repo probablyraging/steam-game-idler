@@ -136,13 +136,25 @@ export default function GeneralSettings({ settings, setSettings }) {
                 </Checkbox>
 
                 <Checkbox
+                    name='freeGameNotifications'
+                    isSelected={localSettings?.general?.freeGameNotifications}
+                    onChange={handleCheckboxChange}
+                >
+                    <div className='flex items-center gap-1'>
+                        <p className='text-xs'>
+                            Free game notifications
+                        </p>
+                    </div>
+                </Checkbox>
+
+                <Checkbox
                     name='clearData'
                     isSelected={localSettings?.general?.clearData}
                     onChange={handleCheckboxChange}
                 >
                     <div className='flex items-center gap-1'>
                         <p className='text-xs'>
-                            Delete locally saved data on logout
+                            Delete saved data on logout
                         </p>
                     </div>
                 </Checkbox>
