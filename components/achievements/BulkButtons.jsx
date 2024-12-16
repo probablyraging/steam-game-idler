@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, ModalContent, ModalBody, Button, useDisclosure, ModalFooter } from '@nextui-org/react';
-import { lockAchievement, logEvent, unlockAchievement } from '@/utils/utils';
+import { logEvent, unlockAchievement, lockAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
 import { invoke } from '@tauri-apps/api/tauri';
 
@@ -21,18 +21,30 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                 onClose();
                 let unlocked = 0;
                 const total = achievementList.length;
-                toast.info(`Unlocking ${total} achievements`);
+                const toastId = toast.info(`Unlocking 0 of ${total} achievements for ${appName}.`, {
+                    autoClose: false,
+                    isLoading: true,
+                    closeButton: false
+                });
                 for (const ach of achievementList) {
                     try {
-                        await unlockAchievement(appId, ach.name, true);
+                        await unlockAchievement(appId, ach.name);
                         unlocked++;
-                        await new Promise(resolve => setTimeout(resolve, 200));
+                        toast.update(toastId, {
+                            render: `Unlocking ${unlocked} of ${total} achievements for ${appName}.`,
+                        });
                     } catch (error) {
                         console.error(`Failed to unlock achievement ${ach.name}:`, error);
                     }
                 }
                 setBtnLoading(false);
-                toast.success(`Successfully unlocked ${unlocked} of ${total} achievements.`);
+                toast.update(toastId, {
+                    render: `Successfully unlocked ${unlocked} of ${total} achievements for ${appName}.`,
+                    autoClose: true,
+                    isLoading: false,
+                    closeButton: true,
+                    type: 'success'
+                });
             } else {
                 onClose();
                 toast.error('Steam is not running');
@@ -51,18 +63,30 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                 onClose();
                 let locked = 0;
                 const total = achievementList.length;
-                toast.info(`Locking ${total} achievements`);
+                const toastId = toast.info(`Locking 0 of ${total} achievements for ${appName}.`, {
+                    autoClose: false,
+                    isLoading: true,
+                    closeButton: false
+                });
                 for (const ach of achievementList) {
                     try {
                         await lockAchievement(appId, ach.name);
                         locked++;
-                        await new Promise(resolve => setTimeout(resolve, 200));
+                        toast.update(toastId, {
+                            render: `Locking ${locked} of ${total} achievements for ${appName}.`,
+                        });
                     } catch (error) {
                         console.error(`Failed to unlock achievement ${ach.name}:`, error);
                     }
                 }
                 setBtnLoading(false);
-                toast.success(`Successfully locked ${locked} of ${total} achievements.`);
+                toast.update(toastId, {
+                    render: `Successfully locked ${locked} of ${total} achievements for ${appName}.`,
+                    autoClose: true,
+                    isLoading: false,
+                    closeButton: true,
+                    type: 'success'
+                });
             } else {
                 onClose();
                 toast.error('Steam is not running');

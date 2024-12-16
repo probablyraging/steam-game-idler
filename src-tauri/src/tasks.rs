@@ -7,7 +7,7 @@ lazy_static::lazy_static! {
 }
 
 #[tauri::command]
-pub fn start_idle(file_path: String, app_id: String, quiet: String) -> Result<(), String> {
+pub async fn start_idle(file_path: String, app_id: String, quiet: String) -> Result<(), String> {
     let child = std::process::Command::new(&file_path)
         .args(&["idle", &app_id, &quiet])
         .creation_flags(0x08000000)
@@ -39,26 +39,34 @@ pub async fn stop_idle(app_id: String) -> Result<(), String> {
 }
 
 #[tauri::command]
-pub fn unlock_achievement(file_path: String, app_id: String, achievement_id: String, unlock_all: bool) -> Result<(), String> {
-    let unlock_all_arg = if unlock_all { "true" } else { "false" }.to_string();
+pub async fn toggle_achievement(file_path: String, app_id: String, achievement_id: String) -> Result<(), String> {
     std::process::Command::new(file_path)
-        .args(&["unlock", &app_id, &achievement_id, &unlock_all_arg])
+        .args(&["toggle_achievement", &app_id, &achievement_id])
         .output()
         .expect("failed to execute unlocker");
     Ok(())
 }
 
 #[tauri::command]
-pub fn lock_achievement(file_path: String, app_id: String, achievement_id: String) -> Result<(), String> {
+pub async fn unlock_achievement(file_path: String, app_id: String, achievement_id: String) -> Result<(), String> {
     std::process::Command::new(file_path)
-        .args(&["lock_all", &app_id, &achievement_id])
+        .args(&["unlock_achievement", &app_id, &achievement_id])
         .output()
         .expect("failed to execute unlocker");
     Ok(())
 }
 
 #[tauri::command]
-pub fn update_stat(file_path: String, app_id: String, stat_name: String, new_value: String) -> Result<(), String> {
+pub async fn lock_achievement(file_path: String, app_id: String, achievement_id: String) -> Result<(), String> {
+    std::process::Command::new(file_path)
+        .args(&["lock_achievement", &app_id, &achievement_id])
+        .output()
+        .expect("failed to execute unlocker");
+    Ok(())
+}
+
+#[tauri::command]
+pub async fn update_stat(file_path: String, app_id: String, stat_name: String, new_value: String) -> Result<(), String> {
     std::process::Command::new(file_path)
         .args(&["update_stat", &app_id, &stat_name, &new_value])
         .output()

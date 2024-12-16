@@ -13,7 +13,7 @@ const APP_FOLDER_NAME: &str = "steam-game-idler";
 const MAX_LINES: usize = 500;
 
 #[tauri::command]
-pub fn check_status() -> bool {
+pub async fn check_status() -> bool {
     let output = std::process::Command::new("tasklist")
         .args(&["/FI", "IMAGENAME eq steam.exe"])
         .stdout(Stdio::piped())
@@ -26,7 +26,7 @@ pub fn check_status() -> bool {
 }
 
 #[tauri::command]
-pub fn check_steam_status(file_path: String) -> Result<String, String> {
+pub async fn check_steam_status(file_path: String) -> Result<String, String> {
     let output = std::process::Command::new(file_path)
         .arg("check_steam")
         .creation_flags(0x08000000)
@@ -46,7 +46,7 @@ pub fn check_steam_status(file_path: String) -> Result<String, String> {
 }
 
 #[tauri::command]
-pub fn anti_away() -> Result<(), String> {
+pub async fn anti_away() -> Result<(), String> {
     std::process::Command::new("cmd")
         .args(&["/C", "start steam://friends/status/online"])
         .creation_flags(0x08000000)
@@ -56,7 +56,7 @@ pub fn anti_away() -> Result<(), String> {
 }
 
 #[tauri::command]
-pub fn get_file_path() -> Result<PathBuf, String> {
+pub async fn get_file_path() -> Result<PathBuf, String> {
     match std::env::current_exe() {
         Ok(path) => return Ok(path),
         Err(error) => return Err(format!("{error}")),
@@ -64,7 +64,7 @@ pub fn get_file_path() -> Result<PathBuf, String> {
 }
 
 #[tauri::command]
-pub fn log_event(message: String, app_handle: tauri::AppHandle) -> Result<(), String> {
+pub async fn log_event(message: String, app_handle: tauri::AppHandle) -> Result<(), String> {
     let app_data_dir = app_handle.path_resolver().app_data_dir()
         .ok_or("Failed to get app data directory")?;
     let app_specific_dir = app_data_dir.parent().unwrap_or(&app_data_dir).join(APP_FOLDER_NAME);

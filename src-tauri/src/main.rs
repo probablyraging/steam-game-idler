@@ -101,6 +101,7 @@ fn main() {
             check_status,
             start_idle,
             stop_idle,
+            toggle_achievement,
             unlock_achievement,
             lock_achievement,
             update_stat,

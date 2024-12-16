@@ -160,7 +160,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                             isGameIdling = true;
                         }
                     }
-                    unlockAchievement(achievement.appId, achievement.name, true);
+                    unlockAchievement(achievement.appId, achievement.name);
                     achievementsRemaining--;
                     logEvent(`[Achievement Unlocker - Auto] Unlocked ${achievement.name} for ${achievement.gameName}`);
                     setAchievementCount(prevCount => Math.max(prevCount - 1, 0));

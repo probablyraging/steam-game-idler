@@ -40,17 +40,16 @@ export async function stopIdler(appId, appName) {
     }
 };
 
-export async function unlockAchievement(appId, achievementId, unlockAll) {
+export async function toggleAchievement(appId, achievementId) {
     try {
         const steamRunning = await invoke('check_status');
         if (steamRunning) {
             const path = await invoke('get_file_path');
             const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
-            await invoke('unlock_achievement', {
+            await invoke('toggle_achievement', {
                 filePath: fullPath,
                 appId: appId.toString(),
-                achievementId: achievementId,
-                unlockAll: unlockAll
+                achievementId: achievementId
             });
             achievementCounter++;
             updateMongoStats('achievement');
@@ -61,9 +60,32 @@ export async function unlockAchievement(appId, achievementId, unlockAll) {
             return { error: 'Steam is not running' };
         }
     } catch (error) {
+        console.error('Error in toggleAchievement util: ', error);
+        logEvent(`[Error] in (toggleAchievement) util: ${error}`);
+        return { error: error };
+    }
+}
+
+export async function unlockAchievement(appId, achievementId) {
+    try {
+        const steamRunning = await invoke('check_status');
+        if (steamRunning) {
+            const path = await invoke('get_file_path');
+            const fullPath = path.replace('Steam Game Idler.exe', 'libs\\SteamUtility.exe');
+            await invoke('unlock_achievement', {
+                filePath: fullPath,
+                appId: appId.toString(),
+                achievementId: achievementId
+            });
+            achievementCounter++;
+            updateMongoStats('achievement');
+            logEvent(`[Achievement Unlocker] Unlocked ${achievementId} (${appId})`);
+        } else {
+            logEvent(`[Error] [Achievement Unlocker] Steam is not running`);
+        }
+    } catch (error) {
         console.error('Error in unlockAchievement util: ', error);
         logEvent(`[Error] in (unlockAchievement) util: ${error}`);
-        return { error: error };
     }
 }
 
@@ -78,8 +100,6 @@ export async function lockAchievement(appId, achievementId) {
                 appId: appId.toString(),
                 achievementId: achievementId
             });
-            achievementCounter++;
-            updateMongoStats('achievement');
             logEvent(`[Achievement Unlocker] Locked ${achievementId} (${appId})`);
         } else {
             logEvent(`[Error] [Achievement Unlocker] Steam is not running`);

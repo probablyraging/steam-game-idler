@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace SteamUtility
 {
@@ -19,8 +19,10 @@ namespace SteamUtility
         {
             this.appid = appid;
             InitializeComponent();
-            appHeader.Load($"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg");
-            
+            appHeader.Load(
+                $"https://cdn.akamai.steamstatic.com/steam/apps/{appid}/header_292x136.jpg"
+            );
+
             startTime = DateTime.Now;
             timer = new Timer();
             timer.Interval = 1000;
@@ -46,11 +48,15 @@ namespace SteamUtility
             {
                 using (var client = new HttpClient())
                 {
-                    var response = await client.GetAsync($"https://store.steampowered.com/api/appdetails?appids={appid}");
+                    var response = await client.GetAsync(
+                        $"https://store.steampowered.com/api/appdetails?appids={appid}"
+                    );
                     response.EnsureSuccessStatusCode();
                     var responseBody = await response.Content.ReadAsStringAsync();
 
-                    var jsonData = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(responseBody);
+                    var jsonData = JsonConvert.DeserializeObject<Dictionary<string, JObject>>(
+                        responseBody
+                    );
                     var data = (JObject)jsonData[appid.ToString()];
                     appName = (string)data["data"]["name"];
                     if (string.IsNullOrWhiteSpace(appName))

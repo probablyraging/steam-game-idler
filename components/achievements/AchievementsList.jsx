@@ -1,22 +1,22 @@
 import React from 'react';
 import Image from 'next/image';
-import { logEvent, unlockAchievement } from '@/utils/utils';
+import { logEvent, toggleAchievement } from '@/utils/utils';
 import { toast } from 'react-toastify';
 import { Tooltip } from '@nextui-org/react';
 
 export default function AchievementsList({ appId, appName, achievementsUnavailable, achievementList, userGameAchievementsMap, percentageMap }) {
-    const handleUnlock = async (achievementName, type) => {
+    const handleToggle = async (achievementName, type) => {
         try {
-            const status = await unlockAchievement(appId, achievementName, false);
+            const status = await toggleAchievement(appId, achievementName, false);
             if (!status.error) {
                 toast.success(`${type} ${achievementName} for ${appName}`);
             } else {
                 toast.error(`Error: ${status.error}`);
-                logEvent(`[Error] in handleUnlock: ${status.error}`);
+                logEvent(`[Error] in handleToggle: ${status.error}`);
             }
         } catch (error) {
-            console.error('Error in (handleUnlock):', error);
-            logEvent(`[Error] in (handleUnlock): ${error}`);
+            console.error('Error in (handleToggle):', error);
+            logEvent(`[Error] in (handleToggle): ${error}`);
         }
     };
 
@@ -57,7 +57,7 @@ export default function AchievementsList({ appId, appName, achievementsUnavailab
                                 {isUnlocked ? (
                                     <div
                                         className='flex justify-center items-center w-[30px] h-[30px] cursor-pointer group'
-                                        onClick={() => handleUnlock(item.name, 'Locked')}
+                                        onClick={() => handleToggle(item.name, 'Locked')}
                                     >
                                         <div className='bg-red-400 group-hover:bg-opacity-85 py-1 px-2 rounded-sm text-xs text-offwhite font-semibold mr-6 duration-200'>
                                             <p>Lock</p>
@@ -66,7 +66,7 @@ export default function AchievementsList({ appId, appName, achievementsUnavailab
                                 ) : (
                                     <div
                                         className='flex justify-center items-center w-[30px] h-[30px] cursor-pointer group'
-                                        onClick={() => handleUnlock(item.name, 'Unlocked')}
+                                        onClick={() => handleToggle(item.name, 'Unlocked')}
                                     >
                                         <div className='bg-[#4fc27d] group-hover:bg-opacity-85 py-1 px-2 rounded-sm text-xs text-offwhite font-semibold mr-6 duration-200'>
                                             <p>Unlock</p>
