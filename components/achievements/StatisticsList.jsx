@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Input } from '@nextui-org/react';
-import { logEvent, updateStat } from '@/utils/utils';
-import { toast } from 'react-toastify';
 
-export default function StatisticsList({ appId, appName, statisticsUnavailable, statisticsList, userGameStatsMap }) {
-    const [inputValues, setInputValues] = useState({});
-
+export default function StatisticsList({ statisticsUnavailable, statisticsList, userGameStatsMap, setInitialStatValues, newStatValues, setNewStatValues }) {
     useEffect(() => {
         const initialValues = {};
         if (statisticsList) {
@@ -13,28 +9,18 @@ export default function StatisticsList({ appId, appName, statisticsUnavailable, 
                 initialValues[item.name] = userGameStatsMap.get(item.name) || 0;
             });
         }
-        setInputValues(initialValues);
+        setInitialStatValues(initialValues);
+        setNewStatValues(prevValues => {
+            return Object.keys(prevValues).length === 0 ? initialValues : prevValues;
+        });
     }, [statisticsList, userGameStatsMap]);
 
     const handleInputChange = (name, value) => {
-        setInputValues(prevValues => ({
+        const numericalValue = value.replace(/\D/g, '');
+        setNewStatValues(prevValues => ({
             ...prevValues,
-            [name]: value
+            [name]: numericalValue
         }));
-    };
-
-    const handleUpdate = async (statName) => {
-        try {
-            const status = await updateStat(appId, statName, inputValues[statName].toString());
-            if (!status.error) {
-                toast.success(`Updated ${statName} to ${inputValues[statName]} for ${appName}`);
-            } else {
-                toast.error(`Error: ${status.error}`);
-            }
-        } catch (error) {
-            console.error('Error in (handleUpdate):', error);
-            logEvent(`[Error] in (handleUpdate): ${error}`);
-        }
     };
 
     return (
@@ -47,50 +33,24 @@ export default function StatisticsList({ appId, appName, statisticsUnavailable, 
                         </p>
                     </div>
                 ) : (
-                    <div className='bg-container border border-border text-xs rounded min-h-[200px] max-h-[calc(100vh-286px)] overflow-y-auto'>
-                        <table className='w-full border-collapse'>
-                            <thead className='sticky top-0 z-10'>
-                                <tr className='border-b border-border bg-[#dedede] dark:bg-base'>
-                                    <th className='text-left p-1.5 w-1/2'>Name</th>
-                                    <th className='text-left p-1.5 w-full'>Value</th>
-                                    <th className='text-left p-1.5'></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {statisticsList && statisticsList.map((item, index) => {
-                                    return (
-                                        <tr key={item.name} className={index % 2 === 0 ? 'bg-container' : 'bg-[#f1f1f1] dark:bg-[#1a1a1a]'}>
-                                            <td className='p-1.5'>
-                                                {item.name}
-                                            </td>
-                                            <td className='p-1.5'>
-                                                <Input
-                                                    type='number'
-                                                    size='sm'
-                                                    value={inputValues[item.name] || 0}
-                                                    onChange={(e) => handleInputChange(item.name, e.target.value)}
-                                                    className='w-[70px]'
-                                                    classNames={{
-                                                        inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-sm group-data-[focus-visible=true]:ring-transparent group-data-[focus-visible=true]:ring-offset-transparent'],
-                                                        input: ['text-xs']
-                                                    }}
-                                                />
-                                            </td>
-                                            <td className='p-1.5 px-3'>
-                                                <div
-                                                    className='flex justify-center items-center w-[30px] h-[30px] cursor-pointer group'
-                                                    onClick={() => handleUpdate(item.name)}
-                                                >
-                                                    <div className='bg-sgi group-hover:bg-opacity-85 py-1 px-2 rounded-sm text-xs text-offwhite font-semibold mr-6 duration-200'>
-                                                        <p>Update</p>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                    <div className='grid grid-cols-2 gap-4 bg-container border border-border text-xs p-4 rounded min-h-[200px] max-h-[calc(100vh-286px)] overflow-y-auto'>
+                        {statisticsList && statisticsList.map((item) => {
+                            return (
+                                <div key={item.name} className='flex justify-between items-center border border-border bg-[#f1f1f1] dark:bg-[#1a1a1a] p-2 rounded-sm'>
+                                    {item.name}
+                                    <Input
+                                        size='sm'
+                                        value={newStatValues[item.name]}
+                                        onChange={(e) => handleInputChange(item.name, e.target.value)}
+                                        className='w-[120px]'
+                                        classNames={{
+                                            inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-sm group-data-[focus-visible=true]:ring-transparent group-data-[focus-visible=true]:ring-offset-transparent'],
+                                            input: ['text-xs']
+                                        }}
+                                    />
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
             </div>

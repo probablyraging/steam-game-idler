@@ -123,12 +123,7 @@ namespace SteamUtility.Commands
                 }
                 else
                 {
-                    MessageBox.Show(
-                        $"Failed to update stat '{statName}'. It might not exist.",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
+                    Console.WriteLine($"Failed to update stat '{statName}'. It might not exist.");
                 }
             }
             catch (Exception ex)

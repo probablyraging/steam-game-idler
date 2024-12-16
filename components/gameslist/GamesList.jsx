@@ -186,7 +186,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
 
     if (isLoading) return <Loader />;
 
-    if (!gameList) return <Private steamId={steamId} />;
+    if (!gameList) return <Private steamId={steamId} setRefreshKey={setRefreshKey} />;
 
     return (
         <React.Fragment key={refreshKey}>

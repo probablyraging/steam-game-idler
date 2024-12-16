@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Loader from '../Loader';
 import PageHeader from './PageHeader';
 import Alerts from './Alerts';
-import BulkButtons from './BulkButtons';
+import TabButtons from './TabButtons';
 import AchievementsList from './AchievementsList';
 import { Tab, Tabs } from '@nextui-org/react';
 import StatisticsList from './StatisticsList';
@@ -22,6 +22,8 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
     const [btnLoading, setBtnLoading] = useState(false);
     const [showAlertOne, setShowAlertOne] = useState(true);
     const [currentTab, setCurrentTab] = useState(null);
+    const [initialStatValues, setInitialStatValues] = useState({});
+    const [newStatValues, setNewStatValues] = useState({});
 
     useEffect(() => {
         const getAchievementData = async () => {
@@ -108,7 +110,7 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                     />
 
                     <div className='flex flex-wrap gap-4 mt-2'>
-                        <BulkButtons
+                        <TabButtons
                             appId={appId}
                             appName={appName}
                             achievementsUnavailable={achievementsUnavailable}
@@ -117,6 +119,8 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                             inputValue={inputValue}
                             setBtnLoading={setBtnLoading}
                             currentTab={currentTab}
+                            initialStatValues={initialStatValues}
+                            newStatValues={newStatValues}
                         />
 
                         <div className='flex flex-col w-full'>
@@ -148,11 +152,12 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                                 </Tab>
                                 <Tab key='statistics' title='Statistics'>
                                     <StatisticsList
-                                        appId={appId}
-                                        appName={appName}
                                         statisticsUnavailable={statisticsUnavailable}
                                         statisticsList={statisticsList}
                                         userGameStatsMap={userGameStatsMap}
+                                        setInitialStatValues={setInitialStatValues}
+                                        newStatValues={newStatValues}
+                                        setNewStatValues={setNewStatValues}
                                     />
                                 </Tab>
                             </Tabs>

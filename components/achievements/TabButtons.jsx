@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Modal, ModalContent, ModalBody, Button, useDisclosure, ModalFooter } from '@nextui-org/react';
-import { logEvent, unlockAchievement, lockAchievement } from '@/utils/utils';
+import { logEvent, unlockAchievement, lockAchievement, updateStat } from '@/utils/utils';
 import { toast } from 'react-toastify';
 import { invoke } from '@tauri-apps/api/tauri';
 
-export default function BulkButtons({ appId, appName, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading, currentTab }) {
+export default function TabButtons({ appId, appName, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading, currentTab, initialStatValues, newStatValues }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [state, setState] = useState('');
 
@@ -97,6 +97,32 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
         }
     };
 
+    const handleUpdateAll = () => {
+        const changedValues = Object.entries(newStatValues).filter(([key, value]) => {
+            return value !== initialStatValues[key];
+        });
+
+        if (changedValues.length < 1) {
+            toast.info('No changes to save.');
+        }
+
+        changedValues.map(async (value) => {
+            const statName = value[0];
+            const newValue = value[1].toString() || '0';
+            try {
+                const status = await updateStat(appId, statName, newValue);
+                if (!status.error) {
+                    toast.success(`Updated ${statName} to ${newValue} for ${appName}`);
+                } else {
+                    toast.error(`Error: ${status.error}`);
+                }
+            } catch (error) {
+                console.error('Error in (handleUpdate):', error);
+                logEvent(`[Error] in (handleUpdate): ${error}`);
+            }
+        });
+    };
+
     return (
         <React.Fragment>
             <div className='flex justify-center items-center w-full'>
@@ -106,7 +132,7 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                     </p>
                 </div>
                 <div className='flex justify-end w-full'>
-                    {!achievementsUnavailable && (
+                    {!achievementsUnavailable && currentTab === 'achievements' && (
                         <div className='flex items-center gap-2'>
                             <Button
                                 size='sm'
@@ -120,11 +146,24 @@ export default function BulkButtons({ appId, appName, achievementsUnavailable, b
                             <Button
                                 size='sm'
                                 isLoading={btnLoading}
-                                isDisabled={!achievementList || inputValue.length > 0 || currentTab === 'statistics'}
+                                isDisabled={!achievementList || inputValue.length > 0}
                                 className='bg-red-400 font-semibold text-offwhite rounded-sm'
                                 onClick={() => handleSetState('lock')}
                             >
                                 Lock all
+                            </Button>
+                        </div>
+                    )}
+                    {currentTab === 'statistics' && (
+                        <div className='flex items-center gap-2'>
+                            <Button
+                                size='sm'
+                                isLoading={btnLoading}
+                                isDisabled={Object.keys(initialStatValues).length < 1}
+                                className='bg-sgi font-semibold text-offwhite rounded-sm'
+                                onClick={handleUpdateAll}
+                            >
+                                Save changes
                             </Button>
                         </div>
                     )}

@@ -1,7 +1,12 @@
 import React from 'react';
 import ExtLink from '../ExtLink';
+import { Button } from '@nextui-org/react';
 
-export default function Private({ steamId }) {
+export default function Private({ steamId, setRefreshKey }) {
+    const handleRefresh = () => {
+        setRefreshKey(prevKey => prevKey + 1);
+    };
+
     return (
         <React.Fragment>
             <div className='flex justify-center items-center w-calc min-h-calc max-h-calc'>
@@ -32,6 +37,11 @@ export default function Private({ steamId }) {
                         <ExtLink href={`https://steamcommunity.com/profiles/${steamId}/edit/settings`} className={'text-xs text-blue-400 mt-4'}>
                             Change account privacy
                         </ExtLink>
+                        <Button size='sm' className='flex justify-center items-center bg-sgi px-3 py-2 mt-5 rounded-sm' onClick={handleRefresh}>
+                            <p className='flex items-center gap-2 font-medium text-xs text-offwhite'>
+                                Try again
+                            </p>
+                        </Button>
                     </div>
                 </div>
             </div>
