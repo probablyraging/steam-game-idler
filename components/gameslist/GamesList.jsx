@@ -14,6 +14,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
     const [sortStyle, setSortStyle] = useState('a-z');
     const [favorites, setFavorites] = useState(null);
     const [cardFarming, setCardFarming] = useState(null);
+    const [autoIdle, setAutoIdle] = useState(null);
     const [achievementUnlocker, setAchievementUnlocker] = useState(null);
     const [filteredGames, setFilteredGames] = useState([]);
     const [visibleGames, setVisibleGames] = useState([]);
@@ -83,6 +84,9 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 } else if (sortStyle === 'achievementUnlocker') {
                     const achievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
                     sortedAndFilteredGames = achievementUnlocker.map(JSON.parse);
+                } else if (sortStyle === 'autoIdle') {
+                    const autoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
+                    sortedAndFilteredGames = autoIdle.map(JSON.parse);
                 }
                 if (isQuery && inputValue && inputValue.trim().length > 0) {
                     sortedAndFilteredGames = sortedAndFilteredGames.filter(item =>
@@ -94,10 +98,10 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 setCurrentPage(1);
             }
         } catch (error) {
-            console.error('Error in useeffect:', error);
-            logEvent(`[Error] in useeffect: ${error}`);
+            console.error('Error sorting lists:', error);
+            logEvent(`[Error] sorting lists: ${error}`);
         }
-    }, [gameList, recentGames, favorites, cardFarming, achievementUnlocker, sortStyle, isQuery, inputValue]);
+    }, [gameList, recentGames, favorites, cardFarming, achievementUnlocker, autoIdle, sortStyle, isQuery, inputValue]);
 
     useEffect(() => {
         try {
@@ -107,29 +111,11 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
             setCardFarming(cardFarming.map(JSON.parse));
             const achievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
             setAchievementUnlocker(achievementUnlocker.map(JSON.parse));
+            const autoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
+            setAutoIdle(autoIdle.map(JSON.parse));
         } catch (error) {
-            console.error('Error in useeffect:', error);
-            logEvent(`[Error] in useeffect: ${error}`);
-        }
-    }, []);
-
-    useEffect(() => {
-        try {
-            const cardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
-            setCardFarming(cardFarming.map(JSON.parse));
-        } catch (error) {
-            console.error('Error in useeffect:', error);
-            logEvent(`[Error] in useeffect: ${error}`);
-        }
-    }, []);
-
-    useEffect(() => {
-        try {
-            const achievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
-            setAchievementUnlocker(achievementUnlocker.map(JSON.parse));
-        } catch (error) {
-            console.error('Error in useeffect:', error);
-            logEvent(`[Error] in useeffect: ${error}`);
+            console.error('Error getting lists:', error);
+            logEvent(`[Error] getting lists: ${error}`);
         }
     }, []);
 
@@ -213,8 +199,10 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                             favorites={favorites}
                             cardFarming={cardFarming}
                             achievementUnlocker={achievementUnlocker}
+                            autoIdle={autoIdle}
                             setFavorites={setFavorites}
                             setCardFarming={setCardFarming}
+                            setAutoIdle={setAutoIdle}
                             setAchievementUnlocker={setAchievementUnlocker}
                             showAchievements={showAchievements}
                             setShowAchievements={setShowAchievements}

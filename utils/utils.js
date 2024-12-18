@@ -3,6 +3,7 @@ import { invoke } from '@tauri-apps/api/tauri';
 import { getVersion } from '@tauri-apps/api/app';
 import { Time } from "@internationalized/date";
 import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
+import axios from 'axios';
 
 let idleCounter = 0;
 let achievementCounter = 0;
@@ -174,13 +175,26 @@ export async function logEvent(message) {
 
 export const updateMongoStats = debounce(async (stat) => {
     try {
+        console.log(process.env.NEXT_PUBLIC_API_KEY);
         if (stat === 'launched') {
-            await invoke('db_update_stats', { stat: 'launched', count: 1 });
+            await axios.post(
+                process.env.NEXT_PUBLIC_API_BASE + 'statistics',
+                { type: 'launched' },
+                { headers: { 'Authorization': 'Bearer ' + process.env.NEXT_PUBLIC_API_KEY, }, }
+            );
         } else if (stat === 'idle') {
-            await invoke('db_update_stats', { stat: 'idle', count: idleCounter });
+            await axios.post(
+                process.env.NEXT_PUBLIC_API_BASE + 'statistics',
+                { type: 'idle' },
+                { headers: { 'Authorization': 'Bearer ' + process.env.NEXT_PUBLIC_API_KEY, }, }
+            );
             idleCounter = 0;
         } else if (stat === 'achievement') {
-            await invoke('db_update_stats', { stat: 'achievement', count: achievementCounter });
+            await axios.post(
+                process.env.NEXT_PUBLIC_API_BASE + 'statistics',
+                { type: 'achievement' },
+                { headers: { 'Authorization': 'Bearer ' + process.env.NEXT_PUBLIC_API_KEY, }, }
+            );
             achievementCounter = 0;
         }
     } catch (error) {

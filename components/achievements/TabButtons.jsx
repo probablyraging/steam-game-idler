@@ -3,8 +3,10 @@ import { Modal, ModalContent, ModalBody, Button, useDisclosure, ModalFooter } fr
 import { logEvent, unlockAchievement, lockAchievement, updateStat } from '@/utils/utils';
 import { toast } from 'react-toastify';
 import { invoke } from '@tauri-apps/api/tauri';
+import ExtLink from '../ExtLink';
+import { SiSteamdb } from 'react-icons/si';
 
-export default function TabButtons({ appId, appName, achievementsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading, currentTab, initialStatValues, newStatValues }) {
+export default function TabButtons({ appId, appName, achievementsUnavailable, statisticsUnavailable, btnLoading, achievementList, inputValue, setBtnLoading, currentTab, initialStatValues, newStatValues }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
     const [state, setState] = useState('');
 
@@ -125,11 +127,14 @@ export default function TabButtons({ appId, appName, achievementsUnavailable, bt
 
     return (
         <React.Fragment>
-            <div className='flex justify-center items-center w-full'>
-                <div className='w-full'>
+            <div className='flex justify-center items-center w-full min-h-8'>
+                <div className='flex items-center gap-2 w-full'>
                     <p className='m-0 p-0'>
                         {appName}
                     </p>
+                    <ExtLink href={`https://steamdb.info/app/${appId}/stats/`}>
+                        <SiSteamdb className='text-sgi' />
+                    </ExtLink>
                 </div>
                 <div className='flex justify-end w-full'>
                     {!achievementsUnavailable && currentTab === 'achievements' && (
@@ -154,7 +159,7 @@ export default function TabButtons({ appId, appName, achievementsUnavailable, bt
                             </Button>
                         </div>
                     )}
-                    {currentTab === 'statistics' && (
+                    {!statisticsUnavailable && currentTab === 'statistics' && (
                         <div className='flex items-center gap-2'>
                             <Button
                                 size='sm'

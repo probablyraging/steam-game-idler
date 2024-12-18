@@ -18,6 +18,7 @@ export default function PageHeader({ steamId, setActivePage, sortStyle, setSortS
         { key: 'favorite', label: 'Favorited Games' },
         { key: 'cardFarming', label: 'Card Farming Games' },
         { key: 'achievementUnlocker', label: 'Achievement Unlocker Games' },
+        { key: 'autoIdle', label: 'Auto Idle Games' },
     ];
 
     const handleSorting = (e) => {
@@ -85,7 +86,8 @@ export default function PageHeader({ steamId, setActivePage, sortStyle, setSortS
                             listbox: ['p-0'],
                             value: ['text-xs'],
                             trigger: ['bg-input border border-inputborder data-[hover=true]:!bg-titlebar data-[open=true]:!bg-titlebar duration-100 rounded-sm'],
-                            popoverContent: ['bg-base border border-border rounded'],
+                            popoverContent: ['bg-base border border-border rounded justify-start'],
+                            listboxWrapper: ['max-h-[270px]']
                         }}
                     >
                         {(item) => <SelectItem classNames={{ title: ['text-xs'], base: ['rounded-sm'] }}>{item.label}</SelectItem>}

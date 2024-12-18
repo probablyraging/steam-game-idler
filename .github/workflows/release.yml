@@ -102,6 +102,8 @@ jobs:
           run: |
             echo "KEY=${{ secrets.KEY }}" > .env.prod
             echo "MONGO_SRV=${{ secrets.MONGO_SRV }}" >> .env.prod
+            echo "NEXT_PUBLIC_API_BASE=${{ secrets.API_BASE }}" >> .env.local
+            echo "NEXT_PUBLIC_API_KEY=${{ secrets.API_KEY }}" >> .env.local
           shell: pwsh
           working-directory: ${{ github.workspace }}
 

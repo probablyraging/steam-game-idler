@@ -1,11 +1,9 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 pub mod requests;
-pub mod mongodb;
 pub mod tasks;
 pub mod utils;
 use requests::*;
-use mongodb::*;
 use tasks::*;
 use utils::*;
 
@@ -118,7 +116,6 @@ fn main() {
             get_games_with_drops,
             get_game_details,
             open_file_explorer,
-            db_update_stats,
             get_free_games,
             anti_away
         ])

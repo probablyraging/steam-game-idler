@@ -60,7 +60,7 @@ export default function Logs() {
                                     {logs.map((log, index) => (
                                         <tr key={index} className={index % 2 === 0 ? 'bg-container' : 'bg-[#f1f1f1] dark:bg-[#1a1a1a]'}>
                                             <td className='p-1.5 text-sgi uppercase'>{log.timestamp}</td>
-                                            <td className={`p-1.5 ${log.message.includes('Error') && 'text-red-400'}`}>
+                                            <td className={`p-1.5 ${log.message?.includes('Error') && 'text-red-400'}`}>
                                                 {log.message}
                                             </td>
                                         </tr>

@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { startIdler, logEvent } from '@/utils/utils';
 import { FaAward } from 'react-icons/fa';
 
-export default function GameCard({ gameList, favorites, cardFarming, achievementUnlocker, setFavorites, setAchievementUnlocker, setCardFarming, showAchievements, setShowAchievements, setAppId, setAppName }) {
+export default function GameCard({ gameList, favorites, cardFarming, achievementUnlocker, autoIdle, setFavorites, setAchievementUnlocker, setCardFarming, setAutoIdle, showAchievements, setShowAchievements, setAppId, setAppName }) {
     const [isLoading, setIsLoading] = useState(true);
 
     setTimeout(() => {
@@ -53,6 +53,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 favorites.push(JSON.stringify(item));
                 localStorage.setItem('favorites', JSON.stringify(favorites));
                 const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
+                toast.success(`${item.name} added to favorites`, { autoClose: true });
                 setFavorites(newFavorites.map(JSON.parse));
                 logEvent(`[Favorites] Added ${item.name} (${item.appid})`);
             } catch (error) {
@@ -70,7 +71,8 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 const updatedFavorites = favorites.filter(arr => JSON.parse(arr).appid !== item.appid);
                 localStorage.setItem('favorites', JSON.stringify(updatedFavorites));
                 const newFavorites = (localStorage.getItem('favorites') && JSON.parse(localStorage.getItem('favorites'))) || [];
-                setCardFarming(newFavorites.map(JSON.parse));
+                toast.success(`${item.name} removed from favorites`, { autoClose: true });
+                setFavorites(newFavorites.map(JSON.parse));
                 logEvent(`[Favorites] Removed ${item.name} (${item.appid})`);
             } catch (error) {
                 console.error('Error in (removeFromFavorites):', error);
@@ -87,6 +89,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 cardFarming.push(JSON.stringify(item));
                 localStorage.setItem('cardFarming', JSON.stringify(cardFarming));
                 const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
+                toast.success(`${item.name} added to card farming`, { autoClose: true });
                 setCardFarming(newCardFarming.map(JSON.parse));
                 logEvent(`[Card Farming] Added ${item.name} (${item.appid})`);
             } catch (error) {
@@ -104,6 +107,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 const updatedCardFarming = cardFarming.filter(arr => JSON.parse(arr).appid !== item.appid);
                 localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
                 const newCardFarming = (localStorage.getItem('cardFarming') && JSON.parse(localStorage.getItem('cardFarming'))) || [];
+                toast.success(`${item.name} removed from card farming`, { autoClose: true });
                 setCardFarming(newCardFarming.map(JSON.parse));
                 logEvent(`[Card Farming] Removed ${item.name} (${item.appid})`);
             } catch (error) {
@@ -121,6 +125,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 achievementUnlocker.push(JSON.stringify(item));
                 localStorage.setItem('achievementUnlocker', JSON.stringify(achievementUnlocker));
                 const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
+                toast.success(`${item.name} added to achievement unlocker`, { autoClose: true });
                 setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
                 logEvent(`[Achievement Unlocker] Added ${item.name} (${item.appid})`);
             } catch (error) {
@@ -138,11 +143,52 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== item.appid);
                 localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
                 const newAchievementUnlocker = (localStorage.getItem('achievementUnlocker') && JSON.parse(localStorage.getItem('achievementUnlocker'))) || [];
+                toast.success(`${item.name} removed from achievement unlocker`, { autoClose: true });
                 setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
                 logEvent(`[Achievement Unlocker] Removed ${item.name} (${item.appid})`);
             } catch (error) {
                 console.error('Error in (removeFromAchievementUnlocker):', error);
                 logEvent(`[Error] in (removeFromAchievementUnlocker): ${error}`);
+            }
+        }, 500);
+    };
+
+    const addToAutoIdle = (e, item) => {
+        e.stopPropagation();
+        setTimeout(() => {
+            try {
+                let autoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
+                if (autoIdle.length < 32) {
+                    autoIdle.push(JSON.stringify(item));
+                    localStorage.setItem('autoIdle', JSON.stringify(autoIdle));
+                    const newAutoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
+                    toast.success(`${item.name} added to auto idle`, { autoClose: true });
+                    setAutoIdle(newAutoIdle.map(JSON.parse));
+                    logEvent(`[Auto Idle] Added ${item.name} (${item.appid})`);
+                } else {
+                    return toast.error('A max of 32 games can be added to auto idler', { autoClose: true });
+                }
+            } catch (error) {
+                console.error('Error in (addToAutoIdle):', error);
+                logEvent(`[Error] in (addToAutoIdle): ${error}`);
+            }
+        }, 500);
+    };
+
+    const removeFromAutoIdle = (e, item) => {
+        e.stopPropagation();
+        setTimeout(() => {
+            try {
+                const autoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
+                const updatedAutoIdle = autoIdle.filter(arr => JSON.parse(arr).appid !== item.appid);
+                localStorage.setItem('autoIdle', JSON.stringify(updatedAutoIdle));
+                const newAutoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
+                toast.success(`${item.name} removed from auto idle`, { autoClose: true });
+                setAutoIdle(newAutoIdle.map(JSON.parse));
+                logEvent(`[Auto Idle] Removed ${item.name} (${item.appid})`);
+            } catch (error) {
+                console.error('Error in (removeFromAutoIdle):', error);
+                logEvent(`[Error] in (removeFromAutoIdle): ${error}`);
             }
         }, 500);
     };
@@ -188,6 +234,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                                 favorites={favorites}
                                 cardFarming={cardFarming}
                                 achievementUnlocker={achievementUnlocker}
+                                autoIdle={autoIdle}
                                 handleIdle={handleIdle}
                                 viewAchievments={viewAchievments}
                                 viewStorePage={viewStorePage}
@@ -197,6 +244,8 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                                 removeFromCardFarming={removeFromCardFarming}
                                 addToAchievementUnlocker={addToAchievementUnlocker}
                                 removeFromAchievementUnlocker={removeFromAchievementUnlocker}
+                                addToAutoIdle={addToAutoIdle}
+                                removeFromAutoIdle={removeFromAutoIdle}
                             />
                         </div>
                     </div>

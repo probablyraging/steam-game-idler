@@ -169,12 +169,18 @@ pub async fn get_achievement_unlocker_data(steam_id: String, app_id: String, api
 }
 
 #[tauri::command]
-pub async fn validate_session(sid: String, sls: String) -> Result<Value, String> {
+pub async fn validate_session(sid: String, sls: String, sma: Option<String>, steamid: String) -> Result<Value, String> {
     let client = Client::new();
+
+    let cookie_value = match sma {
+        Some(sma_val) => format!("sessionid={}; steamLoginSecure={}; steamparental={}; steamMachineAuth{}={}", sid, sls, sma_val, steamid, sma_val),
+        None => format!("sessionid={}; steamLoginSecure={}", sid, sls),
+    };
+
     let response = client
         .get("https://steamcommunity.com/")
         .header("Content-Type", "application/json")
-        .header("Cookie", format!("sessionid={}; steamLoginSecure={}", sid, sls))
+        .header("Cookie", cookie_value)
         .send()
         .await
         .map_err(|e| e.to_string())?;

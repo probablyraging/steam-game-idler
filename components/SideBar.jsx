@@ -69,9 +69,8 @@ export default function SideBar({ setUserSummary, activePage, setActivePage, sho
                                     }}
                                 />
                             )}
-                            <Sparkles>
-                                <IoGift className='text-offwhite' fontSize={24} />
-                            </Sparkles>
+                            <Sparkles />
+                            <IoGift className='text-[#ffc700]' fontSize={24} />
                         </div>
                     )}
                 </div>

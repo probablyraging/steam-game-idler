@@ -5,7 +5,7 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import { IoPlay } from 'react-icons/io5';
 import { FaAward, FaSteam } from 'react-icons/fa';
 
-export default function CardMenu({ item, favorites, cardFarming, achievementUnlocker, handleIdle, viewAchievments, viewStorePage, addToFavorites, removeFromFavorites, addToCardFarming, removeFromCardFarming, addToAchievementUnlocker, removeFromAchievementUnlocker }) {
+export default function CardMenu({ item, favorites, cardFarming, achievementUnlocker, autoIdle, handleIdle, viewAchievments, viewStorePage, addToFavorites, removeFromFavorites, addToCardFarming, removeFromCardFarming, addToAchievementUnlocker, removeFromAchievementUnlocker, addToAutoIdle, removeFromAutoIdle }) {
     return (
         <React.Fragment>
             <Dropdown classNames={{ content: ['rounded p-0 bg-base border border-border'] }}>
@@ -103,6 +103,27 @@ export default function CardMenu({ item, favorites, cardFarming, achievementUnlo
                             textValue='Add to achievement unlocker'
                         >
                             <p className='text-xs'>Add to achievement unlocker</p>
+                        </DropdownItem>
+                    )}
+                    {autoIdle.some(arr => arr.appid === item.appid) ? (
+                        <DropdownItem
+                            className='rounded'
+                            key='auto-rem'
+                            startContent={<TiMinus />}
+                            onClick={(e) => removeFromAutoIdle(e, item)}
+                            textValue='Remove from auto idle'
+                        >
+                            <p className='text-xs'>Remove from auto idle</p>
+                        </DropdownItem>
+                    ) : (
+                        <DropdownItem
+                            className='rounded'
+                            key='auto-add'
+                            startContent={<TiPlus />}
+                            onClick={(e) => addToAutoIdle(e, item)}
+                            textValue='Add to auto idle'
+                        >
+                            <p className='text-xs'>Add to auto idle</p>
                         </DropdownItem>
                     )}
                 </DropdownMenu>

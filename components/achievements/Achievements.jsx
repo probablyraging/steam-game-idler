@@ -95,6 +95,7 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                         setShowAchievements={setShowAchievements}
                         achievementList={achievementList}
                         setAchievementList={setAchievementList}
+                        achievementsUnavailable={achievementsUnavailable}
                         setIsSorted={setIsSorted}
                         inputValue={inputValue}
                         setInputValue={setInputValue}
@@ -114,6 +115,7 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                             appId={appId}
                             appName={appName}
                             achievementsUnavailable={achievementsUnavailable}
+                            statisticsUnavailable={statisticsUnavailable}
                             btnLoading={btnLoading}
                             achievementList={achievementList}
                             inputValue={inputValue}

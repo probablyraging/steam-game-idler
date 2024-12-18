@@ -4,7 +4,7 @@ import { IoMdArrowRoundBack } from 'react-icons/io';
 import { MdSort } from 'react-icons/md';
 import { RiSearchLine } from 'react-icons/ri';
 
-export default function PageHeader({ setShowAchievements, achievementList, setAchievementList, setIsSorted, inputValue, setInputValue, percentageMap, userGameAchievementsMap, currentTab }) {
+export default function PageHeader({ setShowAchievements, achievementList, setAchievementList, achievementsUnavailable, setIsSorted, inputValue, setInputValue, percentageMap, userGameAchievementsMap, currentTab }) {
     const sortOptions = [
         { key: 'percent', label: 'Percentage' },
         { key: 'title', label: 'Alphabetically' },
@@ -60,7 +60,7 @@ export default function PageHeader({ setShowAchievements, achievementList, setAc
                 <Input
                     isClearable
                     size='sm'
-                    isDisabled={!achievementList || currentTab === 'statistics'}
+                    isDisabled={achievementsUnavailable || currentTab === 'statistics'}
                     placeholder='Search for an achievement'
                     startContent={<RiSearchLine />}
                     className='max-w-[400px]'
@@ -73,7 +73,7 @@ export default function PageHeader({ setShowAchievements, achievementList, setAc
                 <div className='flex gap-2'>
                     <Select
                         aria-label='sort'
-                        isDisabled={inputValue.length > 0 || !achievementList || currentTab === 'statistics'}
+                        isDisabled={inputValue.length > 0 || achievementsUnavailable || currentTab === 'statistics'}
                         disallowEmptySelection
                         radius='none'
                         size='sm'

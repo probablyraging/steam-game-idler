@@ -33,10 +33,10 @@ export default function StatisticsList({ statisticsUnavailable, statisticsList, 
                         </p>
                     </div>
                 ) : (
-                    <div className='grid grid-cols-2 gap-4 bg-container border border-border text-xs p-4 rounded min-h-[200px] max-h-[calc(100vh-286px)] overflow-y-auto'>
+                    <div className='grid grid-cols-2 gap-4 bg-container border border-border text-xs p-4 rounded max-h-[calc(100vh-286px)] overflow-y-auto'>
                         {statisticsList && statisticsList.map((item) => {
                             return (
-                                <div key={item.name} className='flex justify-between items-center border border-border bg-[#f1f1f1] dark:bg-[#1a1a1a] p-2 rounded-sm'>
+                                <div key={item.name} className='flex justify-between items-center max-h-12 border border-border bg-[#f1f1f1] dark:bg-[#1a1a1a] p-2 rounded-sm'>
                                     {item.name}
                                     <Input
                                         size='sm'

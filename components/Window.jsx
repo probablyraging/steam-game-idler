@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { checkUpdate } from '@tauri-apps/api/updater';
 import Dashboard from './Dashboard';
-import { fetchFreeGames, fetchLatest, logEvent, sendNativeNotification, updateMongoStats } from '@/utils/utils';
+import { fetchFreeGames, fetchLatest, logEvent, sendNativeNotification, startIdler, updateMongoStats } from '@/utils/utils';
 import { Time } from '@internationalized/date';
 import Setup from './Setup';
 import UpdateToast from './UpdateToast';
@@ -105,6 +105,22 @@ export default function Window() {
         checkForFreeGames();
         return () => clearInterval(intervalId);
     }, [checkForFreeGames]);
+
+    useEffect(() => {
+        const startAutoIdleGames = () => {
+            try {
+                const autoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
+                const games = autoIdle.map(JSON.parse);
+                for (const game of games) {
+                    startIdler(game.appid, game.name);
+                }
+            } catch (error) {
+                console.error('Error in (startAutoIdleGames):', error);
+                logEvent(`[Error] in (startAutoIdleGames): ${error}`);
+            }
+        };
+        startAutoIdleGames();
+    }, []);
 
     if (initUpdate) return (
         <UpdateScreen updateManifest={updateManifest} />

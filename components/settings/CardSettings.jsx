@@ -8,6 +8,7 @@ export default function CardSettings({ settings, setSettings }) {
     let [isLoading, setIsLoading] = useState(false);
     const [sidValue, setSidValue] = useState('');
     const [slsValue, setSlsValue] = useState('');
+    const [smaValue, setSmaValue] = useState('');
     const [hasCookies, setHasCookies] = useState(false);
     const [loginState, setLoginState] = useState(false);
     const [steamUser, setSteamUser] = useState(null);
@@ -24,14 +25,16 @@ export default function CardSettings({ settings, setSettings }) {
         const validateSession = async () => {
             try {
                 setIsLoading(true);
+                const userSummary = JSON.parse(localStorage.getItem('userSummary')) || {};
                 const cookies = JSON.parse(localStorage.getItem('steamCookies'));
 
                 if (cookies && cookies.sid && cookies.sls) {
                     setHasCookies(true);
                     setSidValue(cookies.sid);
                     setSlsValue(cookies.sls);
+                    setSmaValue(cookies.sma);
 
-                    const res = await invoke('validate_session', { sid: cookies.sid, sls: cookies.sls });
+                    const res = await invoke('validate_session', { sid: cookies.sid, sls: cookies.sls, sma: cookies.sma, steamid: userSummary.steamId });
                     if (res.user) {
                         setSteamUser(res.user);
                         setLoginState(true);
@@ -60,16 +63,23 @@ export default function CardSettings({ settings, setSettings }) {
         setSlsValue(e.target.value);
     };
 
+    const handleSmaChange = (e) => {
+        setSmaValue(e.target.value);
+    };
+
     const handleSave = async () => {
         try {
             if (sidValue.length > 0 && slsValue.length > 0) {
                 setIsLoading(true);
 
-                const res = await invoke('validate_session', { sid: sidValue, sls: slsValue });
+                const userSummary = JSON.parse(localStorage.getItem('userSummary')) || {};
+
+                const res = await invoke('validate_session', { sid: sidValue, sls: slsValue, sma: smaValue, steamid: userSummary.steamId });
+
                 if (res.user) {
                     setSteamUser(res.user);
                     setLoginState(true);
-                    localStorage.setItem('steamCookies', JSON.stringify({ sid: sidValue, sls: slsValue }));
+                    localStorage.setItem('steamCookies', JSON.stringify({ sid: sidValue, sls: slsValue, sma: smaValue }));
                     setHasCookies(true);
                     logEvent(`[Settings - Card Farming] Logged in as ${res.user}`);
                 } else {
@@ -92,6 +102,7 @@ export default function CardSettings({ settings, setSettings }) {
             localStorage.removeItem('steamCookies');
             setSidValue('');
             setSlsValue('');
+            setSmaValue('');
             setLoginState(false);
             setHasCookies(false);
             logEvent('[Settings - Card Farming] Logged out');
@@ -175,12 +186,14 @@ export default function CardSettings({ settings, setSettings }) {
                     <p className='text-xs my-2'>
                         Steam credentials are required in order to use the Card Farming feature. <ExtLink href={'https://github.com/probablyraging/steam-game-idler/wiki/Settings#steam-credentials'} className='text-blue-400'>Learn more</ExtLink>
                     </p>
-                    <div className='flex flex-col'>
-                        <div className='flex gap-4'>
+                    <div className='flex flex-col mt-4'>
+                        <div className='flex flex-col gap-2'>
                             <Input
                                 size='sm'
-                                placeholder='sessionid'
-                                className='max-w-[200px]'
+                                label='sessionid'
+                                labelPlacement='outside'
+                                placeholder=' '
+                                className='max-w-[300px]'
                                 classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
                                 value={sidValue}
                                 onChange={handleSidChange}
@@ -188,24 +201,44 @@ export default function CardSettings({ settings, setSettings }) {
                             />
                             <Input
                                 size='sm'
-                                placeholder='steamLoginSecure'
-                                className='max-w-[200px]'
+                                label='steamLoginSecure'
+                                labelPlacement='outside'
+                                placeholder=' '
+                                className='max-w-[300px]'
                                 classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
                                 value={slsValue}
                                 onChange={handleSlsChange}
                                 type={'password'}
                             />
-                            <Button
-                                isDisabled={hasCookies || !sidValue || !slsValue}
+                            <Input
                                 size='sm'
-                                className='bg-sgi font-semibold text-offwhite rounded-sm'
-                                onClick={handleSave}
-                            >
-                                Save
-                            </Button>
-                            <Button isDisabled={!hasCookies} size='sm' className='font-semibold text-offwhite bg-red-400 rounded-sm' onClick={handleClear}>
-                                Clear
-                            </Button>
+                                label={<p>steamParental/steamMachineAuth <span className='italic'>(optional)</span></p>}
+                                labelPlacement='outside'
+                                placeholder=' '
+                                className='max-w-[300px]'
+                                classNames={{ inputWrapper: ['bg-input border border-inputborder hover:!bg-titlebar rounded-md'] }}
+                                value={smaValue}
+                                onChange={handleSmaChange}
+                                type={'password'}
+                            />
+                            <div className='flex w-[200px] gap-2 mt-2'>
+                                <Button
+                                    size='sm'
+                                    isDisabled={hasCookies || !sidValue || !slsValue}
+                                    className='bg-sgi font-semibold text-offwhite rounded-sm w-full'
+                                    onClick={handleSave}
+                                >
+                                    Save
+                                </Button>
+                                <Button
+                                    size='sm'
+                                    isDisabled={!hasCookies}
+                                    className='font-semibold text-offwhite bg-red-400 rounded-sm w-full'
+                                    onClick={handleClear}
+                                >
+                                    Clear
+                                </Button>
+                            </div>
                         </div>
 
                         {isLoading ? (
