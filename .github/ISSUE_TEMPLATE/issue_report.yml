@@ -9,9 +9,12 @@ body:
     id: terms
     attributes:
       label: Pre-report checklist
+      description: Please try to fulfull all of the following
       options:
         - label: I have checked for similar open/closed issues
         - label: I have checked the FAQ wiki for my issue
+        - label: I have included my "log.txt" file located in "C:\Users\<user>\AppData\Roaming\steam-game-idler"
+        - label: I have included screenshots/videos of my issue
         
   - type: textarea
     id: description
@@ -24,23 +27,8 @@ body:
   - type: textarea
     id: steps-to-reproduce
     attributes:
-      label: Steps to reproduce
+      label: Steps to reproduce the issue (if any)
       description: Provide detailed steps to reproduce your issue 
-
-  - type: file
-    id: log-file
-    attributes:
-      label: Log file
-      description: Upload your "log.txt" file (located in "C:\Users\<user>\AppData\Roaming\steam-game-idler")
-    validations:
-      required: true
-
-  - type: file
-    id: screenshots
-    attributes:
-      label: Screenshots or videos
-      description: Upload screenshots or screen recordings demonstrating the issue
-      multiple: true
       
   - type: dropdown
     id: sgi-branch
