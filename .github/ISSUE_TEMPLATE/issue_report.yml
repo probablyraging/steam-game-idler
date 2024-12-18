@@ -1,10 +1,21 @@
 name: Issue/Bug Report
 description: Create an issue or bug report
-title: "Title"
+title: "Check the FAQ wiki before reporting an issue - https://github.com/zevnda/steam-game-idler/wiki/faq"
 labels: ["bug", "investigating"]
 assignees:
   - "ProbablyRaging"
 body:
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Pre-report checklist
+      description: Please select all that apply
+      options:
+        - label: I have included my log.txt file (recommended)
+        - label: I have included steps to reproduce the issue
+        - label: I have included screenshots/videos
+        - label: I have checked for similar issues before reporting
+        - label: I have checked the FAQ wiki before reporting
   - type: textarea
     id: what-happened
     attributes:
@@ -12,9 +23,9 @@ body:
       description: A clear and concise description of your issue or bug
       placeholder: |
         Please include the following in your issue report;
-        - Any steps that might help reproduced the issue
+        - Your log.txt file found in "C:\Users\<user>\AppData\Roaming\steam-game-idler"
+        - Any steps that might help reproduce the issue
         - Screenshots/videos of the issue
-        - Your log.txt file found in C:\Users\<user>\AppData\Roaming\steam-game-idler
     validations:
       required: true
   - type: dropdown
@@ -30,18 +41,9 @@ body:
     id: version
     attributes:
       label: What version of SGI are you using?
+      description: If using an older version, specify the version number in your issue
       options:
         - Latest version
         - Older version
     validations:
       required: true
-  - type: checkboxes
-    id: terms
-    attributes:
-      label: Additional Information
-      description: Please select all that apply
-      options:
-        - label: I have included steps to reproduce the issue
-        - label: I have included screenshots/videos
-        - label: I have included a log.txt file
-        - label: I have checked for similar issues before reporting
