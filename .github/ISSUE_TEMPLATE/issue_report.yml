@@ -9,13 +9,13 @@ body:
     id: terms
     attributes:
       label: Pre-report checklist
-      description: Please select all that apply
+      description: Please try to fulfill all of the following
       options:
-        - label: I have included my log.txt file (recommended)
+        - label: I have checked for similar open/closed issues
+        - label: I have checked the FAQ wiki for my issue
+        - label: I have included my log.txt file
         - label: I have included steps to reproduce the issue
         - label: I have included screenshots/videos
-        - label: I have checked for similar issues before reporting
-        - label: I have checked the FAQ wiki before reporting
   - type: textarea
     id: what-happened
     attributes:
@@ -23,7 +23,7 @@ body:
       description: A clear and concise description of your issue or bug
       placeholder: |
         Please include the following in your issue report;
-        - Your log.txt file found in "C:\Users\<user>\AppData\Roaming\steam-game-idler"
+        - Your "log.txt" file found in "C:\Users\<user>\AppData\Roaming\steam-game-idler"
         - Any steps that might help reproduce the issue
         - Screenshots/videos of the issue
     validations:
@@ -41,7 +41,7 @@ body:
     id: version
     attributes:
       label: What version of SGI are you using?
-      description: If using an older version, specify the version number in your issue
+      description: If using an older version, specify which version in your issue
       options:
         - Latest version
         - Older version
