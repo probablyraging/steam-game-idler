@@ -2,7 +2,7 @@ name: Issue/Bug Report
 description: Create an issue or bug report
 labels: ["bug", "investigating"]
 assignees:
-  - "ProbablyRaging"
+  - "zevnda"
 body:
   - type: textarea
     id: description
