@@ -13,22 +13,25 @@ body:
       options:
         - label: I have checked for similar open/closed issues
         - label: I have checked the FAQ wiki for my issue
-        - label: I have included my "log.txt" file located in "C:\Users\<user>\AppData\Roaming\steam-game-idler"
-        - label: I have included screenshots/videos of my issue
+        - label: I have included my "log.txt" file located in "C:\\Users\\<user>\\AppData\\Roaming\\steam-game-idler"
+    validations:
+      required: true
         
   - type: textarea
     id: description
     attributes:
       label: Describe the issue
       description: A clear and descriptive overview of your issue
+      placeholder: Feel free to include any screenshots or videos that demonstrate your issue 
     validations:
       required: true
 
   - type: textarea
     id: steps-to-reproduce
     attributes:
-      label: Steps to reproduce the issue (if any)
-      description: Provide detailed steps to reproduce your issue 
+      label: Steps to reproduce the issue
+      description: Provide detailed steps to reproduce your issue
+      placeholder: Leave this blank if you are unsure
       
   - type: dropdown
     id: sgi-branch
