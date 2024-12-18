@@ -10,6 +10,7 @@ import { logEvent } from '@/utils/utils';
 export default function Automate({ setActivePage }) {
     const startCardFarming = async () => {
         try {
+            const userSummary = JSON.parse(localStorage.getItem('userSummary')) || {};
             const steamRunning = await invoke('check_status');
             const steamCookies = JSON.parse(localStorage.getItem('steamCookies')) || {};
             const settings = JSON.parse(localStorage.getItem('settings')) || {};
@@ -19,7 +20,7 @@ export default function Automate({ setActivePage }) {
             if (!steamCookies.sid || !steamCookies.sls) {
                 return toast.error('Missing credentials in Settings');
             }
-            const res = await invoke('validate_session', { sid: steamCookies?.sid, sls: steamCookies?.sls });
+            const res = await invoke('validate_session', { sid: steamCookies?.sid, sls: steamCookies?.sls, steamid: userSummary.steamId });
             if (!res.user) {
                 localStorage.removeItem('steamCookies');
                 return toast.error('Steam credentials need to be updated');
