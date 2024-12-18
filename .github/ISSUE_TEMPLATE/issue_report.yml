@@ -10,12 +10,13 @@ body:
       label: Pre-report checklist
       description: Please try to fulfull all of the following
       options:
-        - label: I have checked for similar open/closed issues
+        - label: I have checked for similar [open/closed issues](https://github.com/zevnda/steam-game-idler/issues?q=)
+            required: true
         - label: I have checked the [FAQ wiki](https://github.com/zevnda/steam-game-idler/wiki/faq) for my issue
+            required: true
         - label: I have included my "log.txt" file located in "C:\\Users\\your_username\\AppData\\Roaming\\steam-game-idler"
-    validations:
-      required: true
-        
+            required: true
+            
   - type: textarea
     id: description
     attributes:
