@@ -9,25 +9,39 @@ body:
     id: terms
     attributes:
       label: Pre-report checklist
-      description: Please try to fulfill all of the following
       options:
         - label: I have checked for similar open/closed issues
         - label: I have checked the FAQ wiki for my issue
-        - label: I have included my log.txt file
-        - label: I have included steps to reproduce the issue
-        - label: I have included screenshots/videos
+        
   - type: textarea
-    id: what-happened
+    id: description
     attributes:
       label: Describe the issue
-      description: A clear and concise description of your issue or bug
-      placeholder: |
-        Please include the following in your issue report;
-        - Your "log.txt" file found in "C:\Users\<user>\AppData\Roaming\steam-game-idler"
-        - Any steps that might help reproduce the issue
-        - Screenshots/videos of the issue
+      description: A clear and descriptive overview of your issue
     validations:
       required: true
+
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Provide detailed steps to reproduce your issue 
+
+  - type: file
+    id: log-file
+    attributes:
+      label: Log file
+      description: Upload your "log.txt" file (located in "C:\Users\<user>\AppData\Roaming\steam-game-idler")
+    validations:
+      required: true
+
+  - type: file
+    id: screenshots
+    attributes:
+      label: Screenshots or videos
+      description: Upload screenshots or screen recordings demonstrating the issue
+      multiple: true
+      
   - type: dropdown
     id: sgi-branch
     attributes:
@@ -37,6 +51,7 @@ body:
         - "CLI + WebUI"
     validations:
       required: true
+      
   - type: dropdown
     id: version
     attributes:
