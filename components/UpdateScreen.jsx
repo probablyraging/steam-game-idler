@@ -7,6 +7,7 @@ import { HiMiniMinus } from 'react-icons/hi2';
 import { BiSolidLeaf, BiWindows } from 'react-icons/bi';
 import { IoClose } from 'react-icons/io5';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function UpdateScreen({ updateManifest }) {
     const [progress, setProgress] = useState(0);
@@ -20,10 +21,12 @@ export default function UpdateScreen({ updateManifest }) {
                 try {
                     const currentVersion = await getVersion();
                     const newVersion = updateManifest ? updateManifest?.version : 'Unknown';
+                    localStorage.setItem('hasUpdated', true);
                     logEvent(`[System] Updated Steam Game Idler (${currentVersion} > ${newVersion})`);
                     await installUpdate();
                     await relaunch();
                 } catch (error) {
+                    toast.error(`Error in (performUpdate): ${error?.message}`);
                     console.error('Error in (performUpdate):', error);
                     logEvent(`[Error] in (performUpdate): ${error}`);
                 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal, ModalContent, ModalBody, useDisclosure, ModalFooter } from '@nextui-org/react';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function ResetSettings({ setSettings, setRefreshKey }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -15,9 +16,11 @@ export default function ResetSettings({ setSettings, setRefreshKey }) {
             localStorage.removeItem('steamCookies');
             setSettings(null);
             setRefreshKey(prevKey => prevKey + 1);
+            toast.success('[Settings] Reset to default');
             logEvent('[Settings] Reset to default');
             onClose();
         } catch (error) {
+            toast.error(`Error in (handleResetSettings): ${error?.message}`);
             console.error('Error in (handleResetSettings):', error);
             logEvent(`[Error] in (handleResetSettings): ${error}`);
         }

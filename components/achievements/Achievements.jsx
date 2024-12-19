@@ -8,6 +8,7 @@ import { Tab, Tabs } from '@nextui-org/react';
 import StatisticsList from './StatisticsList';
 import { invoke } from '@tauri-apps/api/tauri';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function Achievements({ steamId, appId, appName, setShowAchievements }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +43,7 @@ export default function Achievements({ steamId, appId, appName, setShowAchieveme
                 };
                 setIsLoading(false);
             } catch (error) {
+                toast.error(`Error in (getAchievementData): ${error?.message}`);
                 console.error('Error in (getAchievementData):', error);
                 logEvent(`[Error] in (getAchievementData): ${error}`);
             }

@@ -5,6 +5,7 @@ import Private from './Private';
 import Loader from '../Loader';
 import { invoke } from '@tauri-apps/api/tauri';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function GamesList({ steamId, inputValue, isQuery, setActivePage, setAppId, setAppName, showAchievements, setShowAchievements }) {
     const scrollContainerRef = useRef(null);
@@ -54,6 +55,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 }
             } catch (error) {
                 setIsLoading(false);
+                toast.error(`Error in (getGamesList): ${error?.message}`);
                 console.error('Error in (getGamesList):', error);
                 logEvent(`[Error] in (getGamesList): ${error}`);
             }
@@ -98,6 +100,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 setCurrentPage(1);
             }
         } catch (error) {
+            toast.error(`Error in sorting list: ${error?.message}`);
             console.error('Error sorting lists:', error);
             logEvent(`[Error] sorting lists: ${error}`);
         }
@@ -114,6 +117,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
             const autoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
             setAutoIdle(autoIdle.map(JSON.parse));
         } catch (error) {
+            toast.error(`Error getting list: ${error?.message}`);
             console.error('Error getting lists:', error);
             logEvent(`[Error] getting lists: ${error}`);
         }
@@ -134,6 +138,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                     }
                 }
             } catch (error) {
+                toast.error(`Error in (handleScroll): ${error?.message}`);
                 console.error('Error in (handleScroll):', error);
                 logEvent(`[Error] in (handleScroll): ${error}`);
             }
@@ -146,6 +151,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 return () => scrollContainer.removeEventListener('scroll', handleScroll);
             }
         } catch (error) {
+            toast.error(`Error setting up event listener: ${error?.message}`);
             console.error('Error setting up event listener:', error);
             logEvent(`[Error] setting up event listener: ${error}`);
         }
@@ -165,6 +171,7 @@ export default function GamesList({ steamId, inputValue, isQuery, setActivePage,
                 }
             }
         } catch (error) {
+            toast.error(`Error in (handleScroll): ${error?.message}`);
             console.error('Error in (handleScroll):', error);
             logEvent(`[Error] in (handleScroll): ${error}`);
         }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@nextui-org/react';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function UpdateToast({ closeToast, updateManifest, setInitUpdate }) {
     const handleUpdate = async () => {
@@ -10,6 +11,7 @@ export default function UpdateToast({ closeToast, updateManifest, setInitUpdate 
                 setInitUpdate(true);
             }, 500);
         } catch (error) {
+            toast.error(`Error in (checkForUpdates): ${error?.message}`);
             console.error('Error in (checkForUpdates):', error);
             logEvent(`[Error] in (checkForUpdates): ${error}`);
         }

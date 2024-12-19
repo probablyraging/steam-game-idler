@@ -3,6 +3,7 @@ import { checkDrops, formatTime, getAllGamesWithDrops, logEvent, startIdler, sto
 import StopButton from './StopButton';
 import { Button, Skeleton, Spinner } from '@nextui-org/react';
 import { IoCheckmark } from 'react-icons/io5';
+import { toast } from 'react-toastify';
 
 export default function CardFarming({ setActivePage }) {
     const isMountedRef = useRef(true);
@@ -32,6 +33,7 @@ export default function CardFarming({ setActivePage }) {
                     setIsComplete(true);
                 }
             } catch (error) {
+                toast.error(`Error in (startCardFarming): ${error?.message}`);
                 console.error('Error in (startCardFarming) :', error);
                 logEvent(`[Error] in (startCardFarming) ${error}`);
             }
@@ -89,6 +91,7 @@ export default function CardFarming({ setActivePage }) {
                 await Promise.all(dropCheckPromises);
             }
         } catch (error) {
+            toast.error(`Error in (checkGamesForDrops): ${error?.message}`);
             console.error('Error in (checkGamesForDrops) :', error);
             logEvent(`[Error] in (checkGamesForDrops) ${error}`);
         }
@@ -126,6 +129,7 @@ export default function CardFarming({ setActivePage }) {
             await delay(duration);
             stopIdler(appId, name);
         } catch (error) {
+            toast.error(`Error in (startAndStopIdler): ${error?.message}`);
             console.error('Error in (startAndStopIdler) :', error);
             logEvent(`[Error] in (startAndStopIdler) ${error}`);
         }
@@ -154,6 +158,7 @@ export default function CardFarming({ setActivePage }) {
                 });
             });
         } catch (error) {
+            toast.error(`Error in (delay): ${error?.message}`);
             console.error('Error in (delay) :', error);
             logEvent(`[Error] in (delay) ${error}`);
         }
@@ -174,6 +179,7 @@ export default function CardFarming({ setActivePage }) {
                 remainingTime -= 1000;
             }, 1000);
         } catch (error) {
+            toast.error(`Error in (startCountdown): ${error?.message}`);
             console.error('Error in (startCountdown):', error);
             logEvent(`[Error] in (startCountdown) ${error}`);
         }
@@ -185,6 +191,7 @@ export default function CardFarming({ setActivePage }) {
             const updatedCardFarming = cardFarming.filter(game => JSON.parse(game).id !== gameId);
             localStorage.setItem('cardFarming', JSON.stringify(updatedCardFarming));
         } catch (error) {
+            toast.error(`Error in (removeGameFromFarmingList): ${error?.message}`);
             console.error('Error in (removeGameFromFarmingList) :', error);
             logEvent(`[Error] in (removeGameFromFarmingList) ${error}`);
         }
@@ -196,6 +203,7 @@ export default function CardFarming({ setActivePage }) {
             const stopPromises = Array.from(gamesWithDrops).map(game => stopIdler(game.appId, game.name));
             await Promise.all(stopPromises);
         } catch (error) {
+            toast.error(`Error in (handleCancel): ${error?.message}`);
             console.error('Error in (handleCancel) :', error);
             logEvent(`[Error] in (handleCancel) ${error}`);
         } finally {

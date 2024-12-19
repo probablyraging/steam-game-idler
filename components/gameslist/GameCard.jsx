@@ -24,6 +24,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 toast.error('Steam is not running');
             }
         } catch (error) {
+            toast.error(`Error in (handleIdle): ${error?.message}`);
             console.error('Error in (handleIdle):', error);
             logEvent(`[Error] in (handleIdle): ${error}`);
         }
@@ -57,6 +58,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 setFavorites(newFavorites.map(JSON.parse));
                 logEvent(`[Favorites] Added ${item.name} (${item.appid})`);
             } catch (error) {
+                toast.error(`Error in (addToFavorites): ${error?.message}`);
                 console.error('Error in (addToFavorites):', error);
                 logEvent(`[Error] in (addToFavorites): ${error}`);
             }
@@ -75,6 +77,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 setFavorites(newFavorites.map(JSON.parse));
                 logEvent(`[Favorites] Removed ${item.name} (${item.appid})`);
             } catch (error) {
+                toast.error(`Error in (removeFromFavorites): ${error?.message}`);
                 console.error('Error in (removeFromFavorites):', error);
                 logEvent(`[Error] in (removeFromFavorites): ${error}`);
             }
@@ -93,6 +96,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 setCardFarming(newCardFarming.map(JSON.parse));
                 logEvent(`[Card Farming] Added ${item.name} (${item.appid})`);
             } catch (error) {
+                toast.error(`Error in (addToCardFarming): ${error?.message}`);
                 console.error('Error in (addToCardFarming):', error);
                 logEvent(`[Error] in (addToCardFarming): ${error}`);
             }
@@ -111,6 +115,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 setCardFarming(newCardFarming.map(JSON.parse));
                 logEvent(`[Card Farming] Removed ${item.name} (${item.appid})`);
             } catch (error) {
+                toast.error(`Error in (removeFromCardFarming): ${error?.message}`);
                 console.error('Error in (removeFromCardFarming):', error);
                 logEvent(`[Error] in (removeFromCardFarming): ${error}`);
             }
@@ -129,6 +134,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
                 logEvent(`[Achievement Unlocker] Added ${item.name} (${item.appid})`);
             } catch (error) {
+                toast.error(`Error in (addToAchievementUnlocker): ${error?.message}`);
                 console.error('Error in (addToAchievementUnlocker):', error);
                 logEvent(`[Error] in (addToAchievementUnlocker): ${error}`);
             }
@@ -147,6 +153,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 setAchievementUnlocker(newAchievementUnlocker.map(JSON.parse));
                 logEvent(`[Achievement Unlocker] Removed ${item.name} (${item.appid})`);
             } catch (error) {
+                toast.error(`Error in (removeFromAchievementUnlocker): ${error?.message}`);
                 console.error('Error in (removeFromAchievementUnlocker):', error);
                 logEvent(`[Error] in (removeFromAchievementUnlocker): ${error}`);
             }
@@ -169,6 +176,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                     return toast.error('A max of 32 games can be added to auto idler', { autoClose: true });
                 }
             } catch (error) {
+                toast.error(`Error in (addToAutoIdle): ${error?.message}`);
                 console.error('Error in (addToAutoIdle):', error);
                 logEvent(`[Error] in (addToAutoIdle): ${error}`);
             }
@@ -187,6 +195,7 @@ export default function GameCard({ gameList, favorites, cardFarming, achievement
                 setAutoIdle(newAutoIdle.map(JSON.parse));
                 logEvent(`[Auto Idle] Removed ${item.name} (${item.appid})`);
             } catch (error) {
+                toast.error(`Error in (removeFromAutoIdle): ${error?.message}`);
                 console.error('Error in (removeFromAutoIdle):', error);
                 logEvent(`[Error] in (removeFromAutoIdle): ${error}`);
             }

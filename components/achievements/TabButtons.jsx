@@ -52,6 +52,7 @@ export default function TabButtons({ appId, appName, achievementsUnavailable, st
                 toast.error('Steam is not running');
             }
         } catch (error) {
+            toast.error(`Error in (handleUnlockAll): ${error?.message}`);
             console.error('Error in handleUnlockAll:', error);
             logEvent(`[Error] in (handleUnlockAll): ${error}`);
         }
@@ -94,6 +95,7 @@ export default function TabButtons({ appId, appName, achievementsUnavailable, st
                 toast.error('Steam is not running');
             }
         } catch (error) {
+            toast.error(`Error in (handleLockAll): ${error?.message}`);
             console.error('Error in handleLockAll:', error);
             logEvent(`[Error] in handleLockAll: ${error}`);
         }
@@ -119,6 +121,7 @@ export default function TabButtons({ appId, appName, achievementsUnavailable, st
                     toast.error(`Error: ${status.error}`);
                 }
             } catch (error) {
+                toast.error(`Error in (handleUpdate): ${error?.message}`);
                 console.error('Error in (handleUpdate):', error);
                 logEvent(`[Error] in (handleUpdate): ${error}`);
             }

@@ -27,6 +27,7 @@ export default function Setup({ setUserSummary }) {
                 setUserSummary(userSummary);
                 setIsLoading(false);
             } catch (error) {
+                toast.error(`Error in (getUserSummary): ${error?.message}`);
                 console.error('Error in (getUserSummary):', error);
                 logEvent(`[Error] in (getUserSummary): ${error}`);
             }
@@ -50,6 +51,7 @@ export default function Setup({ setUserSummary }) {
                 logEvent('[System] Logged in');
             }
         } catch (error) {
+            toast.error(`Error in (handleClick): ${error?.message}`);
             console.error('Error in (handleClick):', error);
             logEvent(`[Error] in (handleClick): ${error}`);
         }

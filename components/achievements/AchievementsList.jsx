@@ -11,10 +11,11 @@ export default function AchievementsList({ appId, appName, achievementsUnavailab
             if (!status.error) {
                 toast.success(`${type} ${achievementName} for ${appName}`);
             } else {
-                toast.error(`Error: ${status.error}`);
-                logEvent(`[Error] in handleToggle: ${status.error}`);
+                toast.error(`Error in (handleToggle): ${status?.error}`);
+                logEvent(`[Error] in (handleToggle): ${status.error}`);
             }
         } catch (error) {
+            toast.error(`Error in (handleToggle): ${error?.message}`);
             console.error('Error in (handleToggle):', error);
             logEvent(`[Error] in (handleToggle): ${error}`);
         }

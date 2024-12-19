@@ -4,6 +4,7 @@ import { IoAdd } from 'react-icons/io5';
 import { FaInfoCircle } from 'react-icons/fa';
 import { logEvent } from '@/utils/utils';
 import { invoke } from '@tauri-apps/api/tauri';
+import { toast } from 'react-toastify';
 
 export default function ManualAdd({ setFavorites }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -26,6 +27,7 @@ export default function ManualAdd({ setFavorites }) {
             onClose();
         } catch (error) {
             setIsLoading(false);
+            toast.error(`Error in (handleAdd): ${error?.message}`);
             console.error('Error in (handleAdd):', error);
             logEvent(`[Error] in (handleAdd): ${error}`);
         }
@@ -37,6 +39,7 @@ export default function ManualAdd({ setFavorites }) {
             const numericValue = value.replace(/[^0-9]/g, '');
             setInputValue(numericValue);
         } catch (error) {
+            toast.error(`Error in (handleChange): ${error?.message}`);
             console.error('Error in (handleChange):', error);
             logEvent(`[Error] in (handleChange): ${error}`);
         }

@@ -26,6 +26,22 @@ pub async fn check_status() -> bool {
 }
 
 #[tauri::command]
+pub async fn check_process_by_game_id(ids: Vec<String>) -> Result<Vec<String>, String> {
+    let output = std::process::Command::new("tasklist")
+    .args(&["/V", "/FO", "CSV", "/NH", "/FI", "IMAGENAME eq SteamUtility.exe"])
+    .stdout(Stdio::piped())
+    .stderr(Stdio::null())
+    .creation_flags(0x08000000)
+    .output()
+    .map_err(|e| e.to_string())?;
+
+    let output_str = String::from_utf8_lossy(&output.stdout);
+    Ok(ids.into_iter()
+        .filter(|id| !output_str.contains(&format!("[{}]", id)))
+        .collect())
+}
+
+#[tauri::command]
 pub async fn check_steam_status(file_path: String) -> Result<String, String> {
     let output = std::process::Command::new(file_path)
         .arg("check_steam")

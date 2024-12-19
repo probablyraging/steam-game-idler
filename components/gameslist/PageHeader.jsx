@@ -26,6 +26,7 @@ export default function PageHeader({ steamId, setActivePage, sortStyle, setSortS
             localStorage.setItem('sortStyle', e.currentKey);
             setSortStyle(e.currentKey);
         } catch (error) {
+            toast.error(`Error in (handleSorting): ${error?.message}`);
             console.error('Error in (handleSorting):', error);
             logEvent(`[Error] in (handleSorting): ${error}`);
         }
@@ -43,6 +44,7 @@ export default function PageHeader({ steamId, setActivePage, sortStyle, setSortS
             sessionStorage.setItem('cooldown', moment().add(3, 'minutes').unix());
             setRefreshKey(prevKey => prevKey + 1);
         } catch (error) {
+            toast.error(`Error in (handleRefetch): ${error?.message}`);
             console.error('Error in (handleRefetch):', error);
             logEvent(`[Error] in (handleRefetch): ${error}`);
         }

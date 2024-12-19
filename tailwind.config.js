@@ -52,6 +52,9 @@ module.exports = {
                     'favorite': '#e9e9e9',
                     'favoriteicon': '#56c6ff',
                     'favoritehover': '#d1d1d1',
+                    'modalheader': '#ffffff',
+                    'modalbody': '#fafafa',
+                    'modalfooter': '#ffffff',
                     primary: {
                         DEFAULT: '#000',
                         foreground: '#fff'
@@ -83,6 +86,9 @@ module.exports = {
                     'favorite': '#333',
                     'favoriteicon': '#56c6ff',
                     'favoritehover': '#414141',
+                    'modalheader': '#121212',
+                    'modalbody': '#171717',
+                    'modalfooter': '#121212',
                     primary: {
                         DEFAULT: '#fff',
                         foreground: '#000'

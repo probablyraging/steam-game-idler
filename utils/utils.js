@@ -4,6 +4,7 @@ import { getVersion } from '@tauri-apps/api/app';
 import { Time } from "@internationalized/date";
 import { isPermissionGranted, requestPermission, sendNotification } from '@tauri-apps/api/notification';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 let idleCounter = 0;
 let achievementCounter = 0;
@@ -26,6 +27,7 @@ export async function startIdler(appId, appName, quiet = false) {
             return false;
         }
     } catch (error) {
+        toast.error(`Error in (startIdler) util: ${error?.message}`);
         console.error('Error in startIdler util', error);
         logEvent(`[Error] in (startIdler) util: ${error}`);
     }
@@ -36,6 +38,7 @@ export async function stopIdler(appId, appName) {
         await invoke('stop_idle', { appId: appId.toString() });
         logEvent(`[Idling] Stopped ${appName} (${appId})`);
     } catch (error) {
+        toast.error(`Error in (stopIdler) util: ${error?.message}`);
         console.error('Error in stopIdler util: ', error);
         logEvent(`[Error] in (stopIdler) util: ${error}`);
     }
@@ -61,6 +64,7 @@ export async function toggleAchievement(appId, achievementId) {
             return { error: 'Steam is not running' };
         }
     } catch (error) {
+        toast.error(`Error in (toggleAchievement) util: ${error?.message}`);
         console.error('Error in toggleAchievement util: ', error);
         logEvent(`[Error] in (toggleAchievement) util: ${error}`);
         return { error: error };
@@ -85,6 +89,7 @@ export async function unlockAchievement(appId, achievementId) {
             logEvent(`[Error] [Achievement Unlocker] Steam is not running`);
         }
     } catch (error) {
+        toast.error(`Error in (unlockAchievement) util: ${error?.message}`);
         console.error('Error in unlockAchievement util: ', error);
         logEvent(`[Error] in (unlockAchievement) util: ${error}`);
     }
@@ -106,6 +111,7 @@ export async function lockAchievement(appId, achievementId) {
             logEvent(`[Error] [Achievement Unlocker] Steam is not running`);
         }
     } catch (error) {
+        toast.error(`Error in (lockAchievement) util: ${error?.message}`);
         console.error('Error in lockAchievement util: ', error);
         logEvent(`[Error] in (lockAchievement) util: ${error}`);
     }
@@ -130,6 +136,7 @@ export async function updateStat(appId, statName, newValue) {
             return { error: 'Steam is not running' };
         }
     } catch (error) {
+        toast.error(`Error in (updateStat) util: ${error?.message}`);
         console.error('Error in updateStat util: ', error);
         logEvent(`[Error] in (updateStat) util: ${error}`);
         return { error: error };
@@ -145,6 +152,7 @@ export async function checkDrops(steamId, appId, sid, sls) {
             return 0;
         }
     } catch (error) {
+        toast.error(`Error in (checkDrops) util: ${error?.message}`);
         console.error('Error in checkDrops util: ', error);
         logEvent(`[Error] in (checkDrops) util: ${error}`);
     }
@@ -159,6 +167,7 @@ export async function getAllGamesWithDrops(steamId, sid, sls) {
             return false;
         }
     } catch (error) {
+        toast.error(`Error in (getAllGamesWithDrops) util: ${error?.message}`);
         console.error('Error in getAllGamesWithDrops util: ', error);
         logEvent(`[Error] in (getAllGamesWithDrops) util: ${error}`);
     }
@@ -169,13 +178,13 @@ export async function logEvent(message) {
         const version = await getVersion();
         await invoke('log_event', { message: `[v${version}] ${message}` });
     } catch (error) {
+        toast.error(`Error in (logEvent) util: ${error?.message}`);
         console.error('Error in logEvent util: ', error);
     }
 };
 
 export const updateMongoStats = debounce(async (stat) => {
     try {
-        console.log(process.env.NEXT_PUBLIC_API_KEY);
         if (stat === 'launched') {
             await axios.post(
                 process.env.NEXT_PUBLIC_API_BASE + 'statistics',
@@ -198,6 +207,7 @@ export const updateMongoStats = debounce(async (stat) => {
             achievementCounter = 0;
         }
     } catch (error) {
+        toast.error(`Error in (updateMongoStats) util: ${error?.message}`);
         console.error('Error in updateMongoStats util: ', error);
         logEvent(`[Error] in (updateMongoStats) util: ${error}`);
     }
@@ -221,6 +231,7 @@ export async function fetchLatest() {
         const data = await res.json();
         return data;
     } catch (error) {
+        toast.error(`Error in (fetchLatest) util: ${error?.message}`);
         console.error('Error in (fetchLatest):', error);
         logEvent(`[Error] in (fetchLatest): ${error}`);
         return null;
@@ -235,6 +246,7 @@ export async function fetchFreeGames() {
         }
         return [];
     } catch (error) {
+        toast.error(`Error in (fetchFreeGames) util: ${error?.message}`);
         console.error('Error in (fetchFreeGames):', error);
         logEvent(`[Error] in (fetchFreeGames): ${error}`);
         return false;
@@ -262,6 +274,7 @@ export async function antiAwayStatus(active = null) {
             }
         }
     } catch (error) {
+        toast.error(`Error in (antiAwayStatus) util: ${error?.message}`);
         console.error('Error in (antiAwayStatus):', error);
         logEvent(`[Error] in (antiAwayStatus): ${error}`);
     }
@@ -283,6 +296,7 @@ export async function sendNativeNotification(title, body) {
             });
         }
     } catch (error) {
+        toast.error(`Error in (sendNativeNotification) util: ${error?.message}`);
         console.error('Error in (sendNativeNotification):', error);
         logEvent(`[Error] in (sendNativeNotification): ${error}`);
     }

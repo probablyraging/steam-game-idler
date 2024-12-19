@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Checkbox, Slider, Spinner, TimeInput } from '@nextui-org/react';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function AchievementSettings({ settings, setSettings }) {
     const [labelInterval, setLabelInterval] = useState(null);
@@ -28,6 +29,7 @@ export default function AchievementSettings({ settings, setSettings }) {
                 logEvent(`[Settings - Achievement Unlocker] Changed '${name}' to '${checked}'`);
             }
         } catch (error) {
+            toast.error(`Error in (handleCheckboxChange): ${error?.message}`);
             console.error('Error in (handleCheckboxChange):', error);
             logEvent(`[Error] in (handleCheckboxChange): ${error}`);
         }
@@ -47,6 +49,7 @@ export default function AchievementSettings({ settings, setSettings }) {
                 logEvent(`[Settings - Achievement Unlocker] Changed 'interval' to '${e}'`);
             }
         } catch (error) {
+            toast.error(`Error in (handleSliderChange): ${error?.message}`);
             console.error('Error in (handleSliderChange):', error);
             logEvent(`[Error] in (handleSliderChange): ${error}`);
         }
@@ -66,6 +69,7 @@ export default function AchievementSettings({ settings, setSettings }) {
                 logEvent(`[Settings - Achievement Unlocker] Changed '${type}' to '${value.toString()}'`);
             }
         } catch (error) {
+            toast.error(`Error in (handleScheduleChange): ${error?.message}`);
             console.error('Error in (handleScheduleChange):', error);
             logEvent(`[Error] in (handleScheduleChange): ${error}`);
         }
@@ -77,6 +81,7 @@ export default function AchievementSettings({ settings, setSettings }) {
         try {
             localStorage.setItem('settings', JSON.stringify(newSettings));
         } catch (error) {
+            toast.error(`Error in (updateSettings): ${error?.message}`);
             console.error('Error in (updateSettings):', error);
             logEvent(`[Error] in (updateSettings): ${error}`);
         }

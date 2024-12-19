@@ -9,6 +9,7 @@ import SettingsMenu from './SettingsMenu';
 import ResetSettings from './ResetSettings';
 import { Time } from '@internationalized/date';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function Settings({ setInitUpdate, setUpdateManifest }) {
     const [settings, setSettings] = useState(null);
@@ -21,6 +22,7 @@ export default function Settings({ setInitUpdate, setUpdateManifest }) {
                 const appVersion = await getVersion();
                 setVersion(appVersion);
             } catch (error) {
+                toast.error(`Error in (getAppVersion): ${error?.message}`);
                 console.error('Error in (getAppVersion):', error);
                 logEvent(`[Error] in (getAppVersion): ${error}`);
             }

@@ -5,6 +5,7 @@ import { FaSignOutAlt } from 'react-icons/fa';
 import { IoGameController, IoGift, IoSettings } from 'react-icons/io5';
 import { logEvent } from '@/utils/utils';
 import Sparkles from './Sparkles';
+import { toast } from 'react-toastify';
 
 export default function SideBar({ setUserSummary, activePage, setActivePage, showFreeGamesTab }) {
     const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -31,6 +32,7 @@ export default function SideBar({ setUserSummary, activePage, setActivePage, sho
             }
             logEvent('[System] Logged out');
         } catch (error) {
+            toast.error(`Error in (handleLogout): ${error?.message}`);
             console.error('Error in (handleLogout):', error);
             logEvent(`[Error] in (handleLogout): ${error}`);
         }

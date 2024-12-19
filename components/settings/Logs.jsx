@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { invoke } from '@tauri-apps/api/tauri';
 import { logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function Logs() {
     const [logs, setLogs] = useState([]);
@@ -19,6 +20,7 @@ export default function Logs() {
                     setLogs(logEntries);
                     setLogPath(`${fullLogPath}\\log.txt`);
                 } catch (error) {
+                    toast.error(`Error in (fetchLogs): ${error?.message}`);
                     console.error('Error in (fetchLogs):', error);
                     logEvent(`[Error] in (fetchLogs): ${error}`);
                 }
@@ -33,6 +35,7 @@ export default function Logs() {
         try {
             await invoke('open_file_explorer', { path: logPath });
         } catch (error) {
+            toast.error(`Error in (handleOpenLogFile): ${error?.message}`);
             console.error('Error in (handleOpenLogFile):', error);
             logEvent(`[Error] in (handleOpenLogFile): ${error}`);
         }

@@ -2,6 +2,7 @@ import React from 'react';
 import { IoStop } from 'react-icons/io5';
 import { motion } from 'framer-motion';
 import { logEvent, stopIdler } from '@/utils/utils';
+import { toast } from 'react-toastify';
 
 export default function StopButton({ setActivePage, isMountedRef, abortControllerRef, gamesWithDrops, screen, currentGame }) {
     const borderWidths = [
@@ -19,6 +20,7 @@ export default function StopButton({ setActivePage, isMountedRef, abortControlle
                 await stopIdler(currentGame.appId, currentGame.name);
             }
         } catch (error) {
+            toast.error(`Error in (handleStop): ${error?.message}`);
             console.error('Error in (handleStop) :', error);
             logEvent(`[Error] in (handleStop) ${error}`);
         } finally {

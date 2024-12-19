@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { ThemeProvider } from '@/components/theme/theme-provider';
 import { NextUIProvider } from '@nextui-org/react';
 import { debounce, logEvent } from '@/utils/utils';
+import { toast } from 'react-toastify';
 import '../styles/globals.css';
 
 export default function MyApp({ Component, pageProps }) {
@@ -19,6 +20,7 @@ export default function MyApp({ Component, pageProps }) {
                 const safeY = Math.floor(monitor.size.height * 0.1);
                 await appWindow.setPosition(new PhysicalPosition(safeX, safeY));
             } catch (error) {
+                toast.error(`Error in (setToSafePosition): ${error?.message}`);
                 console.error('Error in (setToSafePosition):', error);
                 logEvent(`[Error] in (setToSafePosition): ${error}`);
             }
@@ -39,6 +41,7 @@ export default function MyApp({ Component, pageProps }) {
                 }
                 return false;
             } catch (error) {
+                toast.error(`Error in (isPositionOnScreen): ${error?.message}`);
                 console.error('Error in (isPositionOnScreen):', error);
                 logEvent(`[Error] in (isPositionOnScreen): ${error}`);
             }
@@ -59,6 +62,7 @@ export default function MyApp({ Component, pageProps }) {
                         await setToSafePosition();
                     }
                 } catch (error) {
+                    toast.error(`Error in (setupAppWindow - savedState) - Failed to restore window state: ${error?.message}`);
                     console.error('Error in (setupAppWindow - savedState) - Failed to restore window state:', error);
                     logEvent(`[Error] in (setupAppWindow - savedState) - Failed to restore window state: ${error}`);
                     await setToSafePosition();
@@ -69,6 +73,7 @@ export default function MyApp({ Component, pageProps }) {
                 await appWindow.setSize(new PhysicalSize(defaultWidth, defaultHeight));
                 await setToSafePosition();
             } catch (error) {
+                toast.error(`Error in (setupAppWindow - savedState): ${error?.message}`);
                 console.error('Error in (setupAppWindow - savedState):', error);
                 logEvent(`[Error] in (setupAppWindow - savedState): ${error}`);
             }
@@ -88,6 +93,7 @@ export default function MyApp({ Component, pageProps }) {
                 };
                 localStorage.setItem('windowState', JSON.stringify(windowState));
             } catch (error) {
+                toast.error(`Error in (saveWindowState): ${error?.message}`);
                 console.error('Error in (saveWindowState):', error);
                 logEvent(`[Error] in (saveWindowState): ${error}`);
             }

@@ -17,10 +17,10 @@ export default function Automate({ setActivePage }) {
             if (!steamRunning) {
                 return toast.error('Steam is not running');
             }
-            if (!steamCookies.sid || !steamCookies.sls) {
+            if (!steamCookies?.sid || !steamCookies?.sls) {
                 return toast.error('Missing credentials in Settings');
             }
-            const res = await invoke('validate_session', { sid: steamCookies?.sid, sls: steamCookies?.sls, steamid: userSummary.steamId });
+            const res = await invoke('validate_session', { sid: steamCookies?.sid, sls: steamCookies?.sls, sma: steamCookies?.sma, steamid: userSummary.steamId });
             if (!res.user) {
                 localStorage.removeItem('steamCookies');
                 return toast.error('Steam credentials need to be updated');
@@ -31,6 +31,7 @@ export default function Automate({ setActivePage }) {
             }
             setActivePage('card-farming');
         } catch (error) {
+            toast.error(`Error in (startCardFarming): ${error?.message}`);
             console.error('Error in (startCardFarming):', error);
             logEvent(`[Error] in (startCardFarming): ${error}`);
         }
@@ -52,6 +53,7 @@ export default function Automate({ setActivePage }) {
             }
             setActivePage('achievement-unlocker');
         } catch (error) {
+            toast.error(`Error in (startAchievementUnlocker): ${error?.message}`);
             console.error('Error in (startAchievementUnlocker):', error);
             logEvent(`[Error] in (startAchievementUnlocker): ${error}`);
         }

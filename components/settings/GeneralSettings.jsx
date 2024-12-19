@@ -3,6 +3,7 @@ import { Button, Checkbox, Input } from '@nextui-org/react';
 import { antiAwayStatus, logEvent } from '@/utils/utils';
 import { enable, isEnabled, disable } from 'tauri-plugin-autostart-api';
 import ExtLink from '../ExtLink';
+import { toast } from 'react-toastify';
 
 export default function GeneralSettings({ settings, setSettings }) {
     const [localSettings, setLocalSettings] = useState(null);
@@ -47,6 +48,7 @@ export default function GeneralSettings({ settings, setSettings }) {
                 logEvent(`[Settings - General] Changed '${name}' to '${checked}'`);
             }
         } catch (error) {
+            toast.error(`Error in (handleCheckboxChange): ${error?.message}`);
             console.error('Error in (handleCheckboxChange):', error);
             logEvent(`[Error] in (handleCheckboxChange): ${error}`);
         }
@@ -58,6 +60,7 @@ export default function GeneralSettings({ settings, setSettings }) {
         try {
             localStorage.setItem('settings', JSON.stringify(newSettings));
         } catch (error) {
+            toast.error(`Error in (updateSettings): ${error?.message}`);
             console.error('Error in (updateSettings):', error);
             logEvent(`[Error] in (updateSettings): ${error}`);
         }
@@ -88,6 +91,7 @@ export default function GeneralSettings({ settings, setSettings }) {
                 setHasKey(true);
             }
         } catch (error) {
+            toast.error(`Error in (handleKeySave): ${error?.message}`);
             console.error('Error in (handleKeySave):', error);
             logEvent(`[Error] in (handleKeySave): ${error}`);
         }
@@ -100,6 +104,7 @@ export default function GeneralSettings({ settings, setSettings }) {
             setHasKey(false);
             logEvent('[Settings - General] Cleared Steam web API key');
         } catch (error) {
+            toast.error(`Error in (handleClear): ${error?.message}`);
             console.error('Error in (handleClear):', error);
             logEvent(`[Error] in (handleClear): ${error}`);
         }

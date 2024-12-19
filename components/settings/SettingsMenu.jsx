@@ -22,6 +22,7 @@ export default function SettingsMenu({ setInitUpdate, setUpdateManifest }) {
                 toast.info('Steam Game Idler is up to date');
             }
         } catch (error) {
+            toast.error(`Error in (checkForUpdates): ${error?.message}`);
             console.error('Error in (checkForUpdates):', error);
             logEvent(`[Error] in (checkForUpdates): ${error}`);
         }

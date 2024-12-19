@@ -7,6 +7,8 @@ import Setup from './Setup';
 import UpdateToast from './UpdateToast';
 import UpdateScreen from './UpdateScreen';
 import { toast } from 'react-toastify';
+import ChangelogModal from './ChangelogModal';
+import { invoke } from '@tauri-apps/api/tauri';
 
 export default function Window() {
     const [userSummary, setUserSummary] = useState(null);
@@ -14,6 +16,7 @@ export default function Window() {
     const [initUpdate, setInitUpdate] = useState(false);
     const [showFreeGamesTab, setShowFreeGamesTab] = useState(false);
     const [freeGamesList, setFreeGamesList] = useState([]);
+    const [showChangelogModal, setShowChangelogModal] = useState(false);
 
     useEffect(() => {
         const checkForUpdates = async () => {
@@ -28,11 +31,29 @@ export default function Window() {
                     toast.info(<UpdateToast updateManifest={manifest} setInitUpdate={setInitUpdate} />, { autoClose: false });
                 }
             } catch (error) {
+                toast.error(`Error in (checkForUpdates): ${error?.message}`);
                 console.error('Error in (checkForUpdates):', error);
                 logEvent(`[Error] in (checkForUpdates): ${error}`);
             }
         };
         checkForUpdates();
+    }, []);
+
+    useEffect(() => {
+        const changelogModal = () => {
+            try {
+                const hasUpdated = localStorage.getItem('hasUpdated');
+                if (hasUpdated === 'true') {
+                    setShowChangelogModal(true);
+                    localStorage.setItem('hasUpdated', false);
+                }
+            } catch (error) {
+                toast.error(`Error in (changelogModal): ${error?.message}`);
+                console.error('Error in (changelogModal):', error);
+                logEvent(`[Error] in (changelogModal): ${error}`);
+            }
+        };
+        changelogModal();
     }, []);
 
     useEffect(() => {
@@ -67,6 +88,7 @@ export default function Window() {
                 currentSettings = JSON.parse(localStorage.getItem('settings'));
             }
         } catch (error) {
+            toast.error(`Error creating default settings: ${error?.message}`);
             console.error('Error creating default settings:', error);
             logEvent(`[Error] creating default settings: ${error}`);
         }
@@ -95,6 +117,7 @@ export default function Window() {
                 setShowFreeGamesTab(false);
             }
         } catch (error) {
+            toast.error(`Error in (checkForFreeGames): ${error?.message}`);
             console.error('Error in (checkForFreeGames):', error);
             logEvent(`[Error] in (checkForFreeGames): ${error}`);
         }
@@ -107,14 +130,20 @@ export default function Window() {
     }, [checkForFreeGames]);
 
     useEffect(() => {
-        const startAutoIdleGames = () => {
+        const startAutoIdleGames = async () => {
             try {
                 const autoIdle = (localStorage.getItem('autoIdle') && JSON.parse(localStorage.getItem('autoIdle'))) || [];
                 const games = autoIdle.map(JSON.parse);
-                for (const game of games) {
-                    startIdler(game.appid, game.name);
+                const gameIds = games.map(game => game.appid.toString());
+                const notRunningIds = await invoke('check_process_by_game_id', { ids: gameIds });
+                for (const id of notRunningIds) {
+                    const game = games.find(g => g.appid.toString() === id);
+                    if (game) {
+                        startIdler(game.appid, game.name);
+                    }
                 }
             } catch (error) {
+                toast.error(`Error in (startAutoIdleGames): ${error?.message}`);
                 console.error('Error in (startAutoIdleGames):', error);
                 logEvent(`[Error] in (startAutoIdleGames): ${error}`);
             }
@@ -141,6 +170,7 @@ export default function Window() {
                     showFreeGamesTab={showFreeGamesTab}
                     freeGamesList={freeGamesList}
                 />
+                <ChangelogModal showChangelogModal={showChangelogModal} setShowChangelogModal={setShowChangelogModal} />
             </div>
         </React.Fragment>
     );

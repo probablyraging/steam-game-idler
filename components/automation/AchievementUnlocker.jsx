@@ -4,6 +4,7 @@ import { Button, Spinner } from '@nextui-org/react';
 import { formatTime, getRandomDelay, isWithinSchedule, logEvent, startIdler, stopIdler, unlockAchievement } from '@/utils/utils';
 import { IoCheckmark } from 'react-icons/io5';
 import { invoke } from '@tauri-apps/api/tauri';
+import { toast } from 'react-toastify';
 
 export default function AchievementUnlocker({ setActivePage }) {
     const isMountedRef = useRef(true);
@@ -46,6 +47,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                     startAchievementUnlocker();
                 }
             } catch (error) {
+                toast.error(`Error in (startAchievementUnlocker): ${error?.message}`);
                 console.error('Error in (startAchievementUnlocker):', error);
                 logEvent(`[Error] in (startAchievementUnlocker) ${error}`);
             }
@@ -111,6 +113,7 @@ export default function AchievementUnlocker({ setActivePage }) {
 
             return { achievements, game };
         } catch (error) {
+            toast.error(`Error in (fetchAchievements): ${error?.message}`);
             console.error('Error in (fetchAchievements):', error);
             logEvent(`[Error] in (fetchAchievements) ${error}`);
         }
@@ -128,6 +131,7 @@ export default function AchievementUnlocker({ setActivePage }) {
             }
             setIsWaitingForSchedule(false);
         } catch (error) {
+            toast.error(`Error in (waitUntilInSchedule): ${error?.message}`);
             console.error('Error in (waitUntilInSchedule):', error);
             logEvent(`[Error] in (waitUntilInSchedule) ${error}`);
         }
@@ -175,6 +179,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 }
             }
         } catch (error) {
+            toast.error(`Error in (unlockAchievements): ${error?.message}`);
             console.error('Error in (unlockAchievements):', error);
             logEvent(`[Error] in (unlockAchievements) ${error}`);
         }
@@ -186,7 +191,8 @@ export default function AchievementUnlocker({ setActivePage }) {
             const updatedAchievementUnlocker = achievementUnlocker.filter(arr => JSON.parse(arr).appid !== gameId);
             localStorage.setItem('achievementUnlocker', JSON.stringify(updatedAchievementUnlocker));
         } catch (error) {
-            console.error('Error in (removeGameFromUnlockerList):', error);
+            toast.error(`Error in (unlockAchievements): ${error?.message}`);
+            console.error('Error in (unlockAchievements):', error);
             logEvent(`[Error] in (removeGameFromUnlockerList) ${error}`);
         }
     };
@@ -206,6 +212,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 remainingTime -= 1000;
             }, 1000);
         } catch (error) {
+            toast.error(`Error in (startCountdown): ${error?.message}`);
             console.error('Error in (startCountdown):', error);
             logEvent(`[Error] in (startCountdown) ${error}`);
         }
@@ -234,6 +241,7 @@ export default function AchievementUnlocker({ setActivePage }) {
                 });
             });
         } catch (error) {
+            toast.error(`Error in (delay): ${error?.message}`);
             console.error('Error in (delay):', error);
             logEvent(`[Error] in (delay) ${error}`);
         }
