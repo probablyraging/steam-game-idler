@@ -4,7 +4,6 @@ import { getVersion } from '@tauri-apps/api/app';
 import ReactMarkdown from 'react-markdown';
 import styles from './ChangelogModal.module.css';
 import rehypeRaw from 'rehype-raw';
-import Loader from './Loader';
 import ExtLink from './ExtLink';
 
 export default function ChangelogModal({ showChangelogModal, setShowChangelogModal }) {
